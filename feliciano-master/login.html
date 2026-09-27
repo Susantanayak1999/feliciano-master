@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login | Mixtape Kitchen</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .auth-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2418 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 15px;
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 50px 40px;
+            max-width: 460px;
+            width: 100%;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+        }
+
+        .auth-card .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-card .brand-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #c8a97e;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 30px;
+        }
+
+        .auth-card h2 {
+            font-family: "Great Vibes", cursive;
+            font-size: 42px;
+            color: #c8a97e;
+            margin-bottom: 5px;
+            font-weight: normal;
+            line-height: 1;
+        }
+
+        .auth-card .sub {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 0;
+        }
+
+        .auth-card label {
+            font-weight: 600;
+            color: #000;
+            font-size: 14px;
+        }
+
+        .auth-card .form-control {
+            height: 52px;
+            font-size: 15px;
+        }
+
+        .auth-card .btn-primary {
+            background: #c8a97e;
+            border-color: #c8a97e;
+            color: #fff;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 500;
+            width: 100%;
+            border-radius: 2px;
+        }
+
+        .auth-card .btn-primary:hover {
+            background: transparent;
+            color: #c8a97e;
+            border-color: #c8a97e;
+        }
+
+        .auth-card .switch {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .auth-card .switch a {
+            color: #c8a97e;
+            font-weight: 600;
+        }
+
+        .auth-card .error-msg {
+            display: none;
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .auth-card .error-msg.show {
+            display: block;
+        }
+
+        .auth-card .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .auth-card .back-home:hover {
+            color: #c8a97e;
+        }
+
+        @media (max-width: 576px) {
+            .auth-card {
+                padding: 35px 25px;
+            }
+
+            .auth-card h2 {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="auth-section">
+        <div class="auth-card">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <span class="icon-music-tone"></span>
+                </div>
+                <h2>Mixtape Kitchen</h2>
+                <p class="sub">Welcome back</p>
+            </div>
+
+            <div class="error-msg" id="errorBox"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <div class="form-group text-center mt-4">
+                    <button type="submit" class="btn btn-primary py-3 px-4" id="submitBtn">
+                        Sign In
+                    </button>
+                </div>
+            </form>
+
+            <p class="switch">New here? <a href="signup.html">Create an account</a></p>
+            <a href="index.html" class="back-home">&larr; Back to home</a>
+
+        </div>
+    </section>
+
+    <script>
+        const BACKEND_URL = "https://feliciano-master.onrender.com";
+        const form = document.getElementById("loginForm");
+        const errorBox = document.getElementById("errorBox");
+        const submitBtn = document.getElementById("submitBtn");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorBox.classList.remove("show");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Signing in...";
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: document.getElementById("email").value.trim(),
+                        password: document.getElementById("password").value,
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    window.location.href = "index.html";
+                } else {
+                    errorBox.textContent = data.error || "Login failed";
+                    errorBox.classList.add("show");
+                }
+            } catch (err) {
+                errorBox.textContent = "Network error. Please try again.";
+                errorBox.classList.add("show");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Sign In";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -3,7 +3,8 @@
 
 <head>
   <title>Mixtape Kitchen - Bold flavors, fresh ingredients, and good vibes — welcome to Mixtape Kitchen.</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -72,7 +73,12 @@
           <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
           <li class="nav-item cta"><a href="reservation.html" class="nav-link">Book a table</a></li>
 
-          <li class="nav-item cta cart-btn"><a href="cart.html" class="nav-link">Add to Cart</a></li>
+          <li class="nav-item cta cart-btn">
+            <a href="cart.html" class="nav-link cart-link">
+              <span class="ion-ios-cart"></span>
+              <span class="cart-badge" id="nav-cart-count">0</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -481,7 +487,8 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
-
+  <script src="js/cart-badge.js"></script>
+  <script src="js/auth-nav.js"></script>
 </body>
 
 </html>

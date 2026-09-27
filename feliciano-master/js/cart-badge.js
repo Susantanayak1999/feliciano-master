@@ -10,7 +10,10 @@ function updateCartCount() {
         count += Number(item.quantity) || 0;
     });
     var el = document.getElementById('nav-cart-count');
-    if (el) el.textContent = count;
+    if (el) {
+        el.textContent = count;
+        el.setAttribute('data-count', count);
+    }
 }
 
 // Update on page load
