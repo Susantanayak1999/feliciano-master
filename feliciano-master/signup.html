@@ -193,17 +193,29 @@
     </section>
 
     <script>
-        const BACKEND_URL = "https://feliciano-master.onrender.com"; const form = document.getElementById("signupForm");
+        const BACKEND_URL = "https://feliciano-master.onrender.com";
+
+        const form = document.getElementById("signupForm");
         const errorBox = document.getElementById("errorBox");
         const submitBtn = document.getElementById("submitBtn");
+
+        fetch(`${BACKEND_URL}/`)
+            .then(r => r.json())
+            .then(() => console.log("Backend is warm"))
+            .catch(() => console.log("Backend cold — will warm on submit"));
+
+        let navigating = false;
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             errorBox.classList.remove("show");
             submitBtn.disabled = true;
-            submitBtn.textContent = "Creating...";
+            submitBtn.textContent = "Connecting...";
 
             try {
+                await fetch(`${BACKEND_URL}/`, { method: "GET" }).catch(() => { });
+                submitBtn.textContent = "Creating...";
+
                 const res = await fetch(`${BACKEND_URL}/signup`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -217,17 +229,38 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
+                    navigating = true;
+
+                    // ---- CLEAR ANY PREVIOUS CART ----
+                    localStorage.removeItem("cart");
+
+                    // ---- SAVE NEW SESSION ----
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("user", JSON.stringify(data.user));
-                    window.location.href = "index.html"; l
-                } else {
-                    errorBox.textContent = data.error || "Signup failed";
-                    errorBox.classList.add("show");
+
+                    // Reset cart badge to 0
+                    const badge = document.getElementById("nav-cart-count");
+                    if (badge) {
+                        badge.textContent = "0";
+                        badge.setAttribute("data-count", "0");
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 100);
+                    return;
                 }
-            } catch (err) {
-                errorBox.textContent = "Network error. Please try again.";
+
+                errorBox.textContent = data.error || "Signup failed";
                 errorBox.classList.add("show");
-            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Create Account";
+
+            } catch (err) {
+                if (navigating) return;
+                console.error(err);
+                errorBox.textContent = "Server is waking up. Please wait a few seconds and try again.";
+                errorBox.classList.add("show");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Create Account";
             }

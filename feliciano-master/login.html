@@ -186,12 +186,16 @@
 
         </div>
     </section>
-
     <script>
         const BACKEND_URL = "https://feliciano-master.onrender.com";
+
         const form = document.getElementById("loginForm");
         const errorBox = document.getElementById("errorBox");
         const submitBtn = document.getElementById("submitBtn");
+
+        fetch(`${BACKEND_URL}/`).catch(() => { });
+
+        let navigating = false;
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -212,17 +216,37 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
+                    navigating = true;
+
+                    // ---- CLEAR ANY PREVIOUS CART ----
+                    localStorage.removeItem("cart");
+
+                    // ---- SAVE NEW SESSION ----
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("user", JSON.stringify(data.user));
-                    window.location.href = "index.html";
-                } else {
-                    errorBox.textContent = data.error || "Login failed";
-                    errorBox.classList.add("show");
+
+                    // Reset cart badge to 0
+                    const badge = document.getElementById("nav-cart-count");
+                    if (badge) {
+                        badge.textContent = "0";
+                        badge.setAttribute("data-count", "0");
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 100);
+                    return;
                 }
-            } catch (err) {
-                errorBox.textContent = "Network error. Please try again.";
+
+                errorBox.textContent = data.error || "Invalid email or password";
                 errorBox.classList.add("show");
-            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Sign In";
+
+            } catch (err) {
+                if (navigating) return;
+                errorBox.textContent = "Server is waking up. Please try again.";
+                errorBox.classList.add("show");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Sign In";
             }

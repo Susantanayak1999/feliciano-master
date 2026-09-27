@@ -52,11 +52,25 @@
             document.addEventListener("click", (e) => {
                 if (!li.contains(e.target)) dropdown.classList.remove("show");
             });
+
+            // ---------- LOGOUT — clear session AND cart ----------
             li.querySelector("#logoutBtn").addEventListener("click", (e) => {
                 e.preventDefault();
                 if (confirm("Sign out?")) {
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
+                    localStorage.removeItem("cart");   // ← clear cart
+
+                    // Reset cart badge immediately
+                    if (typeof updateCartCount === "function") {
+                        updateCartCount();
+                    }
+                    const badge = document.getElementById("nav-cart-count");
+                    if (badge) {
+                        badge.textContent = "0";
+                        badge.setAttribute("data-count", "0");
+                    }
+
                     location.href = "index.html";
                 }
             });
@@ -87,16 +101,12 @@
         style.id = "authNavStyles";
         style.textContent = `
 
-            /* ============================================================
-               CART + AUTH BUTTONS (desktop)
-               ============================================================ */
             .ftco-navbar-light .navbar-nav > .nav-item.auth-btn,
             .ftco-navbar-light .navbar-nav > .nav-item.cart-btn {
                 margin-left: 10px;
                 position: relative;
             }
 
-            /* Cart — round gold pill */
             .ftco-navbar-light .navbar-nav > .nav-item.cart-btn > a.cart-link {
                 position: relative;
                 background: #c8a97e !important;
@@ -118,7 +128,6 @@
                 box-shadow: 0 6px 18px rgba(200, 169, 126, 0.5);
             }
 
-            /* Cart badge (floating count) — desktop */
             .cart-badge {
                 position: absolute;
                 top: -4px;
@@ -142,7 +151,6 @@
                 display: none;
             }
 
-            /* Auth — gold pill */
             .ftco-navbar-light .navbar-nav > .nav-item.auth-btn > a {
                 background: #c8a97e !important;
                 color: #fff !important;
@@ -164,7 +172,6 @@
                 box-shadow: 0 6px 18px rgba(200, 169, 126, 0.5);
             }
 
-            /* Dot separator between cart and auth */
             .ftco-navbar-light .navbar-nav > .nav-item.auth-btn::before {
                 content: "";
                 position: absolute;
@@ -177,9 +184,6 @@
                 background: rgba(255, 255, 255, 0.3);
             }
 
-            /* ============================================================
-               LOGGED-IN DROPDOWN
-               ============================================================ */
             .auth-dropdown {
                 position: absolute;
                 top: calc(100% + 10px);
@@ -214,16 +218,12 @@
                 color: #c8a97e !important;
             }
 
-            /* Scrolled navbar */
             .ftco-navbar-light.scrolled .navbar-nav > .nav-item.auth-btn > a,
             .ftco-navbar-light.scrolled .navbar-nav > .nav-item.cart-btn > a.cart-link {
                 background: #c8a97e !important;
                 color: #fff !important;
             }
 
-            /* ============================================================
-               MOBILE — move cart + auth OUTSIDE the collapsed menu
-               ============================================================ */
             @media (max-width: 991.98px) {
 
                 .ftco-navbar-light > .container {
@@ -232,12 +232,7 @@
                     flex-wrap: wrap !important;
                     justify-content: space-between !important;
                 }
-
-                .ftco-navbar-light .navbar-brand {
-                    order: 1;
-                    flex: 0 0 auto;
-                }
-
+                .ftco-navbar-light .navbar-brand { order: 1; flex: 0 0 auto; }
                 .ftco-navbar-light .mobile-action-strip {
                     order: 2;
                     display: flex;
@@ -246,26 +241,18 @@
                     margin-left: auto;
                     margin-right: 10px;
                 }
-
-                .ftco-navbar-light .navbar-toggler {
-                    order: 3;
-                    flex: 0 0 auto;
-                }
-
+                .ftco-navbar-light .navbar-toggler { order: 3; flex: 0 0 auto; }
                 .ftco-navbar-light .navbar-collapse {
                     order: 4;
                     flex-basis: 100%;
                     width: 100%;
                     margin-top: 12px;
                 }
-
                 .ftco-navbar-light .mobile-action-strip .nav-item {
                     margin: 0 !important;
                     list-style: none;
                     padding: 0 !important;
                 }
-
-                /* Cart circle — smaller on mobile */
                 .ftco-navbar-light .mobile-action-strip .nav-item.cart-btn > a.cart-link {
                     position: relative;
                     width: 40px;
@@ -278,8 +265,6 @@
                     align-items: center;
                     justify-content: center;
                 }
-
-                /* Badge — snug fit on the corner of the cart circle */
                 .ftco-navbar-light .mobile-action-strip .cart-badge {
                     position: absolute;
                     top: -3px;
@@ -297,20 +282,14 @@
                     border: 2px solid #1a1a1a;
                     box-shadow: 0 2px 4px rgba(231, 76, 60, 0.4);
                 }
-
-                /* Auth pill — compact */
                 .ftco-navbar-light .mobile-action-strip .nav-item.auth-btn > a {
                     padding: 8px 14px !important;
                     font-size: 13px !important;
                     border-radius: 25px !important;
                 }
-
-                /* Hide dot separator */
                 .ftco-navbar-light .mobile-action-strip .nav-item.auth-btn::before {
                     display: none;
                 }
-
-                /* Dropdown full width */
                 .auth-dropdown {
                     position: fixed;
                     top: 70px;
@@ -324,7 +303,7 @@
     }
 
     /* ============================================================
-       3. MOBILE LAYOUT — physically move buttons into the strip
+       3. MOBILE LAYOUT
        ============================================================ */
     function forceMobileLayout() {
         const navbarContainer = document.querySelector(".ftco-navbar-light > .container");
