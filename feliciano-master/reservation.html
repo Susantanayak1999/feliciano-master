@@ -2,286 +2,648 @@
 <html lang="en">
 
 <head>
-	<title>Mixtape Kitchen - Bold flavors, fresh ingredients, and good vibes — welcome to Mixtape Kitchen.</title>
-	<link rel="icon"
-		href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Book a Table | Mixtape Kitchen</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 
-	<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-	<link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
 
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
-	<link rel="stylesheet" href="css/magnific-popup.css">
+    <style>
+        /* ============================================================
+           SUCCESS MODAL
+           ============================================================ */
+        .res-success-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 17, 17, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .res-success-modal.active { display: flex; }
 
-	<link rel="stylesheet" href="css/aos.css">
+        .res-success-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 50px 40px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .4);
+            animation: popIn .35s ease both;
+            margin: auto;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(.92); }
+            to   { opacity: 1; transform: scale(1); }
+        }
 
-	<link rel="stylesheet" href="css/ionicons.min.css">
+        .res-success-card .check {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c8a97e, #b18f64);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 22px;
+            font-size: 36px;
+            box-shadow: 0 10px 30px rgba(200,169,126,.45);
+        }
 
-	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
-	<link rel="stylesheet" href="css/jquery.timepicker.css">
+        .res-success-card h3 {
+            font-family: "Great Vibes", cursive;
+            font-size: 40px;
+            color: #c8a97e;
+            font-weight: normal;
+            line-height: 1;
+            margin: 0 0 10px;
+        }
 
+        .res-success-card p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-family: "Poppins", sans-serif;
+        }
 
-	<link rel="stylesheet" href="css/flaticon.css">
-	<link rel="stylesheet" href="css/icomoon.css">
-	<link rel="stylesheet" href="css/style.css">
+        .res-success-card .details {
+            background: #faf8f4;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            border: 1px dashed rgba(200,169,126,.4);
+        }
+        .res-success-card .details div {
+            display: flex; justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #eee;
+            gap: 12px;
+        }
+        .res-success-card .details div:last-child { border-bottom: none; }
+        .res-success-card .details strong { color: #1a1a1a; text-align: right; }
+
+        .res-success-btn {
+            display: inline-block;
+            padding: 13px 30px;
+            background: #c8a97e;
+            color: #fff;
+            border-radius: 30px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 8px;
+            transition: all .3s ease;
+            box-shadow: 0 6px 18px rgba(200,169,126,.4);
+        }
+        .res-success-btn:hover {
+            background: #b8956a;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(200,169,126,.55);
+        }
+
+        /* Inline error for the form */
+        .res-error {
+            display: none;
+            background: #fee;
+            color: #c33;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            font-family: "Poppins", sans-serif;
+        }
+        .res-error.show { display: block; }
+
+        /* Loading state on button */
+        .res-submit.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* ============================================================
+           RESPONSIVE — TABLET & MOBILE
+           ============================================================ */
+
+        /* --- TABLET (max 991px) --- */
+        @media (max-width: 991.98px) {
+            /* Stack the form and map vertically */
+            .makereservation {
+                padding: 60px 30px !important;
+            }
+            .makereservation .py-md-5 {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+
+            /* Map goes full width below form */
+            #map {
+                min-height: 320px;
+                margin-top: 0;
+            }
+
+            /* Keep form fields 2-column */
+            .makereservation .col-md-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        /* --- MOBILE (max 767px) --- */
+        @media (max-width: 767.98px) {
+            /* Form heading centered */
+            .makereservation .heading-section {
+                text-align: center;
+            }
+            .makereservation .heading-section .subheading {
+                font-size: 70px !important;
+                top: -30px !important;
+            }
+            .makereservation .heading-section h2 {
+                font-size: 32px;
+            }
+
+            /* Form container */
+            .makereservation {
+                padding: 50px 20px !important;
+            }
+
+            /* Stack fields: 1 per row on small phones */
+            .makereservation .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            /* Slightly larger touch targets */
+            .makereservation .form-control {
+                height: 48px;
+                font-size: 15px;
+            }
+
+            /* Submit button full width */
+            .makereservation .btn-primary {
+                width: 100%;
+                display: block;
+                text-align: center;
+                padding: 14px 20px;
+            }
+
+            /* Map */
+            #map {
+                min-height: 260px;
+                margin-top: 0;
+            }
+
+            /* Success modal (compact) */
+            .res-success-card {
+                padding: 36px 22px;
+                border-radius: 14px;
+            }
+            .res-success-card .check {
+                width: 64px; height: 64px; font-size: 28px;
+                margin-bottom: 16px;
+            }
+            .res-success-card h3 { font-size: 32px; }
+            .res-success-card p  { font-size: 14px; }
+            .res-success-card .details {
+                font-size: 13px;
+                padding: 14px;
+            }
+            .res-success-btn {
+                width: 100%;
+                text-align: center;
+                padding: 13px 20px;
+            }
+        }
+
+        /* --- VERY SMALL MOBILE (max 480px) --- */
+        @media (max-width: 480px) {
+            .makereservation {
+                padding: 40px 15px !important;
+            }
+            .makereservation .heading-section h2 {
+                font-size: 26px;
+            }
+            .makereservation .heading-section .subheading {
+                font-size: 56px !important;
+                top: -22px !important;
+            }
+            .makereservation .form-group label {
+                font-size: 13px;
+            }
+            .makereservation .form-control {
+                height: 46px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-	<div class="py-1 bg-black top">
-		<div class="container">
-			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-				<div class="col-lg-12 d-block">
-					<div class="row d-flex">
-						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
-									class="icon-phone2"></span></div>
-							<span class="text">+ 1235 2355 98</span>
-						</div>
-						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
-									class="icon-paper-plane"></span></div>
-							<span class="text">youremail@email.com</span>
-						</div>
-						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
-							<p class="mb-0 register-link"><span>Open hours:</span> <span>Monday - Sunday</span>
-								<span>8:00AM - 9:00PM</span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-		<div class="container">
-			<a class="navbar-brand" href="index.html">Feliciano</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
-				aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="oi oi-menu"></span> Menu
-			</button>
+    <div class="py-1 bg-black top">
+        <div class="container">
+            <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+                <div class="col-lg-12 d-block">
+                    <div class="row d-flex">
+                        <div class="col-md pr-4 d-flex topper align-items-center">
+                            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span
+                                    class="icon-phone2"></span></div>
+                            <span class="text">+ 1235 2355 98</span>
+                        </div>
+                        <div class="col-md pr-4 d-flex topper align-items-center">
+                            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span
+                                    class="icon-paper-plane"></span></div>
+                            <span class="text">youremail@email.com</span>
+                        </div>
+                        <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
+                            <p class="mb-0 register-link"><span>Open hours:</span> <span>Monday - Sunday</span>
+                                <span>8:00AM - 9:00PM</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-			<div class="collapse navbar-collapse" id="ftco-nav">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-					<li class="nav-item"><a href="menu.html" class="nav-link">Menu</a></li>
-					<li class="nav-item"><a href="blog.html" class="nav-link">Stories</a></li>
-					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-					<li class="nav-item cta"><a href="reservation.html" class="nav-link">Book a table</a></li>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Mixtape</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
 
-					<li class="nav-item cta cart-btn">
-						<a href="cart.html" class="nav-link cart-link">
-							<span class="ion-ios-cart"></span>
-							<span class="cart-badge" id="nav-cart-count">0</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<!-- END nav -->
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="menu.html" class="nav-link">Menu</a></li>
+                    <li class="nav-item"><a href="blog.html" class="nav-link">Stories</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li class="nav-item cta active"><a href="reservation.html" class="nav-link">Book a table</a></li>
 
-	<section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_3.jpg');"
-		data-stellar-background-ratio="0.5">
-		<div class="overlay"></div>
-		<div class="container">
-			<div class="row no-gutters slider-text align-items-end justify-content-center">
-				<div class="col-md-9 ftco-animate text-center mb-4">
-					<h1 class="mb-2 bread">Book a Table</h1>
-					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i
-									class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i
-								class="ion-ios-arrow-forward"></i></span></p>
-				</div>
-			</div>
-		</div>
-	</section>
+                    <li class="nav-item cta cart-btn">
+                        <a href="cart.html" class="nav-link cart-link">
+                            <span class="ion-ios-cart"></span>
+                            <span class="cart-badge" id="nav-cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-	<section class="ftco-section ftco-no-pt ftco-no-pb">
-		<div class="container-fluid px-0">
-			<div class="row d-flex no-gutters">
-				<div class="col-md-6 order-md-last ftco-animate makereservation p-4 p-md-5 pt-5">
-					<div class="py-md-5">
-						<div class="heading-section ftco-animate mb-5">
-							<span class="subheading">Book a table</span>
-							<h2 class="mb-4">Make Reservation</h2>
-						</div>
-						<form action="#">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="">Name</label>
-										<input type="text" class="form-control" placeholder="Your Name">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="">Email</label>
-										<input type="text" class="form-control" placeholder="Your Email">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="">Phone</label>
-										<input type="text" class="form-control" placeholder="Phone">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="">Phone</label>
-										<input type="text" class="form-control" id="book_date" placeholder="Date">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="">Time</label>
-										<input type="text" class="form-control" id="book_time" placeholder="Time">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="">Person</label>
-										<div class="select-wrap one-third">
-											<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-											<select name="" id="" class="form-control">
-												<option value="">Person</option>
-												<option value="">1</option>
-												<option value="">2</option>
-												<option value="">3</option>
-												<option value="">4+</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-12 mt-3">
-									<div class="form-group">
-										<input type="submit" value="Make a Reservation"
-											class="btn btn-primary py-3 px-5">
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="col-md-6 d-flex align-items-stretch pb-5 pb-md-0">
-					<div id="map"></div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_3.jpg');"
+        data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-end justify-content-center">
+                <div class="col-md-9 ftco-animate text-center mb-4">
+                    <h1 class="mb-2 bread">Book a Table</h1>
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                        <span>Reservation <i class="ion-ios-arrow-forward"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<footer class="ftco-footer ftco-bg-dark ftco-section">
-		<div class="container">
-			<div class="row mb-5">
-				<div class="col-md-6 col-lg-3">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Feliciano</h2>
-						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
-							there live the blind texts.</p>
-						<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
-							<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-							<li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-							<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Open Hours</h2>
-						<ul class="list-unstyled open-hours">
-							<li class="d-flex"><span>Monday</span><span>9:00 - 24:00</span></li>
-							<li class="d-flex"><span>Tuesday</span><span>9:00 - 24:00</span></li>
-							<li class="d-flex"><span>Wednesday</span><span>9:00 - 24:00</span></li>
-							<li class="d-flex"><span>Thursday</span><span>9:00 - 24:00</span></li>
-							<li class="d-flex"><span>Friday</span><span>9:00 - 02:00</span></li>
-							<li class="d-flex"><span>Saturday</span><span>9:00 - 02:00</span></li>
-							<li class="d-flex"><span>Sunday</span><span> 9:00 - 02:00</span></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Instagram</h2>
-						<div class="thumb d-sm-flex">
-							<a href="#" class="thumb-menu img" style="background-image: url(images/insta-1.jpg);">
-							</a>
-							<a href="#" class="thumb-menu img" style="background-image: url(images/insta-2.jpg);">
-							</a>
-							<a href="#" class="thumb-menu img" style="background-image: url(images/insta-3.jpg);">
-							</a>
-						</div>
-						<div class="thumb d-flex">
-							<a href="#" class="thumb-menu img" style="background-image: url(images/insta-4.jpg);">
-							</a>
-							<a href="#" class="thumb-menu img" style="background-image: url(images/insta-5.jpg);">
-							</a>
-							<a href="#" class="thumb-menu img" style="background-image: url(images/insta-6.jpg);">
-							</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Newsletter</h2>
-						<p>Far far away, behind the word mountains, far from the countries.</p>
-						<form action="#" class="subscribe-form">
-							<div class="form-group">
-								<input type="text" class="form-control mb-2 text-center"
-									placeholder="Enter email address">
-								<input type="submit" value="Subscribe" class="form-control submit px-3">
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12 text-center">
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container-fluid px-0">
+            <div class="row d-flex no-gutters">
+                <div class="col-md-6 order-md-last ftco-animate makereservation p-4 p-md-5 pt-5">
+                    <div class="py-md-5">
+                        <div class="heading-section ftco-animate mb-5">
+                            <span class="subheading">Book a table</span>
+                            <h2 class="mb-4">Make Reservation</h2>
+                        </div>
 
-					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						Copyright &copy;
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | This template
-						is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-							target="_blank">Colorlib</a>
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					</p>
-				</div>
-			</div>
-		</div>
-	</footer>
+                        <div class="res-error" id="resError"></div>
 
+                        <form id="reservationForm">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="resName">Name</label>
+                                        <input type="text" id="resName" class="form-control"
+                                            placeholder="Your Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="resEmail">Email</label>
+                                        <input type="email" id="resEmail" class="form-control"
+                                            placeholder="Your Email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="resPhone">Phone</label>
+                                        <input type="tel" id="resPhone" class="form-control"
+                                            placeholder="Phone" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="resDate">Date</label>
+                                        <input type="text" id="resDate" class="form-control"
+                                            placeholder="Select Date" required autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="resTime">Time</label>
+                                        <input type="text" id="resTime" class="form-control"
+                                            placeholder="Select Time" required autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="resPersons">Persons</label>
+                                        <div class="select-wrap one-third">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select id="resPersons" class="form-control" required>
+                                                <option value="">Select</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6+">6+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-12 mt-3">
+                                    <div class="form-group">
+                                        <input type="submit" value="Make a Reservation"
+                                            class="btn btn-primary py-3 px-5 res-submit" id="resSubmit">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 d-flex align-items-stretch pb-5 pb-md-0">
+                    <div id="map" style="width:100%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<!-- loader -->
-	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
-				stroke="#F96D00" />
-		</svg></div>
+    <!-- SUCCESS MODAL -->
+    <div class="res-success-modal" id="resSuccessModal">
+        <div class="res-success-card">
+            <div class="check">✓</div>
+            <h3>Table Booked!</h3>
+            <p>We've received your reservation.</p>
 
+            <div class="details" id="resSuccessDetails"></div>
 
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery-migrate-3.0.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.easing.1.3.js"></script>
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.stellar.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/aos.js"></script>
-	<script src="js/jquery.animateNumber.min.js"></script>
-	<script src="js/bootstrap-datepicker.js"></script>
-	<script src="js/jquery.timepicker.min.js"></script>
-	<script src="js/scrollax.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/cart-badge.js"></script>
-	<script src="js/auth-nav.js"></script>
+            <p style="color:#888; font-size:13px; margin-bottom:20px;">
+                We'll contact you shortly to confirm.
+            </p>
+
+            <a href="menu.html" class="res-success-btn" id="resSuccessClose">
+                Browse Menu
+            </a>
+        </div>
+    </div>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Mixtape</h2>
+                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
+                            there live the blind texts.</p>
+                        <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
+                            <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                            <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                            <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Open Hours</h2>
+                        <ul class="list-unstyled open-hours">
+                            <li class="d-flex"><span>Monday</span><span>9:00 - 24:00</span></li>
+                            <li class="d-flex"><span>Tuesday</span><span>9:00 - 24:00</span></li>
+                            <li class="d-flex"><span>Wednesday</span><span>9:00 - 24:00</span></li>
+                            <li class="d-flex"><span>Thursday</span><span>9:00 - 24:00</span></li>
+                            <li class="d-flex"><span>Friday</span><span>9:00 - 02:00</span></li>
+                            <li class="d-flex"><span>Saturday</span><span>9:00 - 02:00</span></li>
+                            <li class="d-flex"><span>Sunday</span><span> 9:00 - 02:00</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Instagram</h2>
+                        <div class="thumb d-sm-flex">
+                            <a href="#" class="thumb-menu img" style="background-image: url(images/insta-1.jpg);"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(images/insta-2.jpg);"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(images/insta-3.jpg);"></a>
+                        </div>
+                        <div class="thumb d-flex">
+                            <a href="#" class="thumb-menu img" style="background-image: url(images/insta-4.jpg);"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(images/insta-5.jpg);"></a>
+                            <a href="#" class="thumb-menu img" style="background-image: url(images/insta-6.jpg);"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Newsletter</h2>
+                        <p>Far far away, behind the word mountains, far from the countries.</p>
+                        <form action="#" class="subscribe-form">
+                            <div class="form-group">
+                                <input type="text" class="form-control mb-2 text-center"
+                                    placeholder="Enter email address">
+                                <input type="submit" value="Subscribe" class="form-control submit px-3">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00" />
+        </svg></div>
+
+    <!-- Existing scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/cart-badge.js"></script>
+    <script src="js/auth-nav.js"></script>
+    <script src="js/login-gate.js"></script>
+
+    <!-- ============================================================
+         RESERVATION FORM LOGIC (UNCHANGED)
+         ============================================================ -->
+    <script>
+        const BACKEND_URL = "https://feliciano-master.onrender.com";
+
+        const form          = document.getElementById("reservationForm");
+        const errorBox      = document.getElementById("resError");
+        const submitBtn     = document.getElementById("resSubmit");
+        const successModal  = document.getElementById("resSuccessModal");
+        const successDetails= document.getElementById("resSuccessDetails");
+
+        // Pre-fill name/email if user is logged in
+        (function prefill() {
+            try {
+                const user = JSON.parse(localStorage.getItem("user") || "null");
+                if (user) {
+                    document.getElementById("resName").value  = user.name || "";
+                    document.getElementById("resEmail").value = user.email || "";
+                }
+            } catch (e) {}
+        })();
+
+        // Warm up backend
+        fetch(`${BACKEND_URL}/`).catch(() => {});
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // 🔒 Require login
+            if (window.LoginGate && !window.LoginGate.requireLogin("/reservation")) {
+                return;
+            }
+
+            errorBox.classList.remove("show");
+            submitBtn.classList.add("loading");
+            submitBtn.value = "Booking...";
+
+            const payload = {
+                name:    document.getElementById("resName").value.trim(),
+                email:   document.getElementById("resEmail").value.trim(),
+                phone:   document.getElementById("resPhone").value.trim(),
+                date:    document.getElementById("resDate").value.trim(),
+                time:    document.getElementById("resTime").value.trim(),
+                persons: document.getElementById("resPersons").value,
+            };
+
+            try {
+                const token = localStorage.getItem("token");
+
+                const res = await fetch(`${BACKEND_URL}/reserve`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...(token ? { "Authorization": "Bearer " + token } : {}),
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    const r = data.reservation;
+                    successDetails.innerHTML = `
+                        <div><span>Name</span><strong>${r.name}</strong></div>
+                        <div><span>Date</span><strong>${r.date}</strong></div>
+                        <div><span>Time</span><strong>${r.time}</strong></div>
+                        <div><span>Persons</span><strong>${r.persons}</strong></div>
+                    `;
+                    successModal.classList.add("active");
+                    form.reset();
+                } else {
+                    errorBox.textContent = data.error || "Could not book table.";
+                    errorBox.classList.add("show");
+                }
+            } catch (err) {
+                console.error("Reservation error:", err);
+                errorBox.textContent = "Server is waking up. Please try again.";
+                errorBox.classList.add("show");
+            } finally {
+                submitBtn.classList.remove("loading");
+                submitBtn.value = "Make a Reservation";
+            }
+        });
+
+        // Close success modal when clicking the button
+        document.getElementById("resSuccessClose").addEventListener("click", () => {
+            successModal.classList.remove("active");
+        });
+
+        // Initialize date & time pickers
+        $(document).ready(function () {
+            if ($.fn.datepicker) {
+                $('#resDate').datepicker({
+                    format: 'yyyy-mm-dd',
+                    startDate: 'today',
+                    autoclose: true,
+                });
+            }
+            if ($.fn.timepicker) {
+                $('#resTime').timepicker({
+                    timeFormat: 'h:i A',
+                    interval: 30,
+                    minTime: '9:00am',
+                    maxTime: '11:30pm',
+                    defaultTime: '7:00pm',
+                    startTime: '9:00am',
+                    dynamic: false,
+                    dropdown: true,
+                    scrollbar: true,
+                });
+            }
+        });
+    </script>
+
 </body>
 
 </html>

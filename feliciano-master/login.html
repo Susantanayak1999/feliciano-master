@@ -232,8 +232,12 @@
                         badge.setAttribute("data-count", "0");
                     }
 
+                    // Return to the page they came from, or home
+                    const backTo = sessionStorage.getItem("lg_return_to") || "/";
+                    sessionStorage.removeItem("lg_return_to");
+
                     setTimeout(() => {
-                        window.location.href = "/";
+                        window.location.href = backTo;
                     }, 100);
                     return;
                 }

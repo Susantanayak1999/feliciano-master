@@ -50,6 +50,22 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model("Order", orderSchema);
 
 // ============================================================
+// Reservation Schema  ✨ NEW
+// ============================================================
+const reservationSchema = new mongoose.Schema({
+    userId:    { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    name:      { type: String, required: true },
+    email:     { type: String, required: true },
+    phone:     { type: String, required: true },
+    date:      { type: String, required: true },
+    time:      { type: String, required: true },
+    persons:   { type: String, required: true },
+    status:    { type: String, default: "pending" },
+    createdAt: { type: Date, default: Date.now },
+});
+const Reservation = mongoose.model("Reservation", reservationSchema);
+
+// ============================================================
 // JWT Helpers
 // ============================================================
 const JWT_SECRET = process.env.JWT_SECRET || "mixtape-kitchen-secret";
@@ -240,6 +256,70 @@ app.get("/my-orders", authMiddleware, async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.userId }).sort({ createdAt: -1 });
         res.json({ success: true, orders });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// RESERVATION: CREATE  ✨ NEW
+// ============================================================
+app.post("/reserve", async (req, res) => {
+    try {
+        const { name, email, phone, date, time, persons } = req.body;
+
+        if (!name || !email || !phone || !date || !time || !persons) {
+            return res.status(400).json({ success: false, error: "All fields required" });
+        }
+
+        // Optional: attach user id if authenticated
+        let userId = null;
+        try {
+            const token = req.headers.authorization?.replace("Bearer ", "");
+            if (token) {
+                const decoded = jwt.verify(token, JWT_SECRET);
+                userId = decoded.userId;
+            }
+        } catch (e) { /* guest booking is fine */ }
+
+        const reservation = await Reservation.create({
+            userId,
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            date,
+            time,
+            persons,
+        });
+
+        console.log("✅ Reservation created:", reservation._id, name, date, time);
+
+        res.json({
+            success: true,
+            message: "Reservation confirmed!",
+            reservation: {
+                id: reservation._id,
+                name: reservation.name,
+                date: reservation.date,
+                time: reservation.time,
+                persons: reservation.persons,
+            },
+        });
+    } catch (err) {
+        console.error("❌ Reservation error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// RESERVATION: MY RESERVATIONS  ✨ NEW
+// ============================================================
+app.get("/my-reservations", authMiddleware, async (req, res) => {
+    try {
+        const reservations = await Reservation
+            .find({ userId: req.userId })
+            .sort({ createdAt: -1 });
+        res.json({ success: true, reservations });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
