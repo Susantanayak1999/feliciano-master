@@ -1,34 +1,45 @@
 // ============================================================
-// MAILER — Brevo SMTP (sends to ANY email, no domain needed)
+// MAILER — Brevo HTTP API (works on Render, no port blocks)
 // ============================================================
-const nodemailer = require("nodemailer");
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const BREVO_SENDER_EMAIL = "susantanayak01592@gmail.com";
+const BREVO_SENDER_NAME = "Mixtape Kitchen";
 
-const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.BREVO_USER,
-        pass: process.env.BREVO_PASS,
-    },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 20000,
-});
+if (!BREVO_API_KEY) {
+    console.warn("⚠️ BREVO_API_KEY not set — emails will not send");
+} else {
+    console.log("✅ Mailer ready (Brevo API)");
+}
 
-transporter.verify((err) => {
-    if (err) console.warn("⚠️ Brevo not configured:", err.message);
-    else console.log("✅ Mailer ready (Brevo)");
-});
+// ---------- Helper: send via Brevo HTTP API ----------
+async function brevoSend({ to, subject, html }) {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+            "accept": "application/json",
+            "api-key": BREVO_API_KEY,
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            sender: { name: BREVO_SENDER_NAME, email: BREVO_SENDER_EMAIL },
+            to: [{ email: to }],
+            subject,
+            htmlContent: html,
+        }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+        throw new Error(data.message || JSON.stringify(data));
+    }
+    return data;
+}
 
 // ------------------------------------------------------------
 // 1. RESERVATION CONFIRMATION
 // ------------------------------------------------------------
 async function sendReservationEmail({ to, name, date, time, persons, reservationId }) {
-    if (!process.env.BREVO_USER || !process.env.BREVO_PASS) {
-        console.warn("⚠️ Brevo env not set — skipping reservation email");
-        return { sent: false };
-    }
+    if (!BREVO_API_KEY) return { sent: false };
 
     const html = `
     <div style="font-family:'Poppins',Arial,sans-serif;background:#f6f2ea;padding:40px 20px;">
@@ -54,14 +65,13 @@ async function sendReservationEmail({ to, name, date, time, persons, reservation
     </div>`;
 
     try {
-        const info = await transporter.sendMail({
-            from: `"Mixtape Kitchen" <susantanayak01592@gmail.com>`,
+        const data = await brevoSend({
             to,
             subject: `Your Reservation is Confirmed — ${date} at ${time}`,
             html,
         });
-        console.log("✅ Reservation email sent to", to, "→", info.messageId);
-        return { sent: true, id: info.messageId };
+        console.log("✅ Reservation email sent to", to, "→", data.messageId);
+        return { sent: true, id: data.messageId };
     } catch (err) {
         console.error("❌ Reservation email failed:", err.message);
         return { sent: false, error: err.message };
@@ -72,10 +82,7 @@ async function sendReservationEmail({ to, name, date, time, persons, reservation
 // 2. ORDER CONFIRMATION (after payment)
 // ------------------------------------------------------------
 async function sendOrderEmail({ to, name, items, amount, paymentId, orderId }) {
-    if (!process.env.BREVO_USER || !process.env.BREVO_PASS) {
-        console.warn("⚠️ Brevo env not set — skipping order email");
-        return { sent: false };
-    }
+    if (!BREVO_API_KEY) return { sent: false };
 
     const itemRows = (items || []).map(item => `
       <tr>
@@ -110,14 +117,13 @@ async function sendOrderEmail({ to, name, items, amount, paymentId, orderId }) {
     </div>`;
 
     try {
-        const info = await transporter.sendMail({
-            from: `"Mixtape Kitchen" <susantanayak01592@gmail.com>`,
+        const data = await brevoSend({
             to,
             subject: `Your Order is Confirmed — ₹${Number(amount).toFixed(2)}`,
             html,
         });
-        console.log("✅ Order email sent to", to, "→", info.messageId);
-        return { sent: true, id: info.messageId };
+        console.log("✅ Order email sent to", to, "→", data.messageId);
+        return { sent: true, id: data.messageId };
     } catch (err) {
         console.error("❌ Order email failed:", err.message);
         return { sent: false, error: err.message };
