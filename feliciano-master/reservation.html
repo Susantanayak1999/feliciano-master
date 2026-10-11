@@ -26,7 +26,246 @@
 
     <style>
         /* ============================================================
-           SUCCESS MODAL
+           HERO — reservation-specific heading
+           ============================================================ */
+        .res-hero-tag {
+            display: inline-block;
+            background: rgba(200, 169, 126, 0.15);
+            color: #c8a97e;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            border: 1px solid rgba(200, 169, 126, 0.4);
+            font-family: "Poppins", sans-serif;
+        }
+        .res-hero-sub {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 15px;
+            margin-top: 12px;
+            font-family: "Poppins", sans-serif;
+            max-width: 540px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ============================================================
+           WHY BOOK WITH US — feature strip
+           ============================================================ */
+        .res-features {
+            padding: 60px 0 20px;
+            background: #fff;
+        }
+        .res-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        .res-feature {
+            text-align: center;
+            padding: 24px 18px;
+            border-radius: 12px;
+            transition: all .3s ease;
+            border: 1px solid #f1ede6;
+        }
+        .res-feature:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15);
+            border-color: rgba(200, 169, 126, 0.3);
+        }
+        .res-feature .icon {
+            width: 54px; height: 54px;
+            border-radius: 50%;
+            background: rgba(200, 169, 126, 0.12);
+            color: #c8a97e;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 22px;
+            transition: all .3s ease;
+        }
+        .res-feature:hover .icon {
+            background: #c8a97e;
+            color: #fff;
+            transform: rotate(-6deg);
+        }
+        .res-feature h4 {
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+        .res-feature p {
+            font-size: 13px;
+            color: #888;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+           FORM — icons + enhanced styling
+           ============================================================ */
+        .makereservation .heading-section .subheading {
+            position: absolute;
+        }
+
+        .res-form-group {
+            position: relative;
+        }
+        .res-form-group .field-icon {
+            position: absolute;
+            right: 18px;
+            top: 42px;
+            color: #c8a97e;
+            font-size: 16px;
+            opacity: 0.6;
+            pointer-events: none;
+            transition: opacity .25s ease;
+        }
+        .res-form-group input:focus ~ .field-icon,
+        .res-form-group select:focus ~ .field-icon {
+            opacity: 1;
+        }
+
+        /* Nicer form controls */
+        .makereservation .form-control {
+            background: #faf8f4 !important;
+            border: 1.5px solid #eee !important;
+            border-radius: 10px !important;
+            padding: 12px 46px 12px 18px !important;
+            transition: all .25s ease !important;
+            height: 52px !important;
+        }
+        .makereservation .form-control:focus {
+            background: #fff !important;
+            border-color: #c8a97e !important;
+            box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12) !important;
+        }
+
+        .makereservation label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        /* Custom select wrapper */
+        .makereservation .select-wrap {
+            position: relative;
+        }
+        .makereservation .select-wrap .icon {
+            color: #c8a97e;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Enhanced submit button */
+        .res-submit {
+            padding: 16px 40px !important;
+            font-size: 15px !important;
+            font-weight: 600 !important;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 30px !important;
+            transition: all .3s ease !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .res-submit::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transition: left .6s ease;
+        }
+        .res-submit:hover::before {
+            left: 100%;
+        }
+        .res-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(200, 169, 126, 0.5);
+        }
+
+        /* ============================================================
+           SIDE INFO CARD
+           ============================================================ */
+        .res-info-card {
+            background: linear-gradient(160deg, #fdfaf5 0%, #f8f3ea 100%);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 30px;
+            border: 1px dashed rgba(200, 169, 126, 0.35);
+        }
+        .res-info-card h4 {
+            font-family: "Great Vibes", cursive;
+            font-size: 32px;
+            color: #c8a97e;
+            font-weight: normal;
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+        .res-info-card .sub {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .res-info-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(200, 169, 126, 0.2);
+        }
+        .res-info-row:last-child { border-bottom: none; }
+        .res-info-row .ic {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            color: #c8a97e;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);
+        }
+        .res-info-row .txt strong {
+            display: block;
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+        }
+        .res-info-row .txt span {
+            font-size: 12px;
+            color: #888;
+            font-family: "Poppins", sans-serif;
+        }
+
+        /* Map container rounded corners */
+        #map {
+            border-radius: 0;
+        }
+        .res-map-wrap {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+        }
+
+        /* ============================================================
+           SUCCESS MODAL (kept as your design)
            ============================================================ */
         .res-success-modal {
             position: fixed;
@@ -57,7 +296,6 @@
             from { opacity: 0; transform: scale(.92); }
             to   { opacity: 1; transform: scale(1); }
         }
-
         .res-success-card .check {
             width: 80px; height: 80px;
             border-radius: 50%;
@@ -68,7 +306,6 @@
             font-size: 36px;
             box-shadow: 0 10px 30px rgba(200,169,126,.45);
         }
-
         .res-success-card h3 {
             font-family: "Great Vibes", cursive;
             font-size: 40px;
@@ -77,14 +314,12 @@
             line-height: 1;
             margin: 0 0 10px;
         }
-
         .res-success-card p {
             color: #666;
             font-size: 15px;
             margin-bottom: 10px;
             font-family: "Poppins", sans-serif;
         }
-
         .res-success-card .details {
             background: #faf8f4;
             border-radius: 10px;
@@ -122,10 +357,9 @@
             background: #b8956a;
             color: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(200,169,126,.55);
         }
 
-        /* Inline error for the form */
+        /* Error */
         .res-error {
             display: none;
             background: #fee;
@@ -138,131 +372,74 @@
         }
         .res-error.show { display: block; }
 
-        /* Loading state on button */
         .res-submit.loading {
             opacity: 0.7;
             cursor: not-allowed;
         }
 
         /* ============================================================
-           RESPONSIVE — TABLET & MOBILE
+           RESPONSIVE
            ============================================================ */
-
-        /* --- TABLET (max 991px) --- */
         @media (max-width: 991.98px) {
-            /* Stack the form and map vertically */
+            .res-feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 20px;
+            }
             .makereservation {
                 padding: 60px 30px !important;
             }
-            .makereservation .py-md-5 {
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-            }
-
-            /* Map goes full width below form */
-            #map {
-                min-height: 320px;
-                margin-top: 0;
-            }
-
-            /* Keep form fields 2-column */
-            .makereservation .col-md-6 {
-                flex: 0 0 50%;
-                max-width: 50%;
-            }
+            #map { min-height: 350px; }
+            .res-map-wrap { min-height: 350px; }
         }
 
-        /* --- MOBILE (max 767px) --- */
         @media (max-width: 767.98px) {
-            /* Form heading centered */
-            .makereservation .heading-section {
-                text-align: center;
+            .res-feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+                padding: 0 15px;
             }
-            .makereservation .heading-section .subheading {
-                font-size: 70px !important;
-                top: -30px !important;
-            }
-            .makereservation .heading-section h2 {
-                font-size: 32px;
-            }
+            .res-feature { padding: 18px 12px; }
+            .res-feature h4 { font-size: 13px; }
+            .res-feature p { font-size: 11px; }
+            .res-feature .icon { width: 44px; height: 44px; font-size: 18px; }
 
-            /* Form container */
-            .makereservation {
-                padding: 50px 20px !important;
-            }
+            .makereservation .heading-section { text-align: center; }
+            .makereservation .heading-section .subheading { font-size: 70px !important; top: -30px !important; }
+            .makereservation .heading-section h2 { font-size: 32px; }
+            .makereservation { padding: 50px 20px !important; }
 
-            /* Stack fields: 1 per row on small phones */
-            .makereservation .col-md-6 {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
+            .makereservation .col-md-6 { flex: 0 0 100%; max-width: 100%; }
+            .makereservation .form-control { height: 48px; }
+            .makereservation .btn-primary { width: 100%; display: block; text-align: center; padding: 14px 20px; }
 
-            /* Slightly larger touch targets */
-            .makereservation .form-control {
-                height: 48px;
-                font-size: 15px;
-            }
+            #map { min-height: 260px; }
+            .res-map-wrap { min-height: 260px; }
 
-            /* Submit button full width */
-            .makereservation .btn-primary {
-                width: 100%;
-                display: block;
-                text-align: center;
-                padding: 14px 20px;
-            }
+            .res-info-card { padding: 22px 18px; }
+            .res-info-card h4 { font-size: 26px; }
 
-            /* Map */
-            #map {
-                min-height: 260px;
-                margin-top: 0;
-            }
-
-            /* Success modal (compact) */
-            .res-success-card {
-                padding: 36px 22px;
-                border-radius: 14px;
-            }
-            .res-success-card .check {
-                width: 64px; height: 64px; font-size: 28px;
-                margin-bottom: 16px;
-            }
+            .res-success-card { padding: 36px 22px; border-radius: 14px; }
+            .res-success-card .check { width: 64px; height: 64px; font-size: 28px; margin-bottom: 16px; }
             .res-success-card h3 { font-size: 32px; }
-            .res-success-card p  { font-size: 14px; }
-            .res-success-card .details {
-                font-size: 13px;
-                padding: 14px;
-            }
-            .res-success-btn {
-                width: 100%;
-                text-align: center;
-                padding: 13px 20px;
-            }
+            .res-success-card p { font-size: 14px; }
+            .res-success-card .details { font-size: 13px; padding: 14px; }
+            .res-success-btn { width: 100%; text-align: center; padding: 13px 20px; }
         }
 
-        /* --- VERY SMALL MOBILE (max 480px) --- */
         @media (max-width: 480px) {
-            .makereservation {
-                padding: 40px 15px !important;
-            }
-            .makereservation .heading-section h2 {
-                font-size: 26px;
-            }
-            .makereservation .heading-section .subheading {
-                font-size: 56px !important;
-                top: -22px !important;
-            }
-            .makereservation .form-group label {
-                font-size: 13px;
-            }
-            .makereservation .form-control {
-                height: 46px;
-                font-size: 14px;
-            }
+            .res-feature-grid { grid-template-columns: 1fr; }
+            .makereservation { padding: 40px 15px !important; }
+            .makereservation .heading-section h2 { font-size: 26px; }
+            .makereservation .heading-section .subheading { font-size: 56px !important; top: -22px !important; }
+            .makereservation .form-group label { font-size: 12px; }
+            .makereservation .form-control { height: 46px; font-size: 14px; }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- TOP BAR -->
     <div class="py-1 bg-black top">
         <div class="container">
             <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
@@ -289,6 +466,7 @@
         </div>
     </div>
 
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
             <a class="navbar-brand" href="index.html">Mixtape</a>
@@ -317,13 +495,16 @@
         </div>
     </nav>
 
+    <!-- HERO -->
     <section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_3.jpg');"
         data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-end justify-content-center">
                 <div class="col-md-9 ftco-animate text-center mb-4">
+                    <span class="res-hero-tag">Reserve Your Spot</span>
                     <h1 class="mb-2 bread">Book a Table</h1>
+                    <p class="res-hero-sub">Enjoy a curated dining experience — reserve in seconds, no phone calls needed.</p>
                     <p class="breadcrumbs">
                         <span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>
                         <span>Reservation <i class="ion-ios-arrow-forward"></i></span>
@@ -333,9 +514,37 @@
         </div>
     </section>
 
+    <!-- FEATURE STRIP -->
+    <section class="res-features">
+        <div class="res-feature-grid">
+            <div class="res-feature">
+                <div class="icon"><span class="ion-ios-time"></span></div>
+                <h4>Instant Confirmation</h4>
+                <p>Book in seconds — no waiting</p>
+            </div>
+            <div class="res-feature">
+                <div class="icon"><span class="ion-ios-close-circle-outline"></span></div>
+                <h4>Free Cancellation</h4>
+                <p>Cancel anytime before your visit</p>
+            </div>
+            <div class="res-feature">
+                <div class="icon"><span class="ion-ios-restaurant"></span></div>
+                <h4>Best Seat Guaranteed</h4>
+                <p>We reserve the perfect spot for you</p>
+            </div>
+            <div class="res-feature">
+                <div class="icon"><span class="ion-ios-heart"></span></div>
+                <h4>Personal Service</h4>
+                <p>Warm hospitality from the moment you arrive</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESERVATION FORM -->
     <section class="ftco-section ftco-no-pt ftco-no-pb">
         <div class="container-fluid px-0">
             <div class="row d-flex no-gutters">
+
                 <div class="col-md-6 order-md-last ftco-animate makereservation p-4 p-md-5 pt-5">
                     <div class="py-md-5">
                         <div class="heading-section ftco-animate mb-5">
@@ -348,38 +557,43 @@
                         <form id="reservationForm">
                             <div class="row">
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group res-form-group">
                                         <label for="resName">Name</label>
                                         <input type="text" id="resName" class="form-control"
                                             placeholder="Your Name" required>
+                                        <span class="field-icon ion-ios-person"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group res-form-group">
                                         <label for="resEmail">Email</label>
                                         <input type="email" id="resEmail" class="form-control"
                                             placeholder="Your Email" required>
+                                        <span class="field-icon ion-ios-email"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group res-form-group">
                                         <label for="resPhone">Phone</label>
                                         <input type="tel" id="resPhone" class="form-control"
                                             placeholder="Phone" required>
+                                        <span class="field-icon ion-ios-telephone"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group res-form-group">
                                         <label for="resDate">Date</label>
                                         <input type="text" id="resDate" class="form-control"
                                             placeholder="Select Date" required autocomplete="off">
+                                        <span class="field-icon ion-ios-calendar"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group res-form-group">
                                         <label for="resTime">Time</label>
                                         <input type="text" id="resTime" class="form-control"
                                             placeholder="Select Time" required autocomplete="off">
+                                        <span class="field-icon ion-ios-clock"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
@@ -389,12 +603,12 @@
                                             <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                                             <select id="resPersons" class="form-control" required>
                                                 <option value="">Select</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6+">6+</option>
+                                                <option value="1">1 Guest</option>
+                                                <option value="2">2 Guests</option>
+                                                <option value="3">3 Guests</option>
+                                                <option value="4">4 Guests</option>
+                                                <option value="5">5 Guests</option>
+                                                <option value="6+">6+ Guests</option>
                                             </select>
                                         </div>
                                     </div>
@@ -407,10 +621,35 @@
                                 </div>
                             </div>
                         </form>
+
+                        <!-- Info card -->
+                        <div class="res-info-card">
+                            <h4>Need Help?</h4>
+                            <span class="sub">We're here for you</span>
+
+                            <div class="res-info-row">
+                                <div class="ic ion-ios-telephone"></div>
+                                <div class="txt">
+                                    <strong>+91 98765 43210</strong>
+                                    <span>Call us 9 AM – 9 PM</span>
+                                </div>
+                            </div>
+                            <div class="res-info-row">
+                                <div class="ic ion-ios-email"></div>
+                                <div class="txt">
+                                    <strong>hello@mixtapekitchen.in</strong>
+                                    <span>We reply within 1 hour</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
                 <div class="col-md-6 col-12 d-flex align-items-stretch pb-5 pb-md-0">
-                    <div id="map" style="width:100%;"></div>
+                    <div class="res-map-wrap">
+                        <div id="map" style="width:100%; height:100%;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -422,19 +661,17 @@
             <div class="check">✓</div>
             <h3>Table Booked!</h3>
             <p>We've received your reservation.</p>
-
             <div class="details" id="resSuccessDetails"></div>
-
             <p style="color:#888; font-size:13px; margin-bottom:20px;">
                 We'll contact you shortly to confirm.
             </p>
-
             <a href="menu.html" class="res-success-btn" id="resSuccessClose">
                 Browse Menu
             </a>
         </div>
     </div>
 
+    <!-- FOOTER (unchanged) -->
     <footer class="ftco-footer ftco-bg-dark ftco-section">
         <div class="container">
             <div class="row mb-5">
@@ -509,7 +746,7 @@
                 stroke="#F96D00" />
         </svg></div>
 
-    <!-- Existing scripts -->
+    <!-- Scripts (unchanged) -->
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery-migrate-3.0.1.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -541,7 +778,6 @@
         const successModal  = document.getElementById("resSuccessModal");
         const successDetails= document.getElementById("resSuccessDetails");
 
-        // Pre-fill name/email if user is logged in
         (function prefill() {
             try {
                 const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -552,13 +788,11 @@
             } catch (e) {}
         })();
 
-        // Warm up backend
         fetch(`${BACKEND_URL}/`).catch(() => {});
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            // 🔒 Require login
             if (window.LoginGate && !window.LoginGate.requireLogin("/reservation")) {
                 return;
             }
@@ -614,12 +848,10 @@
             }
         });
 
-        // Close success modal when clicking the button
         document.getElementById("resSuccessClose").addEventListener("click", () => {
             successModal.classList.remove("active");
         });
 
-        // Initialize date & time pickers
         $(document).ready(function () {
             if ($.fn.datepicker) {
                 $('#resDate').datepicker({
