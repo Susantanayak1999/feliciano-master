@@ -17,10 +17,24 @@
         if (document.getElementById("authNavItem")) return;
 
         // 🔒 If not logged in, clear any stale cart
+        // const hasToken = !!localStorage.getItem("token");
+        // const hasUser = !!localStorage.getItem("user");
+        // if (!hasToken || !hasUser) {
+        //     localStorage.removeItem("cart");
+        // }
+
+        // 🔒 If not logged in, clear any stale cart
         const hasToken = !!localStorage.getItem("token");
         const hasUser = !!localStorage.getItem("user");
-        if (!hasToken || !hasUser) {
+        const loggedIn = hasToken && hasUser;
+
+        if (!loggedIn) {
             localStorage.removeItem("cart");
+        }
+
+        // 🔄 Refresh cart badge on load
+        if (typeof window.updateCartCount === "function") {
+            setTimeout(window.updateCartCount, 0);
         }
 
         const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -494,3 +508,19 @@
     window.addEventListener("resize", forceMobileLayout);
 
 })();
+
+/* ============================================================
+   5. CART BADGE SYNC — ensure badge updates after layout moves
+   ============================================================ */
+setTimeout(function () {
+    if (typeof window.updateCartCount === "function") {
+        window.updateCartCount();
+    }
+}, 100);
+
+// Re-sync badge whenever items change in this tab
+document.addEventListener("cart:updated", function () {
+    if (typeof window.updateCartCount === "function") {
+        window.updateCartCount();
+    }
+});

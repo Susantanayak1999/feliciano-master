@@ -1354,8 +1354,15 @@
 			if (!btn) return;
 			e.preventDefault();
 
-			if (window.LoginGate && !window.LoginGate.requireLogin("/menu")) {
-				return; // show modal, don't add to cart
+			// 🔒 Require login before adding to cart
+			if (!localStorage.getItem("token")) {
+				if (window.LoginGate) {
+					window.LoginGate.requireLogin("/menu");
+				} else {
+					alert("Please login first.");
+					window.location.href = "/login";
+				}
+				return;
 			}
 
 			var id = Number(btn.dataset.id);
@@ -1363,7 +1370,7 @@
 			var price = Number(btn.dataset.price);
 			var image = btn.dataset.image;
 
-			var cart = getCart();
+			var cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 			// Check if item already exists
 			var existingIndex = -1;
@@ -1375,10 +1382,8 @@
 			}
 
 			if (existingIndex !== -1) {
-				// Increase quantity
 				cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 0) + 1;
 			} else {
-				// Add new item with quantity 1
 				cart.push({
 					id: id,
 					name: name,
@@ -1388,8 +1393,70 @@
 				});
 			}
 
-			saveCart(cart);
+			// Save
+			localStorage.setItem('cart', JSON.stringify(cart));
+
+
+			// Force badge update
+			var badge = document.getElementById("nav-cart-count");
+			if (badge) {
+				var newCount = cart.reduce(function (sum, item) {
+					return sum + (Number(item.quantity) || 0);
+				}, 0);
+				badge.textContent = newCount;
+				badge.setAttribute("data-count", newCount);
+				badge.style.display = newCount > 0 ? "" : "none";
+			}
+
+
+			// 🎯 Update the badge IMMEDIATELY on this page
+			if (typeof window.updateCartCount === "function") {
+				window.updateCartCount();
+			}
+
+			// Show toast
 			showToast('"' + name + '" added to cart!');
+		});
+		var btn = e.target.closest('.order-now-btn');
+		if (!btn) return;
+		e.preventDefault();
+
+		if (window.LoginGate && !window.LoginGate.requireLogin("/menu")) {
+			return; // show modal, don't add to cart
+		}
+
+		var id = Number(btn.dataset.id);
+		var name = btn.dataset.name;
+		var price = Number(btn.dataset.price);
+		var image = btn.dataset.image;
+
+		var cart = getCart();
+
+		// Check if item already exists
+		var existingIndex = -1;
+		for (var i = 0; i < cart.length; i++) {
+			if (cart[i].id === id) {
+				existingIndex = i;
+				break;
+			}
+		}
+
+		if (existingIndex !== -1) {
+			// Increase quantity
+			cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 0) + 1;
+		} else {
+			// Add new item with quantity 1
+			cart.push({
+				id: id,
+				name: name,
+				price: price,
+				image: image,
+				quantity: 1
+			});
+		}
+
+		saveCart(cart);
+		showToast('"' + name + '" added to cart!');
 		});
 
 		// ---------- INIT ON PAGE LOAD ----------

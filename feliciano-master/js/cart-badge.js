@@ -1,6 +1,7 @@
 /* ============================================================
-   CART BADGE — Hide for guests, hide when 0, show count only
-   when logged in AND cart has items.
+   CART BADGE — shared across pages
+   Only shows when user is logged in AND cart has items.
+   Exposes window.updateCartCount() for immediate live updates.
    ============================================================ */
 
 (function () {
@@ -11,7 +12,11 @@
     }
 
     function getCart() {
-        return JSON.parse(localStorage.getItem("cart")) || [];
+        try {
+            return JSON.parse(localStorage.getItem("cart")) || [];
+        } catch (e) {
+            return [];
+        }
     }
 
     function getCartCount() {
@@ -27,33 +32,27 @@
         var badge = document.getElementById("nav-cart-count");
         if (!badge) return;
 
-        // 🔒 Not logged in → force count=0 and HIDE badge
+        // Not logged in → hide badge
         if (!isLoggedIn()) {
             badge.textContent = "0";
             badge.setAttribute("data-count", "0");
             badge.style.display = "none";
-            badge.style.visibility = "hidden";
-            badge.style.opacity = "0";
             return;
         }
 
-        // Logged in → show real count (hide if 0)
         var count = getCartCount();
         badge.textContent = count;
         badge.setAttribute("data-count", count);
 
         if (count > 0) {
-            badge.style.display = "";
-            badge.style.visibility = "";
-            badge.style.opacity = "";
+            badge.style.display = "";           // show
+            badge.style.visibility = "visible";
+            badge.style.opacity = "1";
         } else {
-            badge.style.display = "none";
-            badge.style.visibility = "hidden";
-            badge.style.opacity = "0";
+            badge.style.display = "none";       // hide
         }
     }
 
-    // Clear stale cart if guest
     function cleanStaleCart() {
         if (!isLoggedIn()) {
             if (localStorage.getItem("cart")) {
@@ -73,6 +72,9 @@
         boot();
     }
 
+    // 🌟 Expose globally BEFORE other scripts may need it
+    window.updateCartCount = updateCartCount;
+
     // Cross-tab sync
     window.addEventListener("storage", function (e) {
         if (e.key === "cart" || e.key === "token" || e.key === "user") {
@@ -80,8 +82,5 @@
             updateCartCount();
         }
     });
-
-    // Expose globally
-    window.updateCartCount = updateCartCount;
 
 })();
