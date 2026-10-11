@@ -77,6 +77,22 @@ const reservationSchema = new mongoose.Schema({
 const Reservation = mongoose.model("Reservation", reservationSchema);
 
 // ============================================================
+// MenuItem Schema (NEW)
+// ============================================================
+const menuItemSchema = new mongoose.Schema({
+    name:        { type: String, required: true },
+    description: { type: String, default: "" },
+    price:       { type: Number, required: true },
+    image:       { type: String, default: "" },
+    category:    { type: String, required: true }, // Breakfast / Lunch / Dinner / Drinks / Desserts / Wine
+    type:        { type: String, enum: ["veg", "non-veg"], default: "veg" },
+    ingredients: { type: [String], default: [] },
+    available:   { type: Boolean, default: true },
+    createdAt:   { type: Date, default: Date.now },
+});
+const MenuItem = mongoose.model("MenuItem", menuItemSchema);
+
+// ============================================================
 // JWT Helpers
 // ============================================================
 const JWT_SECRET = process.env.JWT_SECRET || "mixtape-kitchen-secret";
@@ -482,6 +498,74 @@ app.get("/me", authMiddleware, async (req, res) => {
         const user = await User.findById(req.userId).select("-password");
         if (!user) return res.status(404).json({ success: false, error: "User not found" });
         res.json({ success: true, user });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// MENU: GET ALL ITEMS  (NEW)
+// ============================================================
+app.get("/menu", async (req, res) => {
+    try {
+        const items = await MenuItem.find({ available: true }).sort({ category: 1, name: 1 });
+        res.json({ success: true, items });
+    } catch (err) {
+        console.error("❌ Menu fetch error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// MENU: ADD ITEM  (NEW)
+// ============================================================
+app.post("/menu/add", async (req, res) => {
+    try {
+        const { name, description, price, image, category, type, ingredients } = req.body;
+
+        if (!name || !price || !category) {
+            return res.status(400).json({ success: false, error: "Name, price, category required" });
+        }
+
+        const item = await MenuItem.create({
+            name: name.trim(),
+            description: (description || "").trim(),
+            price: Number(price),
+            image: image || "",
+            category: category.trim(),
+            type: type === "non-veg" ? "non-veg" : "veg",
+            ingredients: Array.isArray(ingredients) ? ingredients : [],
+        });
+
+        console.log("✅ Menu item added:", item.name);
+        res.json({ success: true, item });
+
+    } catch (err) {
+        console.error("❌ Menu add error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// MENU: UPDATE ITEM  (NEW)
+// ============================================================
+app.put("/menu/:id", async (req, res) => {
+    try {
+        const item = await MenuItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!item) return res.status(404).json({ success: false, error: "Item not found" });
+        res.json({ success: true, item });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// MENU: DELETE ITEM  (NEW)
+// ============================================================
+app.delete("/menu/:id", async (req, res) => {
+    try {
+        await MenuItem.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
