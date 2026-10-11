@@ -17,24 +17,10 @@
         if (document.getElementById("authNavItem")) return;
 
         // 🔒 If not logged in, clear any stale cart
-        // const hasToken = !!localStorage.getItem("token");
-        // const hasUser = !!localStorage.getItem("user");
-        // if (!hasToken || !hasUser) {
-        //     localStorage.removeItem("cart");
-        // }
-
-        // 🔒 If not logged in, clear any stale cart
         const hasToken = !!localStorage.getItem("token");
         const hasUser = !!localStorage.getItem("user");
-        const loggedIn = hasToken && hasUser;
-
-        if (!loggedIn) {
+        if (!hasToken || !hasUser) {
             localStorage.removeItem("cart");
-        }
-
-        // 🔄 Refresh cart badge on load
-        if (typeof window.updateCartCount === "function") {
-            setTimeout(window.updateCartCount, 0);
         }
 
         const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -508,4 +494,3 @@
     window.addEventListener("resize", forceMobileLayout);
 
 })();
-
