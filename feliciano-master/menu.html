@@ -149,7 +149,7 @@
             text-align: right;
         }
 
-        /* Category tabs — reuse .nav-pills look but ensure consistency */
+        /* Category tabs */
         .cat-tabs-wrap {
             display: flex;
             justify-content: center;
@@ -510,11 +510,9 @@
 
     <script>
         // ============================================
-        // BACKEND URL — auto-detect local vs production
+        // BACKEND URL — always use Render (works everywhere)
         // ============================================
-        const BACKEND_URL = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-            ? "http://localhost:5000"
-            : "https://feliciano-master.onrender.com";
+        const BACKEND_URL = "https://feliciano-master.onrender.com";
 
         console.log("🔗 Backend:", BACKEND_URL);
 
@@ -598,7 +596,7 @@
 
             try {
                 const res = await fetch(`${BACKEND_URL}/menu`);
-                const text = await res.text();   // read raw first, in case it's HTML
+                const text = await res.text();
 
                 let data;
                 try {
