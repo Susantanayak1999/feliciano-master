@@ -41,6 +41,7 @@
             border: 1px solid rgba(200, 169, 126, 0.4);
             font-family: "Poppins", sans-serif;
         }
+
         .res-hero-sub {
             color: rgba(255, 255, 255, 0.75);
             font-size: 15px;
@@ -54,7 +55,11 @@
         /* ============================================================
            FEATURE STRIP
            ============================================================ */
-        .res-features { padding: 60px 0 20px; background: #fff; }
+        .res-features {
+            padding: 60px 0 20px;
+            background: #fff;
+        }
+
         .res-feature-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -63,6 +68,7 @@
             margin: 0 auto;
             padding: 0 30px;
         }
+
         .res-feature {
             text-align: center;
             padding: 24px 18px;
@@ -70,26 +76,33 @@
             transition: all .3s ease;
             border: 1px solid #f1ede6;
         }
+
         .res-feature:hover {
             transform: translateY(-4px);
             box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15);
             border-color: rgba(200, 169, 126, 0.3);
         }
+
         .res-feature .icon {
-            width: 54px; height: 54px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
             background: rgba(200, 169, 126, 0.12);
             color: #c8a97e;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 auto 14px;
             font-size: 22px;
             transition: all .3s ease;
         }
+
         .res-feature:hover .icon {
             background: #c8a97e;
             color: #fff;
             transform: rotate(-6deg);
         }
+
         .res-feature h4 {
             font-family: "Poppins", sans-serif;
             font-size: 15px;
@@ -97,6 +110,7 @@
             color: #1a1a1a;
             margin-bottom: 6px;
         }
+
         .res-feature p {
             font-size: 13px;
             color: #888;
@@ -107,9 +121,14 @@
         /* ============================================================
            FORM ENHANCEMENTS
            ============================================================ */
-        .makereservation .heading-section .subheading { position: absolute; }
+        .makereservation .heading-section .subheading {
+            position: absolute;
+        }
 
-        .res-form-group { position: relative; }
+        .res-form-group {
+            position: relative;
+        }
+
         .res-form-group .field-icon {
             position: absolute;
             right: 18px;
@@ -120,8 +139,11 @@
             pointer-events: none;
             transition: opacity .25s ease;
         }
-        .res-form-group input:focus ~ .field-icon,
-        .res-form-group select:focus ~ .field-icon { opacity: 1; }
+
+        .res-form-group input:focus~.field-icon,
+        .res-form-group select:focus~.field-icon {
+            opacity: 1;
+        }
 
         .makereservation .form-control {
             background: #faf8f4 !important;
@@ -131,11 +153,13 @@
             transition: all .25s ease !important;
             height: 52px !important;
         }
+
         .makereservation .form-control:focus {
             background: #fff !important;
             border-color: #c8a97e !important;
             box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12) !important;
         }
+
         .makereservation label {
             font-size: 13px;
             font-weight: 600;
@@ -144,7 +168,11 @@
             text-transform: uppercase;
             margin-bottom: 8px;
         }
-        .makereservation .select-wrap { position: relative; }
+
+        .makereservation .select-wrap {
+            position: relative;
+        }
+
         .makereservation .select-wrap .icon {
             color: #c8a97e;
             right: 18px;
@@ -164,15 +192,22 @@
             position: relative;
             overflow: hidden;
         }
+
         .res-submit::before {
             content: "";
             position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
             transition: left .6s ease;
         }
-        .res-submit:hover::before { left: 100%; }
+
+        .res-submit:hover::before {
+            left: 100%;
+        }
+
         .res-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(200, 169, 126, 0.5);
@@ -189,6 +224,7 @@
             width: 100%;
             height: 100%;
         }
+
         .res-side-bg {
             position: absolute;
             inset: 0;
@@ -198,7 +234,10 @@
             transform: scale(1.05);
             transition: transform 10s ease;
         }
-        .res-side-panel:hover .res-side-bg { transform: scale(1.15); }
+
+        .res-side-panel:hover .res-side-bg {
+            transform: scale(1.15);
+        }
 
         .res-side-overlay {
             position: relative;
@@ -210,6 +249,7 @@
             justify-content: center;
             color: #fff;
         }
+
         .res-side-eyebrow {
             color: #c8a97e;
             font-size: 13px;
@@ -219,6 +259,7 @@
             display: block;
             font-family: "Poppins", sans-serif;
         }
+
         .res-side-overlay h3 {
             font-family: "Great Vibes", cursive;
             font-size: 54px;
@@ -227,6 +268,7 @@
             line-height: 1;
             margin: 0 0 26px;
         }
+
         .res-side-addr {
             font-size: 15px;
             color: rgba(255, 255, 255, 0.85);
@@ -237,12 +279,14 @@
             font-family: "Poppins", sans-serif;
             line-height: 1.6;
         }
+
         .res-side-addr .ion-ios-location {
             color: #c8a97e;
             font-size: 22px;
             margin-top: 2px;
             flex-shrink: 0;
         }
+
         .res-side-hours {
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
@@ -252,7 +296,13 @@
             gap: 40px;
             flex-wrap: wrap;
         }
-        .res-side-hours > div { display: flex; flex-direction: column; gap: 6px; }
+
+        .res-side-hours>div {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
         .res-side-hours strong {
             color: #c8a97e;
             font-size: 12px;
@@ -261,11 +311,13 @@
             font-weight: 600;
             font-family: "Poppins", sans-serif;
         }
+
         .res-side-hours span {
             color: #fff;
             font-size: 15px;
             font-family: "Poppins", sans-serif;
         }
+
         .res-side-btn {
             display: inline-flex;
             align-items: center;
@@ -282,6 +334,7 @@
             box-shadow: 0 8px 24px rgba(200, 169, 126, 0.4);
             align-self: flex-start;
         }
+
         .res-side-btn:hover {
             background: #b8956a;
             color: #fff;
@@ -297,6 +350,7 @@
             flex-direction: column;
             gap: 16px;
         }
+
         .res-side-contact .rc-item {
             display: flex;
             align-items: center;
@@ -305,7 +359,11 @@
             font-size: 14px;
             font-family: "Poppins", sans-serif;
         }
-        .res-side-contact .ic { color: #c8a97e; font-size: 18px; }
+
+        .res-side-contact .ic {
+            color: #c8a97e;
+            font-size: 18px;
+        }
 
         /* ============================================================
            SUCCESS MODAL — REDESIGNED (NEW)
@@ -313,7 +371,7 @@
         .res-success-modal {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(26,26,26,0.85) 0%, rgba(10,10,10,0.95) 100%);
+            background: radial-gradient(circle at center, rgba(26, 26, 26, 0.85) 0%, rgba(10, 10, 10, 0.95) 100%);
             backdrop-filter: blur(8px);
             z-index: 9999;
             display: none;
@@ -322,13 +380,20 @@
             padding: 20px;
             overflow-y: auto;
         }
+
         .res-success-modal.active {
             display: flex;
             animation: resFadeIn 0.3s ease both;
         }
+
         @keyframes resFadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* ---- CARD ---- */
@@ -347,16 +412,26 @@
             overflow: hidden;
             margin: auto;
         }
+
         @keyframes resPopIn {
-            0%   { opacity: 0; transform: scale(0.85) translateY(30px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+            0% {
+                opacity: 0;
+                transform: scale(0.85) translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         /* Gold gradient top border */
         .res-success-card::before {
             content: "";
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 4px;
             background: linear-gradient(90deg, #c8a97e, #e8d4b8, #c8a97e);
         }
@@ -375,9 +450,19 @@
             pointer-events: none;
             animation: resGlow 2.5s ease-in-out infinite;
         }
+
         @keyframes resGlow {
-            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-            50%      { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.1);
+            }
         }
 
         /* ---- ANIMATED SVG CHECKMARK ---- */
@@ -388,11 +473,13 @@
             height: 90px;
             margin: 0 auto 20px;
         }
+
         .res-check-svg {
             width: 100%;
             height: 100%;
             display: block;
         }
+
         .res-check-circle {
             stroke: #c8a97e;
             stroke-width: 2.5;
@@ -400,6 +487,7 @@
             stroke-dashoffset: 160;
             animation: resDrawCircle 0.7s 0.15s ease forwards;
         }
+
         .res-check-mark {
             stroke: #c8a97e;
             stroke-width: 4;
@@ -409,11 +497,17 @@
             stroke-dashoffset: 50;
             animation: resDrawCheck 0.4s 0.7s ease forwards;
         }
+
         @keyframes resDrawCircle {
-            to { stroke-dashoffset: 0; }
+            to {
+                stroke-dashoffset: 0;
+            }
         }
+
         @keyframes resDrawCheck {
-            to { stroke-dashoffset: 0; }
+            to {
+                stroke-dashoffset: 0;
+            }
         }
 
         /* ---- TEXT ---- */
@@ -429,6 +523,7 @@
             position: relative;
             z-index: 1;
         }
+
         .res-success-card h3 {
             font-family: "Great Vibes", cursive;
             font-size: 46px;
@@ -439,6 +534,7 @@
             position: relative;
             z-index: 1;
         }
+
         .res-success-sub {
             color: #777;
             font-size: 14.5px;
@@ -462,10 +558,12 @@
             position: relative;
             z-index: 1;
         }
+
         .res-success-details:empty {
             display: none;
         }
-        .res-success-details > div {
+
+        .res-success-details>div {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -473,21 +571,25 @@
             border-bottom: 1px dashed rgba(200, 169, 126, 0.25);
             gap: 12px;
         }
-        .res-success-details > div:last-child {
+
+        .res-success-details>div:last-child {
             border-bottom: none;
             padding-bottom: 0;
         }
-        .res-success-details > div:first-child {
+
+        .res-success-details>div:first-child {
             padding-top: 0;
         }
-        .res-success-details > div span {
+
+        .res-success-details>div span {
             color: #999;
             font-size: 12.5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 500;
         }
-        .res-success-details > div strong {
+
+        .res-success-details>div strong {
             color: #1a1a1a;
             font-weight: 600;
             font-size: 14px;
@@ -509,6 +611,7 @@
             position: relative;
             z-index: 1;
         }
+
         .res-success-info .ion-ios-information-circle-outline {
             font-size: 16px;
         }
@@ -535,19 +638,28 @@
             border: none;
             cursor: pointer;
         }
+
         .res-success-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 16px 34px rgba(200, 169, 126, 0.55);
             color: #fff !important;
         }
+
         .res-success-btn .ion-ios-restaurant {
             font-size: 16px;
         }
 
         /* Confetti pieces */
         @keyframes resConfetti {
-            0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.3); }
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.3);
+            }
         }
 
         /* Error */
@@ -561,8 +673,15 @@
             margin-bottom: 18px;
             font-family: "Poppins", sans-serif;
         }
-        .res-error.show { display: block; }
-        .res-submit.loading { opacity: 0.7; cursor: not-allowed; }
+
+        .res-error.show {
+            display: block;
+        }
+
+        .res-submit.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
 
         /* ============================================================
            RESPONSIVE
@@ -572,10 +691,22 @@
                 grid-template-columns: repeat(2, 1fr);
                 padding: 0 20px;
             }
-            .makereservation { padding: 60px 30px !important; }
-            .res-side-panel { min-height: 480px; }
-            .res-side-overlay { padding: 50px 35px; }
-            .res-side-overlay h3 { font-size: 42px; }
+
+            .makereservation {
+                padding: 60px 30px !important;
+            }
+
+            .res-side-panel {
+                min-height: 480px;
+            }
+
+            .res-side-overlay {
+                padding: 50px 35px;
+            }
+
+            .res-side-overlay h3 {
+                font-size: 42px;
+            }
         }
 
         @media (max-width: 767.98px) {
@@ -584,41 +715,134 @@
                 gap: 14px;
                 padding: 0 15px;
             }
-            .res-feature { padding: 18px 12px; }
-            .res-feature h4 { font-size: 13px; }
-            .res-feature p { font-size: 11px; }
-            .res-feature .icon { width: 44px; height: 44px; font-size: 18px; }
 
-            .makereservation .heading-section { text-align: center; }
-            .makereservation .heading-section .subheading { font-size: 70px !important; top: -30px !important; }
-            .makereservation .heading-section h2 { font-size: 32px; }
-            .makereservation { padding: 50px 20px !important; }
+            .res-feature {
+                padding: 18px 12px;
+            }
 
-            .makereservation .col-md-6 { flex: 0 0 100%; max-width: 100%; }
-            .makereservation .form-control { height: 48px; }
-            .makereservation .btn-primary { width: 100%; display: block; text-align: center; padding: 14px 20px; }
+            .res-feature h4 {
+                font-size: 13px;
+            }
 
-            .res-side-panel { min-height: 420px; }
-            .res-side-overlay { padding: 40px 24px; }
-            .res-side-overlay h3 { font-size: 34px; }
-            .res-side-hours { gap: 20px; }
-            .res-side-btn { align-self: stretch; justify-content: center; }
+            .res-feature p {
+                font-size: 11px;
+            }
 
-            .res-success-card { padding: 44px 24px 32px; border-radius: 18px; }
-            .res-check-wrap { width: 76px; height: 76px; }
-            .res-success-card h3 { font-size: 38px; }
-            .res-success-sub { font-size: 13.5px; }
-            .res-success-details { padding: 16px 16px; font-size: 13px; }
-            .res-success-btn { width: 100%; padding: 14px 20px; }
+            .res-feature .icon {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+
+            .makereservation .heading-section {
+                text-align: center;
+            }
+
+            .makereservation .heading-section .subheading {
+                font-size: 70px !important;
+                top: -30px !important;
+            }
+
+            .makereservation .heading-section h2 {
+                font-size: 32px;
+            }
+
+            .makereservation {
+                padding: 50px 20px !important;
+            }
+
+            .makereservation .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .makereservation .form-control {
+                height: 48px;
+            }
+
+            .makereservation .btn-primary {
+                width: 100%;
+                display: block;
+                text-align: center;
+                padding: 14px 20px;
+            }
+
+            .res-side-panel {
+                min-height: 420px;
+            }
+
+            .res-side-overlay {
+                padding: 40px 24px;
+            }
+
+            .res-side-overlay h3 {
+                font-size: 34px;
+            }
+
+            .res-side-hours {
+                gap: 20px;
+            }
+
+            .res-side-btn {
+                align-self: stretch;
+                justify-content: center;
+            }
+
+            .res-success-card {
+                padding: 44px 24px 32px;
+                border-radius: 18px;
+            }
+
+            .res-check-wrap {
+                width: 76px;
+                height: 76px;
+            }
+
+            .res-success-card h3 {
+                font-size: 38px;
+            }
+
+            .res-success-sub {
+                font-size: 13.5px;
+            }
+
+            .res-success-details {
+                padding: 16px 16px;
+                font-size: 13px;
+            }
+
+            .res-success-btn {
+                width: 100%;
+                padding: 14px 20px;
+            }
         }
 
         @media (max-width: 480px) {
-            .res-feature-grid { grid-template-columns: 1fr; }
-            .makereservation { padding: 40px 15px !important; }
-            .makereservation .heading-section h2 { font-size: 26px; }
-            .makereservation .heading-section .subheading { font-size: 56px !important; top: -22px !important; }
-            .makereservation .form-group label { font-size: 12px; }
-            .makereservation .form-control { height: 46px; font-size: 14px; }
+            .res-feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .makereservation {
+                padding: 40px 15px !important;
+            }
+
+            .makereservation .heading-section h2 {
+                font-size: 26px;
+            }
+
+            .makereservation .heading-section .subheading {
+                font-size: 56px !important;
+                top: -22px !important;
+            }
+
+            .makereservation .form-group label {
+                font-size: 12px;
+            }
+
+            .makereservation .form-control {
+                height: 46px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -690,7 +914,8 @@
                 <div class="col-md-9 ftco-animate text-center mb-4">
                     <span class="res-hero-tag">Reserve Your Spot</span>
                     <h1 class="mb-2 bread">Book a Table</h1>
-                    <p class="res-hero-sub">Enjoy a curated dining experience — reserve in seconds, no phone calls needed.</p>
+                    <p class="res-hero-sub">Enjoy a curated dining experience — reserve in seconds, no phone calls
+                        needed.</p>
                     <p class="breadcrumbs">
                         <span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>
                         <span>Reservation <i class="ion-ios-arrow-forward"></i></span>
@@ -746,40 +971,40 @@
                                 <div class="col-md-6 col-12">
                                     <div class="form-group res-form-group">
                                         <label for="resName">Name</label>
-                                        <input type="text" id="resName" class="form-control"
-                                            placeholder="Your Name" required>
+                                        <input type="text" id="resName" class="form-control" placeholder="Your Name"
+                                            required>
                                         <span class="field-icon ion-ios-person"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="form-group res-form-group">
                                         <label for="resEmail">Email</label>
-                                        <input type="email" id="resEmail" class="form-control"
-                                            placeholder="Your Email" required>
+                                        <input type="email" id="resEmail" class="form-control" placeholder="Your Email"
+                                            required>
                                         <span class="field-icon ion-ios-email"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="form-group res-form-group">
                                         <label for="resPhone">Phone</label>
-                                        <input type="tel" id="resPhone" class="form-control"
-                                            placeholder="Phone" required>
+                                        <input type="tel" id="resPhone" class="form-control" placeholder="Phone"
+                                            required>
                                         <span class="field-icon ion-ios-telephone"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="form-group res-form-group">
                                         <label for="resDate">Date</label>
-                                        <input type="text" id="resDate" class="form-control"
-                                            placeholder="Select Date" required autocomplete="off">
+                                        <input type="text" id="resDate" class="form-control" placeholder="Select Date"
+                                            required autocomplete="off">
                                         <span class="field-icon ion-ios-calendar"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="form-group res-form-group">
                                         <label for="resTime">Time</label>
-                                        <input type="text" id="resTime" class="form-control"
-                                            placeholder="Select Time" required autocomplete="off">
+                                        <input type="text" id="resTime" class="form-control" placeholder="Select Time"
+                                            required autocomplete="off">
                                         <span class="field-icon ion-ios-clock"></span>
                                     </div>
                                 </div>
@@ -810,27 +1035,40 @@
                         </form>
 
                         <!-- Small help card under form -->
-                        <div class="res-info-card" style="background: linear-gradient(160deg, #fdfaf5 0%, #f8f3ea 100%); border-radius: 16px; padding: 28px; margin-top: 30px; border: 1px dashed rgba(200, 169, 126, 0.35);">
-                            <h4 style="font-family: 'Great Vibes', cursive; font-size: 32px; color: #c8a97e; font-weight: normal; margin-bottom: 4px; line-height: 1;">Need Help?</h4>
-                            <span style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: block;">We're here for you</span>
+                        <div class="res-info-card"
+                            style="background: linear-gradient(160deg, #fdfaf5 0%, #f8f3ea 100%); border-radius: 16px; padding: 28px; margin-top: 30px; border: 1px dashed rgba(200, 169, 126, 0.35);">
+                            <h4
+                                style="font-family: 'Great Vibes', cursive; font-size: 32px; color: #c8a97e; font-weight: normal; margin-bottom: 4px; line-height: 1;">
+                                Need Help?</h4>
+                            <span
+                                style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: block;">We're
+                                here for you</span>
 
-                            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px dashed rgba(200, 169, 126, 0.2);">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #c8a97e; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);">
+                            <div
+                                style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px dashed rgba(200, 169, 126, 0.2);">
+                                <div
+                                    style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #c8a97e; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);">
                                     <span class="ion-ios-telephone"></span>
                                 </div>
                                 <div>
-                                    <strong style="display: block; font-size: 14px; color: #1a1a1a; font-weight: 600; font-family: 'Poppins', sans-serif;">+91 98765 43210</strong>
-                                    <span style="font-size: 12px; color: #888; font-family: 'Poppins', sans-serif;">Call us 9 AM – 9 PM</span>
+                                    <strong
+                                        style="display: block; font-size: 14px; color: #1a1a1a; font-weight: 600; font-family: 'Poppins', sans-serif;">+91
+                                        98765 43210</strong>
+                                    <span style="font-size: 12px; color: #888; font-family: 'Poppins', sans-serif;">Call
+                                        us 9 AM – 9 PM</span>
                                 </div>
                             </div>
 
                             <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #c8a97e; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);">
+                                <div
+                                    style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #c8a97e; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);">
                                     <span class="ion-ios-email"></span>
                                 </div>
                                 <div>
-                                    <strong style="display: block; font-size: 14px; color: #1a1a1a; font-weight: 600; font-family: 'Poppins', sans-serif;">hello@mixtapekitchen.in</strong>
-                                    <span style="font-size: 12px; color: #888; font-family: 'Poppins', sans-serif;">We reply within 1 hour</span>
+                                    <strong
+                                        style="display: block; font-size: 14px; color: #1a1a1a; font-weight: 600; font-family: 'Poppins', sans-serif;">hello@mixtapekitchen.in</strong>
+                                    <span style="font-size: 12px; color: #888; font-family: 'Poppins', sans-serif;">We
+                                        reply within 1 hour</span>
                                 </div>
                             </div>
                         </div>
@@ -862,7 +1100,8 @@
                                 </div>
                             </div>
 
-                            <a href="https://maps.google.com/?q=Bandra+West+Mumbai" target="_blank" class="res-side-btn">
+                            <a href="https://maps.google.com/?q=Bandra+West+Mumbai" target="_blank"
+                                class="res-side-btn">
                                 <span class="ion-ios-navigate"></span> Get Directions
                             </a>
 
@@ -894,8 +1133,8 @@
             <!-- Animated checkmark (SVG stroke draw) -->
             <div class="res-check-wrap">
                 <svg class="res-check-svg" viewBox="0 0 52 52">
-                    <circle class="res-check-circle" cx="26" cy="26" r="24" fill="none"/>
-                    <path class="res-check-mark" fill="none" d="M14 27l8 8 16-16"/>
+                    <circle class="res-check-circle" cx="26" cy="26" r="24" fill="none" />
+                    <path class="res-check-mark" fill="none" d="M14 27l8 8 16-16" />
                 </svg>
             </div>
 
@@ -1020,24 +1259,24 @@
     <!-- RESERVATION FORM LOGIC -->
     <script>
         const BACKEND_URL = "https://feliciano-master.onrender.com";
-
-        const form          = document.getElementById("reservationForm");
-        const errorBox      = document.getElementById("resError");
-        const submitBtn     = document.getElementById("resSubmit");
-        const successModal  = document.getElementById("resSuccessModal");
-        const successDetails= document.getElementById("resSuccessDetails");
+        //const BACKEND_URL = "http://localhost:5000";
+        const form = document.getElementById("reservationForm");
+        const errorBox = document.getElementById("resError");
+        const submitBtn = document.getElementById("resSubmit");
+        const successModal = document.getElementById("resSuccessModal");
+        const successDetails = document.getElementById("resSuccessDetails");
 
         (function prefill() {
             try {
                 const user = JSON.parse(localStorage.getItem("user") || "null");
                 if (user) {
-                    document.getElementById("resName").value  = user.name || "";
+                    document.getElementById("resName").value = user.name || "";
                     document.getElementById("resEmail").value = user.email || "";
                 }
-            } catch (e) {}
+            } catch (e) { }
         })();
 
-        fetch(`${BACKEND_URL}/`).catch(() => {});
+        fetch(`${BACKEND_URL}/`).catch(() => { });
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -1051,11 +1290,11 @@
             submitBtn.value = "Booking...";
 
             const payload = {
-                name:    document.getElementById("resName").value.trim(),
-                email:   document.getElementById("resEmail").value.trim(),
-                phone:   document.getElementById("resPhone").value.trim(),
-                date:    document.getElementById("resDate").value.trim(),
-                time:    document.getElementById("resTime").value.trim(),
+                name: document.getElementById("resName").value.trim(),
+                email: document.getElementById("resEmail").value.trim(),
+                phone: document.getElementById("resPhone").value.trim(),
+                date: document.getElementById("resDate").value.trim(),
+                time: document.getElementById("resTime").value.trim(),
                 persons: document.getElementById("resPersons").value,
             };
 
@@ -1093,7 +1332,7 @@
                             dot.style.cssText = `
                                 position:absolute; top:50%; left:50%;
                                 width:8px; height:8px; border-radius:50%;
-                                background:${["#c8a97e","#e8d4b8","#b18f64"][i % 3]};
+                                background:${["#c8a97e", "#e8d4b8", "#b18f64"][i % 3]};
                                 pointer-events:none; z-index:2;
                                 animation: resConfetti 0.9s ease-out forwards;
                             `;
