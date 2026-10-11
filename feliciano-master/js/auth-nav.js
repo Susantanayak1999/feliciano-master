@@ -16,6 +16,13 @@
         if (!navList) return;
         if (document.getElementById("authNavItem")) return;
 
+        // 🔒 If not logged in, clear any stale cart
+        const hasToken = !!localStorage.getItem("token");
+        const hasUser = !!localStorage.getItem("user");
+        if (!hasToken || !hasUser) {
+            localStorage.removeItem("cart");
+        }
+
         const user = JSON.parse(localStorage.getItem("user") || "null");
         const li = document.createElement("li");
         li.className = "nav-item cta auth-btn";

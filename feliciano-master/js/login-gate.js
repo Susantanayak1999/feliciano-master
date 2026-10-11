@@ -174,7 +174,7 @@
         const backTo = returnUrl || window.location.pathname + window.location.search;
         try {
             sessionStorage.setItem("lg_return_to", backTo);
-        } catch (e) {}
+        } catch (e) { }
 
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
@@ -215,6 +215,12 @@
 
     /* ---------- Run ---------- */
     function boot() {
+
+        // 🔒 Clear stale cart for guests
+        if (!isLoggedIn()) {
+            localStorage.removeItem("cart");
+        }
+
         injectModal();
         attachCartGuards();
     }
