@@ -26,7 +26,7 @@
 
     <style>
         /* ============================================================
-           HERO — reservation-specific heading
+           HERO TAG + SUB
            ============================================================ */
         .res-hero-tag {
             display: inline-block;
@@ -52,12 +52,9 @@
         }
 
         /* ============================================================
-           WHY BOOK WITH US — feature strip
+           FEATURE STRIP
            ============================================================ */
-        .res-features {
-            padding: 60px 0 20px;
-            background: #fff;
-        }
+        .res-features { padding: 60px 0 20px; background: #fff; }
         .res-feature-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -108,15 +105,11 @@
         }
 
         /* ============================================================
-           FORM — icons + enhanced styling
+           FORM ENHANCEMENTS
            ============================================================ */
-        .makereservation .heading-section .subheading {
-            position: absolute;
-        }
+        .makereservation .heading-section .subheading { position: absolute; }
 
-        .res-form-group {
-            position: relative;
-        }
+        .res-form-group { position: relative; }
         .res-form-group .field-icon {
             position: absolute;
             right: 18px;
@@ -128,11 +121,8 @@
             transition: opacity .25s ease;
         }
         .res-form-group input:focus ~ .field-icon,
-        .res-form-group select:focus ~ .field-icon {
-            opacity: 1;
-        }
+        .res-form-group select:focus ~ .field-icon { opacity: 1; }
 
-        /* Nicer form controls */
         .makereservation .form-control {
             background: #faf8f4 !important;
             border: 1.5px solid #eee !important;
@@ -146,7 +136,6 @@
             border-color: #c8a97e !important;
             box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12) !important;
         }
-
         .makereservation label {
             font-size: 13px;
             font-weight: 600;
@@ -155,11 +144,7 @@
             text-transform: uppercase;
             margin-bottom: 8px;
         }
-
-        /* Custom select wrapper */
-        .makereservation .select-wrap {
-            position: relative;
-        }
+        .makereservation .select-wrap { position: relative; }
         .makereservation .select-wrap .icon {
             color: #c8a97e;
             right: 18px;
@@ -167,7 +152,7 @@
             transform: translateY(-50%);
         }
 
-        /* Enhanced submit button */
+        /* Submit button */
         .res-submit {
             padding: 16px 40px !important;
             font-size: 15px !important;
@@ -187,85 +172,143 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
             transition: left .6s ease;
         }
-        .res-submit:hover::before {
-            left: 100%;
-        }
+        .res-submit:hover::before { left: 100%; }
         .res-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(200, 169, 126, 0.5);
         }
 
         /* ============================================================
-           SIDE INFO CARD
+           SIDE INFO PANEL (replaces Google Map)
            ============================================================ */
-        .res-info-card {
-            background: linear-gradient(160deg, #fdfaf5 0%, #f8f3ea 100%);
-            border-radius: 16px;
-            padding: 28px;
-            margin-top: 30px;
-            border: 1px dashed rgba(200, 169, 126, 0.35);
+        .res-side-panel {
+            position: relative;
+            min-height: 700px;
+            background: #1a1a1a;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
-        .res-info-card h4 {
-            font-family: "Great Vibes", cursive;
-            font-size: 32px;
-            color: #c8a97e;
-            font-weight: normal;
-            margin-bottom: 4px;
-            line-height: 1;
+        .res-side-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.35) saturate(0.9);
+            transform: scale(1.05);
+            transition: transform 10s ease;
         }
-        .res-info-card .sub {
-            font-size: 12px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .res-info-row {
+        .res-side-panel:hover .res-side-bg { transform: scale(1.15); }
+
+        .res-side-overlay {
+            position: relative;
+            z-index: 2;
+            padding: 70px 55px;
+            height: 100%;
             display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 0;
-            border-bottom: 1px dashed rgba(200, 169, 126, 0.2);
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
         }
-        .res-info-row:last-child { border-bottom: none; }
-        .res-info-row .ic {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: #fff;
+        .res-side-eyebrow {
             color: #c8a97e;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 17px;
-            flex-shrink: 0;
-            box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);
-        }
-        .res-info-row .txt strong {
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
             display: block;
-            font-size: 14px;
-            color: #1a1a1a;
+            font-family: "Poppins", sans-serif;
+        }
+        .res-side-overlay h3 {
+            font-family: "Great Vibes", cursive;
+            font-size: 54px;
+            color: #fff;
+            font-weight: normal;
+            line-height: 1;
+            margin: 0 0 26px;
+        }
+        .res-side-addr {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 32px;
+            font-family: "Poppins", sans-serif;
+            line-height: 1.6;
+        }
+        .res-side-addr .ion-ios-location {
+            color: #c8a97e;
+            font-size: 22px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .res-side-hours {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 20px 0;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .res-side-hours > div { display: flex; flex-direction: column; gap: 6px; }
+        .res-side-hours strong {
+            color: #c8a97e;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             font-weight: 600;
             font-family: "Poppins", sans-serif;
         }
-        .res-info-row .txt span {
-            font-size: 12px;
-            color: #888;
+        .res-side-hours span {
+            color: #fff;
+            font-size: 15px;
             font-family: "Poppins", sans-serif;
         }
+        .res-side-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            background: #c8a97e;
+            color: #fff;
+            border-radius: 30px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all .3s ease;
+            box-shadow: 0 8px 24px rgba(200, 169, 126, 0.4);
+            align-self: flex-start;
+        }
+        .res-side-btn:hover {
+            background: #b8956a;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(200, 169, 126, 0.55);
+        }
 
-        /* Map container rounded corners */
-        #map {
-            border-radius: 0;
+        .res-side-contact {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
-        .res-map-wrap {
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-            height: 100%;
-            min-height: 600px;
+        .res-side-contact .rc-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            font-family: "Poppins", sans-serif;
         }
+        .res-side-contact .ic { color: #c8a97e; font-size: 18px; }
 
         /* ============================================================
-           SUCCESS MODAL (kept as your design)
+           SUCCESS MODAL
            ============================================================ */
         .res-success-modal {
             position: fixed;
@@ -280,7 +323,6 @@
             overflow-y: auto;
         }
         .res-success-modal.active { display: flex; }
-
         .res-success-card {
             background: #fff;
             border-radius: 16px;
@@ -371,11 +413,7 @@
             font-family: "Poppins", sans-serif;
         }
         .res-error.show { display: block; }
-
-        .res-submit.loading {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
+        .res-submit.loading { opacity: 0.7; cursor: not-allowed; }
 
         /* ============================================================
            RESPONSIVE
@@ -385,11 +423,10 @@
                 grid-template-columns: repeat(2, 1fr);
                 padding: 0 20px;
             }
-            .makereservation {
-                padding: 60px 30px !important;
-            }
-            #map { min-height: 350px; }
-            .res-map-wrap { min-height: 350px; }
+            .makereservation { padding: 60px 30px !important; }
+            .res-side-panel { min-height: 480px; }
+            .res-side-overlay { padding: 50px 35px; }
+            .res-side-overlay h3 { font-size: 42px; }
         }
 
         @media (max-width: 767.98px) {
@@ -412,11 +449,11 @@
             .makereservation .form-control { height: 48px; }
             .makereservation .btn-primary { width: 100%; display: block; text-align: center; padding: 14px 20px; }
 
-            #map { min-height: 260px; }
-            .res-map-wrap { min-height: 260px; }
-
-            .res-info-card { padding: 22px 18px; }
-            .res-info-card h4 { font-size: 26px; }
+            .res-side-panel { min-height: 420px; }
+            .res-side-overlay { padding: 40px 24px; }
+            .res-side-overlay h3 { font-size: 34px; }
+            .res-side-hours { gap: 20px; }
+            .res-side-btn { align-self: stretch; justify-content: center; }
 
             .res-success-card { padding: 36px 22px; border-radius: 14px; }
             .res-success-card .check { width: 64px; height: 64px; font-size: 28px; margin-bottom: 16px; }
@@ -540,11 +577,12 @@
         </div>
     </section>
 
-    <!-- RESERVATION FORM -->
+    <!-- RESERVATION FORM + SIDE PANEL -->
     <section class="ftco-section ftco-no-pt ftco-no-pb">
         <div class="container-fluid px-0">
             <div class="row d-flex no-gutters">
 
+                <!-- FORM -->
                 <div class="col-md-6 order-md-last ftco-animate makereservation p-4 p-md-5 pt-5">
                     <div class="py-md-5">
                         <div class="heading-section ftco-animate mb-5">
@@ -622,23 +660,28 @@
                             </div>
                         </form>
 
-                        <!-- Info card -->
-                        <div class="res-info-card">
-                            <h4>Need Help?</h4>
-                            <span class="sub">We're here for you</span>
+                        <!-- Small help card under form -->
+                        <div class="res-info-card" style="background: linear-gradient(160deg, #fdfaf5 0%, #f8f3ea 100%); border-radius: 16px; padding: 28px; margin-top: 30px; border: 1px dashed rgba(200, 169, 126, 0.35);">
+                            <h4 style="font-family: 'Great Vibes', cursive; font-size: 32px; color: #c8a97e; font-weight: normal; margin-bottom: 4px; line-height: 1;">Need Help?</h4>
+                            <span style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: block;">We're here for you</span>
 
-                            <div class="res-info-row">
-                                <div class="ic ion-ios-telephone"></div>
-                                <div class="txt">
-                                    <strong>+91 98765 43210</strong>
-                                    <span>Call us 9 AM – 9 PM</span>
+                            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px dashed rgba(200, 169, 126, 0.2);">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #c8a97e; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);">
+                                    <span class="ion-ios-telephone"></span>
+                                </div>
+                                <div>
+                                    <strong style="display: block; font-size: 14px; color: #1a1a1a; font-weight: 600; font-family: 'Poppins', sans-serif;">+91 98765 43210</strong>
+                                    <span style="font-size: 12px; color: #888; font-family: 'Poppins', sans-serif;">Call us 9 AM – 9 PM</span>
                                 </div>
                             </div>
-                            <div class="res-info-row">
-                                <div class="ic ion-ios-email"></div>
-                                <div class="txt">
-                                    <strong>hello@mixtapekitchen.in</strong>
-                                    <span>We reply within 1 hour</span>
+
+                            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #c8a97e; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; box-shadow: 0 3px 12px rgba(200, 169, 126, 0.15);">
+                                    <span class="ion-ios-email"></span>
+                                </div>
+                                <div>
+                                    <strong style="display: block; font-size: 14px; color: #1a1a1a; font-weight: 600; font-family: 'Poppins', sans-serif;">hello@mixtapekitchen.in</strong>
+                                    <span style="font-size: 12px; color: #888; font-family: 'Poppins', sans-serif;">We reply within 1 hour</span>
                                 </div>
                             </div>
                         </div>
@@ -646,11 +689,48 @@
                     </div>
                 </div>
 
+                <!-- SIDE PANEL (replaces Google Map) -->
                 <div class="col-md-6 col-12 d-flex align-items-stretch pb-5 pb-md-0">
-                    <div class="res-map-wrap">
-                        <div id="map" style="width:100%; height:100%;"></div>
+                    <div class="res-side-panel">
+                        <div class="res-side-bg" style="background-image: url('images/bg_4.jpg');"></div>
+                        <div class="res-side-overlay">
+                            <span class="res-side-eyebrow">Visit Us</span>
+                            <h3>Mixtape Kitchen</h3>
+
+                            <p class="res-side-addr">
+                                <span class="ion-ios-location"></span>
+                                123 Melody Lane, Bandra West,<br>Mumbai 400050
+                            </p>
+
+                            <div class="res-side-hours">
+                                <div>
+                                    <strong>Mon – Thu</strong>
+                                    <span>12 PM – 11 PM</span>
+                                </div>
+                                <div>
+                                    <strong>Fri – Sun</strong>
+                                    <span>12 PM – 1 AM</span>
+                                </div>
+                            </div>
+
+                            <a href="https://maps.google.com/?q=Bandra+West+Mumbai" target="_blank" class="res-side-btn">
+                                <span class="ion-ios-navigate"></span> Get Directions
+                            </a>
+
+                            <div class="res-side-contact">
+                                <div class="rc-item">
+                                    <span class="ic ion-ios-telephone"></span>
+                                    <span>+91 98765 43210</span>
+                                </div>
+                                <div class="rc-item">
+                                    <span class="ic ion-ios-email"></span>
+                                    <span>hello@mixtapekitchen.in</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -671,7 +751,7 @@
         </div>
     </div>
 
-    <!-- FOOTER (unchanged) -->
+    <!-- FOOTER -->
     <footer class="ftco-footer ftco-bg-dark ftco-section">
         <div class="container">
             <div class="row mb-5">
@@ -746,7 +826,7 @@
                 stroke="#F96D00" />
         </svg></div>
 
-    <!-- Scripts (unchanged) -->
+    <!-- Scripts -->
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery-migrate-3.0.1.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -766,9 +846,7 @@
     <script src="js/auth-nav.js"></script>
     <script src="js/login-gate.js"></script>
 
-    <!-- ============================================================
-         RESERVATION FORM LOGIC (UNCHANGED)
-         ============================================================ -->
+    <!-- RESERVATION FORM LOGIC -->
     <script>
         const BACKEND_URL = "https://feliciano-master.onrender.com";
 
