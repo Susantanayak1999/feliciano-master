@@ -1,655 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Menu | Mixtape Kitchen</title>
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Menu | Mixtape Kitchen</title>
+	<link rel="icon"
+		href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/aos.css">
-    <link rel="stylesheet" href="css/ionicons.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="css/aos.css">
+	<link rel="stylesheet" href="css/ionicons.min.css">
+	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
+	<link rel="stylesheet" href="css/jquery.timepicker.css">
+	<link rel="stylesheet" href="css/flaticon.css">
+	<link rel="stylesheet" href="css/icomoon.css">
+	<link rel="stylesheet" href="css/style.css">
 
-    <style>
-        /* ============================================================
+	<style>
+		/* ============================================================
            FILTER BAR
            ============================================================ */
-        .menu-filters {
-            background: #fff;
-            padding: 22px 30px;
-            border-radius: 16px;
-            margin: 0 auto 36px;
-            max-width: 1200px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            align-items: center;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.05);
-            border: 1px solid rgba(200,169,126,0.15);
-        }
-        .menu-filters .search-box {
-            flex: 1 1 260px;
-            position: relative;
-        }
-        .menu-filters .search-box input {
-            width: 100%;
-            height: 48px;
-            border: 1.5px solid #eee;
-            background: #faf8f4;
-            border-radius: 30px;
-            padding: 0 18px 0 44px;
-            font-family: "Poppins", sans-serif;
-            font-size: 14px;
-            outline: none;
-            transition: all .25s ease;
-        }
-        .menu-filters .search-box input:focus {
-            border-color: #c8a97e;
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(200,169,126,0.12);
-        }
-        .menu-filters .search-box .icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #c8a97e;
-            font-size: 18px;
-            pointer-events: none;
-        }
+		.menu-filters {
+			background: #fff;
+			padding: 22px 30px;
+			border-radius: 16px;
+			margin: 0 auto 36px;
+			max-width: 1200px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 16px;
+			align-items: center;
+			box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05);
+			border: 1px solid rgba(200, 169, 126, 0.15);
+		}
 
-        .veg-toggle {
-            display: inline-flex;
-            align-items: center;
-            background: #faf8f4;
-            border: 1.5px solid #eee;
-            border-radius: 30px;
-            padding: 4px;
-            gap: 2px;
-            height: 48px;
-        }
-        .veg-toggle button {
-            border: none;
-            background: transparent;
-            padding: 0 16px;
-            height: 38px;
-            border-radius: 30px;
-            font-family: "Poppins", sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            color: #666;
-            cursor: pointer;
-            transition: all .25s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-        .veg-toggle button .dot {
-            width: 10px;
-            height: 10px;
-            border: 1.5px solid #2e7d32;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 2px;
-        }
-        .veg-toggle button .dot::after {
-            content: "";
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: #2e7d32;
-        }
-        .veg-toggle button .dot.nonveg { border-color: #b71c1c; }
-        .veg-toggle button .dot.nonveg::after { background: #b71c1c; }
+		.menu-filters .search-box {
+			flex: 1 1 260px;
+			position: relative;
+		}
 
-        .veg-toggle button.active {
-            background: #c8a97e;
-            color: #fff;
-        }
-        .veg-toggle button.active .dot { border-color: #fff; }
-        .veg-toggle button.active .dot::after { background: #fff; }
+		.menu-filters .search-box input {
+			width: 100%;
+			height: 48px;
+			border: 1.5px solid #eee;
+			background: #faf8f4;
+			border-radius: 30px;
+			padding: 0 18px 0 44px;
+			font-family: "Poppins", sans-serif;
+			font-size: 14px;
+			outline: none;
+			transition: all .25s ease;
+		}
 
-        .price-filter {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #faf8f4;
-            border: 1.5px solid #eee;
-            border-radius: 30px;
-            height: 48px;
-            padding: 0 18px;
-            font-family: "Poppins", sans-serif;
-            font-size: 13px;
-            color: #666;
-        }
-        .price-filter input[type="range"] {
-            width: 130px;
-            accent-color: #c8a97e;
-            cursor: pointer;
-        }
-        .price-filter .price-label {
-            color: #c8a97e;
-            font-weight: 700;
-            font-size: 13px;
-            min-width: 55px;
-            text-align: right;
-        }
+		.menu-filters .search-box input:focus {
+			border-color: #c8a97e;
+			background: #fff;
+			box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12);
+		}
 
-        /* Category tabs */
-        .cat-tabs-wrap {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 40px;
-        }
-        .cat-tabs-wrap .cat-tab {
-            padding: 10px 22px;
-            background: #fff;
-            border: 1.5px solid #eee;
-            border-radius: 30px;
-            font-family: "Poppins", sans-serif;
-            font-size: 13.5px;
-            font-weight: 500;
-            color: #555;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all .25s ease;
-        }
-        .cat-tabs-wrap .cat-tab:hover {
-            border-color: #c8a97e;
-            color: #c8a97e;
-        }
-        .cat-tabs-wrap .cat-tab.active {
-            background: #c8a97e;
-            border-color: #c8a97e;
-            color: #fff;
-            box-shadow: 0 6px 18px rgba(200,169,126,0.35);
-        }
+		.menu-filters .search-box .icon {
+			position: absolute;
+			left: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #c8a97e;
+			font-size: 18px;
+			pointer-events: none;
+		}
 
-        /* Dynamic grid */
-        .dyn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 26px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .dyn-card {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-            border: 1px solid rgba(200,169,126,0.12);
-            transition: transform .3s ease, box-shadow .3s ease;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .dyn-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 45px rgba(200,169,126,0.18);
-        }
-        .dyn-card .img-wrap {
-            width: 100%;
-            height: 200px;
-            position: relative;
-            overflow: hidden;
-            background: #f4efe6;
-        }
-        .dyn-card .img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform .5s ease;
-        }
-        .dyn-card:hover .img-wrap img { transform: scale(1.07); }
+		.veg-toggle {
+			display: inline-flex;
+			align-items: center;
+			background: #faf8f4;
+			border: 1.5px solid #eee;
+			border-radius: 30px;
+			padding: 4px;
+			gap: 2px;
+			height: 48px;
+		}
 
-        .veg-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #fff;
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-family: "Poppins", sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .veg-badge .dot {
-            width: 10px;
-            height: 10px;
-            border: 1.5px solid #2e7d32;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 2px;
-        }
-        .veg-badge .dot::after {
-            content: "";
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: #2e7d32;
-        }
-        .veg-badge.nonveg .dot { border-color: #b71c1c; }
-        .veg-badge.nonveg .dot::after { background: #b71c1c; }
-        .veg-badge .lbl { color: #2e7d32; }
-        .veg-badge.nonveg .lbl { color: #b71c1c; }
+		.veg-toggle button {
+			border: none;
+			background: transparent;
+			padding: 0 16px;
+			height: 38px;
+			border-radius: 30px;
+			font-family: "Poppins", sans-serif;
+			font-size: 13px;
+			font-weight: 500;
+			color: #666;
+			cursor: pointer;
+			transition: all .25s ease;
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+		}
 
-        .cat-tag {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(200,169,126,0.95);
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-family: "Poppins", sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
+		.veg-toggle button .dot {
+			width: 10px;
+			height: 10px;
+			border: 1.5px solid #2e7d32;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 2px;
+		}
 
-        .dyn-card .card-body {
-            padding: 20px 22px 22px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .dyn-card h3 {
-            font-family: "Playfair Display", serif;
-            font-size: 19px;
-            color: #1a1a1a;
-            font-weight: 700;
-            margin-bottom: 6px;
-            line-height: 1.25;
-        }
-        .dyn-card .desc {
-            font-size: 12.5px;
-            color: #888;
-            margin-bottom: 14px;
-            line-height: 1.55;
-            min-height: 36px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .dyn-card .card-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            gap: 12px;
-        }
-        .dyn-card .price-tag {
-            font-family: "Poppins", sans-serif;
-            font-size: 20px;
-            font-weight: 800;
-            color: #c8a97e;
-        }
-        .dyn-card .order-btn {
-            background: linear-gradient(135deg, #c8a97e, #b18f64);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-family: "Poppins", sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: transform .25s ease, box-shadow .25s ease;
-            box-shadow: 0 6px 18px rgba(200,169,126,0.35);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .dyn-card .order-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 26px rgba(200,169,126,0.5);
-        }
+		.veg-toggle button .dot::after {
+			content: "";
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: #2e7d32;
+		}
 
-        .menu-msg {
-            text-align: center;
-            padding: 60px 20px;
-            color: #888;
-            font-family: "Poppins", sans-serif;
-        }
-        .menu-msg .spinner {
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            border: 3px solid rgba(200,169,126,0.2);
-            border-top-color: #c8a97e;
-            margin: 0 auto 18px;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+		.veg-toggle button .dot.nonveg {
+			border-color: #b71c1c;
+		}
 
-        @media (max-width: 700px) {
-            .menu-filters { padding: 16px; gap: 12px; }
-            .menu-filters .search-box { flex: 1 1 100%; }
-            .veg-toggle { flex: 1 1 100%; justify-content: space-between; }
-            .price-filter { flex: 1 1 100%; justify-content: space-between; }
-            .price-filter input[type="range"] { flex: 1; width: auto; }
-            .dyn-grid { grid-template-columns: 1fr; gap: 20px; }
-        }
-    </style>
+		.veg-toggle button .dot.nonveg::after {
+			background: #b71c1c;
+		}
+
+		.veg-toggle button.active {
+			background: #c8a97e;
+			color: #fff;
+		}
+
+		.veg-toggle button.active .dot {
+			border-color: #fff;
+		}
+
+		.veg-toggle button.active .dot::after {
+			background: #fff;
+		}
+
+		.price-filter {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			background: #faf8f4;
+			border: 1.5px solid #eee;
+			border-radius: 30px;
+			height: 48px;
+			padding: 0 18px;
+			font-family: "Poppins", sans-serif;
+			font-size: 13px;
+			color: #666;
+		}
+
+		.price-filter input[type="range"] {
+			width: 130px;
+			accent-color: #c8a97e;
+			cursor: pointer;
+		}
+
+		.price-filter .price-label {
+			color: #c8a97e;
+			font-weight: 700;
+			font-size: 13px;
+			min-width: 55px;
+			text-align: right;
+		}
+
+		/* Category tabs */
+		.cat-tabs-wrap {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-bottom: 40px;
+		}
+
+		.cat-tabs-wrap .cat-tab {
+			padding: 10px 22px;
+			background: #fff;
+			border: 1.5px solid #eee;
+			border-radius: 30px;
+			font-family: "Poppins", sans-serif;
+			font-size: 13.5px;
+			font-weight: 500;
+			color: #555;
+			cursor: pointer;
+			text-decoration: none;
+			transition: all .25s ease;
+		}
+
+		.cat-tabs-wrap .cat-tab:hover {
+			border-color: #c8a97e;
+			color: #c8a97e;
+		}
+
+		.cat-tabs-wrap .cat-tab.active {
+			background: #c8a97e;
+			border-color: #c8a97e;
+			color: #fff;
+			box-shadow: 0 6px 18px rgba(200, 169, 126, 0.35);
+		}
+
+		/* Dynamic grid */
+		.dyn-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 26px;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.dyn-card {
+			background: #fff;
+			border-radius: 16px;
+			overflow: hidden;
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+			border: 1px solid rgba(200, 169, 126, 0.12);
+			transition: transform .3s ease, box-shadow .3s ease;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+		}
+
+		.dyn-card:hover {
+			transform: translateY(-6px);
+			box-shadow: 0 18px 45px rgba(200, 169, 126, 0.18);
+		}
+
+		.dyn-card .img-wrap {
+			width: 100%;
+			height: 200px;
+			position: relative;
+			overflow: hidden;
+			background: #f4efe6;
+		}
+
+		.dyn-card .img-wrap img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform .5s ease;
+		}
+
+		.dyn-card:hover .img-wrap img {
+			transform: scale(1.07);
+		}
+
+		.veg-badge {
+			position: absolute;
+			top: 12px;
+			left: 12px;
+			background: #fff;
+			padding: 4px 10px;
+			border-radius: 20px;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-family: "Poppins", sans-serif;
+			font-size: 11px;
+			font-weight: 600;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.veg-badge .dot {
+			width: 10px;
+			height: 10px;
+			border: 1.5px solid #2e7d32;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 2px;
+		}
+
+		.veg-badge .dot::after {
+			content: "";
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: #2e7d32;
+		}
+
+		.veg-badge.nonveg .dot {
+			border-color: #b71c1c;
+		}
+
+		.veg-badge.nonveg .dot::after {
+			background: #b71c1c;
+		}
+
+		.veg-badge .lbl {
+			color: #2e7d32;
+		}
+
+		.veg-badge.nonveg .lbl {
+			color: #b71c1c;
+		}
+
+		.cat-tag {
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			background: rgba(200, 169, 126, 0.95);
+			color: #fff;
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-family: "Poppins", sans-serif;
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.3px;
+		}
+
+		.dyn-card .card-body {
+			padding: 20px 22px 22px;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.dyn-card h3 {
+			font-family: "Playfair Display", serif;
+			font-size: 19px;
+			color: #1a1a1a;
+			font-weight: 700;
+			margin-bottom: 6px;
+			line-height: 1.25;
+		}
+
+		.dyn-card .desc {
+			font-size: 12.5px;
+			color: #888;
+			margin-bottom: 14px;
+			line-height: 1.55;
+			min-height: 36px;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+
+		.dyn-card .card-bottom {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: auto;
+			gap: 12px;
+		}
+
+		.dyn-card .price-tag {
+			font-family: "Poppins", sans-serif;
+			font-size: 20px;
+			font-weight: 800;
+			color: #c8a97e;
+		}
+
+		.dyn-card .order-btn {
+			background: linear-gradient(135deg, #c8a97e, #b18f64);
+			color: #fff;
+			padding: 10px 20px;
+			border-radius: 30px;
+			font-family: "Poppins", sans-serif;
+			font-size: 13px;
+			font-weight: 600;
+			border: none;
+			cursor: pointer;
+			transition: transform .25s ease, box-shadow .25s ease;
+			box-shadow: 0 6px 18px rgba(200, 169, 126, 0.35);
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.dyn-card .order-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 10px 26px rgba(200, 169, 126, 0.5);
+		}
+
+		.menu-msg {
+			text-align: center;
+			padding: 60px 20px;
+			color: #888;
+			font-family: "Poppins", sans-serif;
+		}
+
+		.menu-msg .spinner {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			border: 3px solid rgba(200, 169, 126, 0.2);
+			border-top-color: #c8a97e;
+			margin: 0 auto 18px;
+			animation: spin 0.8s linear infinite;
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@media (max-width: 700px) {
+			.menu-filters {
+				padding: 16px;
+				gap: 12px;
+			}
+
+			.menu-filters .search-box {
+				flex: 1 1 100%;
+			}
+
+			.veg-toggle {
+				flex: 1 1 100%;
+				justify-content: space-between;
+			}
+
+			.price-filter {
+				flex: 1 1 100%;
+				justify-content: space-between;
+			}
+
+			.price-filter input[type="range"] {
+				flex: 1;
+				width: auto;
+			}
+
+			.dyn-grid {
+				grid-template-columns: 1fr;
+				gap: 20px;
+			}
+		}
+	</style>
 </head>
 
 <body>
 
-    <!-- TOP BAR -->
-    <div class="py-1 bg-black top">
-        <div class="container">
-            <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-                <div class="col-lg-12 d-block">
-                    <div class="row d-flex">
-                        <div class="col-md pr-4 d-flex topper align-items-center">
-                            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-                            <span class="text">+91 98765 43210</span>
-                        </div>
-                        <div class="col-md pr-4 d-flex topper align-items-center">
-                            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-                            <span class="text">hello@feliciano.in</span>
-                        </div>
-                        <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
-                            <p class="mb-0 register-link">
-                                <span>Open hours:</span> <span>Monday - Sunday</span> <span>8:00AM - 9:00PM</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- TOP BAR -->
+	<div class="py-1 bg-black top">
+		<div class="container">
+			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+				<div class="col-lg-12 d-block">
+					<div class="row d-flex">
+						<div class="col-md pr-4 d-flex topper align-items-center">
+							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
+									class="icon-phone2"></span></div>
+							<span class="text">+91 98765 43210</span>
+						</div>
+						<div class="col-md pr-4 d-flex topper align-items-center">
+							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
+									class="icon-paper-plane"></span></div>
+							<span class="text">hello@feliciano.in</span>
+						</div>
+						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
+							<p class="mb-0 register-link">
+								<span>Open hours:</span> <span>Monday - Sunday</span> <span>8:00AM - 9:00PM</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">Mixtape</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
-                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="oi oi-menu"></span> Menu
-            </button>
-            <div class="collapse navbar-collapse" id="ftco-nav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                    <li class="nav-item active"><a href="menu.html" class="nav-link">Menu</a></li>
-                    <li class="nav-item"><a href="blog.html" class="nav-link">Stories</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                    <li class="nav-item cta"><a href="reservation.html" class="nav-link">Book a table</a></li>
-                    <li class="nav-item cta cart-btn">
-                        <a href="cart.html" class="nav-link cart-link">
-                            <span class="ion-ios-cart"></span>
-                            <span class="cart-badge" id="nav-cart-count">0</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<div class="container">
+			<a class="navbar-brand" href="index.html">Mixtape</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+				aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="oi oi-menu"></span> Menu
+			</button>
+			<div class="collapse navbar-collapse" id="ftco-nav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+					<li class="nav-item active"><a href="menu.html" class="nav-link">Menu</a></li>
+					<li class="nav-item"><a href="blog.html" class="nav-link">Stories</a></li>
+					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+					<li class="nav-item cta"><a href="reservation.html" class="nav-link">Book a table</a></li>
+					<li class="nav-item cta cart-btn">
+						<a href="cart.html" class="nav-link cart-link">
+							<span class="ion-ios-cart"></span>
+							<span class="cart-badge" id="nav-cart-count">0</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-    <!-- HERO -->
-    <section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_3.jpg');"
-        data-stellar-background-ratio="0.5">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row no-gutters slider-text align-items-end justify-content-center">
-                <div class="col-md-9 ftco-animate text-center mb-4">
-                    <h1 class="mb-2 bread">Indian Specialties</h1>
-                    <p class="breadcrumbs">
-                        <span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>
-                        <span>Menu <i class="ion-ios-arrow-forward"></i></span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+	<!-- HERO -->
+	<section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_3.jpg');"
+		data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row no-gutters slider-text align-items-end justify-content-center">
+				<div class="col-md-9 ftco-animate text-center mb-4">
+					<h1 class="mb-2 bread">Indian Specialties</h1>
+					<p class="breadcrumbs">
+						<span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>
+						<span>Menu <i class="ion-ios-arrow-forward"></i></span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
-    <!-- MENU SECTION -->
-    <section class="ftco-section">
-        <div class="container">
+	<!-- MENU SECTION -->
+	<section class="ftco-section">
+		<div class="container">
 
-            <!-- FILTER BAR -->
-            <div class="menu-filters">
-                <div class="search-box">
-                    <span class="icon ion-ios-search"></span>
-                    <input type="text" id="searchInput" placeholder="Search dishes...">
-                </div>
+			<!-- FILTER BAR -->
+			<div class="menu-filters">
+				<div class="search-box">
+					<span class="icon ion-ios-search"></span>
+					<input type="text" id="searchInput" placeholder="Search dishes...">
+				</div>
 
-                <div class="veg-toggle" id="vegToggle">
-                    <button data-filter="all" class="active">All</button>
-                    <button data-filter="veg"><span class="dot"></span> Veg</button>
-                    <button data-filter="non-veg"><span class="dot nonveg"></span> Non-Veg</button>
-                </div>
+				<div class="veg-toggle" id="vegToggle">
+					<button data-filter="all" class="active">All</button>
+					<button data-filter="veg"><span class="dot"></span> Veg</button>
+					<button data-filter="non-veg"><span class="dot nonveg"></span> Non-Veg</button>
+				</div>
 
-                <div class="price-filter">
-                    <span>Max ₹</span>
-                    <input type="range" id="priceRange" min="0" max="1000" step="10" value="1000">
-                    <span class="price-label" id="priceLabel">₹1000</span>
-                </div>
-            </div>
+				<div class="price-filter">
+					<span>Max ₹</span>
+					<input type="range" id="priceRange" min="0" max="1000" step="10" value="1000">
+					<span class="price-label" id="priceLabel">₹1000</span>
+				</div>
+			</div>
 
-            <!-- CATEGORY TABS -->
-            <div class="cat-tabs-wrap" id="catTabs">
-                <a class="cat-tab active" data-category="All">All</a>
-                <a class="cat-tab" data-category="Breakfast">Breakfast</a>
-                <a class="cat-tab" data-category="Lunch">Lunch</a>
-                <a class="cat-tab" data-category="Dinner">Dinner</a>
-                <a class="cat-tab" data-category="Drinks">Drinks</a>
-                <a class="cat-tab" data-category="Desserts">Desserts</a>
-                <a class="cat-tab" data-category="Wine">Wine</a>
-            </div>
+			<!-- CATEGORY TABS -->
+			<div class="cat-tabs-wrap" id="catTabs">
+				<a class="cat-tab active" data-category="All">All</a>
+				<a class="cat-tab" data-category="Breakfast">Breakfast</a>
+				<a class="cat-tab" data-category="Lunch">Lunch</a>
+				<a class="cat-tab" data-category="Dinner">Dinner</a>
+				<a class="cat-tab" data-category="Drinks">Drinks</a>
+				<a class="cat-tab" data-category="Desserts">Desserts</a>
+				<a class="cat-tab" data-category="Wine">Wine</a>
+			</div>
 
-            <!-- MENU GRID -->
-            <div id="menuArea">
-                <div class="menu-msg">
-                    <div class="spinner"></div>
-                    Loading menu...
-                </div>
-            </div>
+			<!-- MENU GRID -->
+			<div id="menuArea">
+				<div class="menu-msg">
+					<div class="spinner"></div>
+					Loading menu...
+				</div>
+			</div>
 
-        </div>
-    </section>
+		</div>
+	</section>
 
-    <!-- FOOTER -->
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <p>&copy; <script>document.write(new Date().getFullYear());</script> Mixtape Kitchen. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+	<!-- FOOTER -->
+	<footer class="ftco-footer ftco-bg-dark ftco-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<p>&copy;
+						<script>document.write(new Date().getFullYear());</script> Mixtape Kitchen. All rights reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 
-    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
-        </svg></div>
+	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+				stroke="#F96D00" />
+		</svg></div>
 
-    <!-- Scripts -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.easing.1.3.js"></script>
-    <script src="js/jquery.waypoints.min.js"></script>
-    <script src="js/jquery.stellar.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/aos.js"></script>
-    <script src="js/jquery.animateNumber.min.js"></script>
-    <script src="js/bootstrap-datepicker.js"></script>
-    <script src="js/jquery.timepicker.min.js"></script>
-    <script src="js/scrollax.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/cart-badge.js"></script>
-    <script src="js/auth-nav.js"></script>
-    <script src="js/login-gate.js"></script>
+	<!-- Scripts -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-migrate-3.0.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.stellar.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/jquery.timepicker.min.js"></script>
+	<script src="js/scrollax.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/cart-badge.js"></script>
+	<script src="js/auth-nav.js"></script>
+	<script src="js/login-gate.js"></script>
 
-    <script>
-        // ============================================
-        // BACKEND URL — always use Render (works everywhere)
-        // ============================================
-        const BACKEND_URL = "https://feliciano-master.onrender.com";
+	<script>
+		// ============================================
+		// BACKEND URL — always use Render (works everywhere)
+		// ============================================
+		const BACKEND_URL = "https://feliciano-master.onrender.com";
 
-        console.log("🔗 Backend:", BACKEND_URL);
+		console.log("🔗 Backend:", BACKEND_URL);
 
-        // ============================================
-        // STATE
-        // ============================================
-        let allItems = [];
-        const filters = {
-            search: "",
-            vegType: "all",
-            category: "All",
-            maxPrice: 1000,
-        };
+		// ============================================
+		// STATE
+		// ============================================
+		let allItems = [];
+		const filters = {
+			search: "",
+			vegType: "all",
+			category: "All",
+			maxPrice: 1000,
+		};
 
-        const menuArea = document.getElementById("menuArea");
+		const menuArea = document.getElementById("menuArea");
 
-        // ============================================
-        // CART HELPERS
-        // ============================================
-        function getCart() { return JSON.parse(localStorage.getItem("cart")) || []; }
-        function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); updateCartCount(); }
-        function updateCartCount() {
-            const cart = getCart();
-            let count = 0;
-            cart.forEach(i => { count += Number(i.quantity) || 0; });
-            const el = document.getElementById("nav-cart-count");
-            if (el) el.textContent = count;
-        }
+		// ============================================
+		// CART HELPERS
+		// ============================================
+		function getCart() { return JSON.parse(localStorage.getItem("cart")) || []; }
+		function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); updateCartCount(); }
+		function updateCartCount() {
+			const cart = getCart();
+			let count = 0;
+			cart.forEach(i => { count += Number(i.quantity) || 0; });
+			const el = document.getElementById("nav-cart-count");
+			if (el) el.textContent = count;
+		}
 
-        function showToast(msg) {
-            let toast = document.getElementById("cart-toast");
-            if (!toast) {
-                toast = document.createElement("div");
-                toast.id = "cart-toast";
-                toast.style.cssText = "position:fixed;bottom:30px;right:30px;background:#2e7d32;color:#fff;padding:14px 24px;border-radius:8px;font-family:Poppins,sans-serif;font-size:14px;box-shadow:0 5px 20px rgba(0,0,0,0.2);opacity:0;transform:translateY(20px);transition:0.3s;z-index:9999;";
-                document.body.appendChild(toast);
-            }
-            toast.textContent = msg;
-            toast.style.opacity = "1";
-            toast.style.transform = "translateY(0)";
-            clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => {
-                toast.style.opacity = "0";
-                toast.style.transform = "translateY(20px)";
-            }, 2200);
-        }
+		function showToast(msg) {
+			let toast = document.getElementById("cart-toast");
+			if (!toast) {
+				toast = document.createElement("div");
+				toast.id = "cart-toast";
+				toast.style.cssText = "position:fixed;bottom:30px;right:30px;background:#2e7d32;color:#fff;padding:14px 24px;border-radius:8px;font-family:Poppins,sans-serif;font-size:14px;box-shadow:0 5px 20px rgba(0,0,0,0.2);opacity:0;transform:translateY(20px);transition:0.3s;z-index:9999;";
+				document.body.appendChild(toast);
+			}
+			toast.textContent = msg;
+			toast.style.opacity = "1";
+			toast.style.transform = "translateY(0)";
+			clearTimeout(toast._timeout);
+			toast._timeout = setTimeout(() => {
+				toast.style.opacity = "0";
+				toast.style.transform = "translateY(20px)";
+			}, 2200);
+		}
 
-        document.addEventListener("click", function (e) {
-            const btn = e.target.closest(".order-now-btn");
-            if (!btn) return;
-            e.preventDefault();
+		document.addEventListener("click", function (e) {
+			const btn = e.target.closest(".order-now-btn");
+			if (!btn) return;
+			e.preventDefault();
 
-            if (window.LoginGate && !window.LoginGate.requireLogin("/menu")) return;
+			if (window.LoginGate && !window.LoginGate.requireLogin("/menu")) return;
 
-            const id    = btn.dataset.id;
-            const name  = btn.dataset.name;
-            const price = Number(btn.dataset.price);
-            const image = btn.dataset.image;
+			const id = btn.dataset.id;
+			const name = btn.dataset.name;
+			const price = Number(btn.dataset.price);
+			const image = btn.dataset.image;
+			const type = btn.dataset.type || "veg";   // 👈 new
 
-            const cart = getCart();
-            const idx = cart.findIndex(i => String(i.id) === String(id));
+			const cart = getCart();
+			const idx = cart.findIndex(i => String(i.id) === String(id));
 
-            if (idx !== -1) {
-                cart[idx].quantity = (Number(cart[idx].quantity) || 0) + 1;
-            } else {
-                cart.push({ id, name, price, image, quantity: 1 });
-            }
-            saveCart(cart);
-            showToast(`"${name}" added to cart!`);
-        });
+			if (idx !== -1) {
+				cart[idx].quantity = (Number(cart[idx].quantity) || 0) + 1;
+				cart[idx].type = type;  // 👈 keep it fresh
+			} else {
+				cart.push({ id, name, price, image, quantity: 1, type });  // 👈 include type
+			}
+			saveCart(cart);
+			showToast(`"${name}" added to cart!`);
+		});
 
-        // ============================================
-        // FETCH MENU
-        // ============================================
-        async function loadMenu() {
-            menuArea.innerHTML = `
+		// ============================================
+		// FETCH MENU
+		// ============================================
+		async function loadMenu() {
+			menuArea.innerHTML = `
                 <div class="menu-msg">
                     <div class="spinner"></div>
                     Loading menu...
                 </div>`;
 
-            try {
-                const res = await fetch(`${BACKEND_URL}/menu`);
-                const text = await res.text();
+			try {
+				const res = await fetch(`${BACKEND_URL}/menu`);
+				const text = await res.text();
 
-                let data;
-                try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    console.error("Server returned non-JSON:", text.slice(0, 200));
-                    menuArea.innerHTML = `
+				let data;
+				try {
+					data = JSON.parse(text);
+				} catch (e) {
+					console.error("Server returned non-JSON:", text.slice(0, 200));
+					menuArea.innerHTML = `
                         <div class="menu-msg">
                             ⚠️ Backend at <b>${BACKEND_URL}</b> did not return JSON.<br>
                             <small style="color:#bbb;">${text.slice(0, 120)}…</small>
                         </div>`;
-                    return;
-                }
+					return;
+				}
 
-                if (!res.ok || !data.success) {
-                    throw new Error(data.error || "Failed to load menu");
-                }
+				if (!res.ok || !data.success) {
+					throw new Error(data.error || "Failed to load menu");
+				}
 
-                allItems = data.items || [];
-                console.log("📦 Loaded", allItems.length, "items");
-                applyFilters();
+				allItems = data.items || [];
+				console.log("📦 Loaded", allItems.length, "items");
+				applyFilters();
 
-            } catch (err) {
-                console.error("Menu load error:", err);
-                menuArea.innerHTML = `
+			} catch (err) {
+				console.error("Menu load error:", err);
+				menuArea.innerHTML = `
                     <div class="menu-msg">
                         ⚠️ Could not load menu.<br>
                         <small style="color:#bbb;">${err.message}</small>
                     </div>`;
-            }
-        }
+			}
+		}
 
-        // ============================================
-        // RENDER
-        // ============================================
-        function renderMenu(items) {
-            if (!items.length) {
-                menuArea.innerHTML = `<div class="menu-msg">😔 No items match your filters.</div>`;
-                return;
-            }
+		// ============================================
+		// RENDER
+		// ============================================
+		function renderMenu(items) {
+			if (!items.length) {
+				menuArea.innerHTML = `<div class="menu-msg">😔 No items match your filters.</div>`;
+				return;
+			}
 
-            menuArea.innerHTML = `
+			menuArea.innerHTML = `
                 <div class="dyn-grid">
                     ${items.map((item, i) => {
-                        const isNonVeg = item.type === "non-veg";
-                        const typeLabel = isNonVeg ? "Non-Veg" : "Veg";
-                        const desc = (item.description && item.description.trim())
-                            || (item.ingredients && item.ingredients.length
-                                ? item.ingredients.join(" · ")
-                                : "Freshly prepared by Mixtape Kitchen");
-                        const img = item.image || "images/default-food.jpg";
+				const isNonVeg = item.type === "non-veg";
+				const typeLabel = isNonVeg ? "Non-Veg" : "Veg";
+				const desc = (item.description && item.description.trim())
+					|| (item.ingredients && item.ingredients.length
+						? item.ingredients.join(" · ")
+						: "Freshly prepared by Mixtape Kitchen");
+				const img = item.image || "images/default-food.jpg";
 
-                        return `
+				return `
                             <div class="dyn-card" style="animation-delay:${i * 0.03}s;">
                                 <div class="img-wrap">
                                     <img src="${img}" alt="${item.name}"
@@ -665,80 +753,82 @@
                                     <div class="card-bottom">
                                         <span class="price-tag">₹${Number(item.price).toFixed(0)}</span>
                                         <button class="order-btn order-now-btn"
-                                            data-id="${item._id}"
-                                            data-name="${item.name}"
-                                            data-price="${item.price}"
-                                            data-image="${item.image || ""}">
+    data-id="${item._id}"
+    data-name="${item.name}"
+    data-price="${item.price}"
+    data-image="${item.image || ""}"
+    data-type="${item.type || "veg"}">
                                             <span class="ion-ios-cart"></span> Order Now
                                         </button>
                                     </div>
                                 </div>
                             </div>`;
-                    }).join("")}
+			}).join("")}
                 </div>`;
-        }
+		}
 
-        // ============================================
-        // FILTERS
-        // ============================================
-        function applyFilters() {
-            let list = allItems.slice();
-            if (filters.category !== "All") list = list.filter(i => i.category === filters.category);
-            if (filters.vegType !== "all") list = list.filter(i => i.type === filters.vegType);
-            if (filters.search) {
-                const q = filters.search.toLowerCase();
-                list = list.filter(i =>
-                    i.name.toLowerCase().includes(q) ||
-                    (i.description || "").toLowerCase().includes(q) ||
-                    (i.ingredients || []).join(" ").toLowerCase().includes(q)
-                );
-            }
-            if (filters.maxPrice < 1000) list = list.filter(i => Number(i.price) <= filters.maxPrice);
-            renderMenu(list);
-        }
+		// ============================================
+		// FILTERS
+		// ============================================
+		function applyFilters() {
+			let list = allItems.slice();
+			if (filters.category !== "All") list = list.filter(i => i.category === filters.category);
+			if (filters.vegType !== "all") list = list.filter(i => i.type === filters.vegType);
+			if (filters.search) {
+				const q = filters.search.toLowerCase();
+				list = list.filter(i =>
+					i.name.toLowerCase().includes(q) ||
+					(i.description || "").toLowerCase().includes(q) ||
+					(i.ingredients || []).join(" ").toLowerCase().includes(q)
+				);
+			}
+			if (filters.maxPrice < 1000) list = list.filter(i => Number(i.price) <= filters.maxPrice);
+			renderMenu(list);
+		}
 
-        document.getElementById("searchInput").addEventListener("input", (e) => {
-            filters.search = e.target.value.trim();
-            applyFilters();
-        });
+		document.getElementById("searchInput").addEventListener("input", (e) => {
+			filters.search = e.target.value.trim();
+			applyFilters();
+		});
 
-        document.getElementById("vegToggle").addEventListener("click", (e) => {
-            const btn = e.target.closest("button");
-            if (!btn) return;
-            document.querySelectorAll("#vegToggle button").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            filters.vegType = btn.dataset.filter;
-            applyFilters();
-        });
+		document.getElementById("vegToggle").addEventListener("click", (e) => {
+			const btn = e.target.closest("button");
+			if (!btn) return;
+			document.querySelectorAll("#vegToggle button").forEach(b => b.classList.remove("active"));
+			btn.classList.add("active");
+			filters.vegType = btn.dataset.filter;
+			applyFilters();
+		});
 
-        document.getElementById("catTabs").addEventListener("click", (e) => {
-            const tab = e.target.closest(".cat-tab");
-            if (!tab) return;
-            e.preventDefault();
-            document.querySelectorAll("#catTabs .cat-tab").forEach(t => t.classList.remove("active"));
-            tab.classList.add("active");
-            filters.category = tab.dataset.category;
-            applyFilters();
-        });
+		document.getElementById("catTabs").addEventListener("click", (e) => {
+			const tab = e.target.closest(".cat-tab");
+			if (!tab) return;
+			e.preventDefault();
+			document.querySelectorAll("#catTabs .cat-tab").forEach(t => t.classList.remove("active"));
+			tab.classList.add("active");
+			filters.category = tab.dataset.category;
+			applyFilters();
+		});
 
-        document.getElementById("priceRange").addEventListener("input", (e) => {
-            filters.maxPrice = Number(e.target.value);
-            document.getElementById("priceLabel").textContent = "₹" + filters.maxPrice;
-            applyFilters();
-        });
+		document.getElementById("priceRange").addEventListener("input", (e) => {
+			filters.maxPrice = Number(e.target.value);
+			document.getElementById("priceLabel").textContent = "₹" + filters.maxPrice;
+			applyFilters();
+		});
 
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener("DOMContentLoaded", () => {
-            updateCartCount();
-            loadMenu();
-        });
+		// ============================================
+		// INIT
+		// ============================================
+		document.addEventListener("DOMContentLoaded", () => {
+			updateCartCount();
+			loadMenu();
+		});
 
-        window.addEventListener("storage", (e) => {
-            if (e.key === "cart") updateCartCount();
-        });
-    </script>
+		window.addEventListener("storage", (e) => {
+			if (e.key === "cart") updateCartCount();
+		});
+	</script>
 
 </body>
+
 </html>
