@@ -9,7 +9,7 @@
     const LOGIN_PAGE = "login.html";
 
     /* ============================================================
-       1. INIT — Insert the auth button into the navbar
+       1. INIT
        ============================================================ */
     function init() {
         const navList = document.querySelector(".ftco-navbar-light .navbar-nav");
@@ -58,7 +58,6 @@
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
                     localStorage.removeItem("cart");
-
                     if (typeof updateCartCount === "function") updateCartCount();
                     const badge = document.getElementById("nav-cart-count");
                     if (badge) {
@@ -94,7 +93,9 @@
         style.id = "authNavStyles";
         style.textContent = `
 
-            /* NAVBAR breathing room */
+            /* ============================================================
+               NAVBAR breathing room
+               ============================================================ */
             .ftco-navbar-light {
                 padding-top: 15px !important;
                 padding-bottom: 15px !important;
@@ -111,7 +112,9 @@
                 margin-bottom: 6px !important;
             }
 
-            /* UNIFIED BUTTON GROUP */
+            /* ============================================================
+               DESKTOP — unified pill buttons
+               ============================================================ */
             .ftco-navbar-light .navbar-nav > .nav-item.cta {
                 margin-left: 10px;
                 margin-top: 6px;
@@ -146,7 +149,7 @@
                 box-shadow: 0 6px 18px rgba(200, 169, 126, 0.45) !important;
             }
 
-            /* CART */
+            /* CART (desktop) */
             .ftco-navbar-light .navbar-nav > .nav-item.cart-btn {
                 position: relative;
             }
@@ -161,7 +164,7 @@
                 line-height: 1 !important;
             }
 
-            /* Cart badge */
+            /* Cart badge (desktop) */
             .cart-badge {
                 position: absolute !important;
                 top: -7px !important;
@@ -241,7 +244,7 @@
                 box-shadow: none;
             }
 
-            /* SCROLLED */
+            /* SCROLLED desktop */
             .ftco-navbar-light.scrolled {
                 padding-top: 10px !important;
                 padding-bottom: 10px !important;
@@ -260,29 +263,35 @@
                 width: auto !important;
             }
 
-            /* MOBILE */
+            /* ============================================================
+               MOBILE
+               ============================================================ */
             @media (max-width: 991.98px) {
+
+                /* Navbar row layout */
                 .ftco-navbar-light > .container {
                     display: flex !important;
                     align-items: center !important;
                     flex-wrap: wrap !important;
                     justify-content: space-between !important;
+                    min-height: 60px !important;
                 }
                 .ftco-navbar-light .navbar-brand {
                     order: 1;
                     flex: 0 0 auto;
+                    margin-right: auto;
                 }
                 .ftco-navbar-light .mobile-action-strip {
                     order: 2;
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    margin-left: auto;
-                    margin-right: 10px;
+                    flex: 0 0 auto;
                 }
                 .ftco-navbar-light .navbar-toggler {
                     order: 3;
                     flex: 0 0 auto;
+                    margin-left: 8px;
                 }
                 .ftco-navbar-light .navbar-collapse {
                     order: 4;
@@ -295,41 +304,79 @@
                     list-style: none;
                     padding: 0 !important;
                 }
-                .ftco-navbar-light .mobile-action-strip .nav-item.cta > a {
-                    height: 40px !important;
-                    padding: 0 16px !important;
-                    border-radius: 20px !important;
-                    font-size: 13px !important;
-                }
+
+                /* CART — round gold circle with cart icon */
                 .ftco-navbar-light .mobile-action-strip .nav-item.cart-btn > a.cart-link {
-                    width: 40px !important;
+                    position: relative !important;
+                    width: 42px !important;
+                    height: 42px !important;
+                    min-width: 42px !important;
                     padding: 0 !important;
+                    background: #c8a97e !important;
+                    color: #fff !important;
+                    border-radius: 50% !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
                     justify-content: center !important;
-                    border-radius: 20px !important;
-                    font-size: 16px !important;
+                    font-size: 17px !important;
+                    box-shadow: 0 3px 10px rgba(200, 169, 126, 0.35) !important;
                 }
+                .ftco-navbar-light .mobile-action-strip .nav-item.cart-btn > a.cart-link .ion-ios-cart {
+                    font-size: 17px !important;
+                }
+
+                /* Cart badge — snug on the circle */
                 .ftco-navbar-light .mobile-action-strip .cart-badge {
-                    top: -5px !important;
-                    right: -5px !important;
-                    min-width: 17px !important;
-                    height: 17px !important;
-                    line-height: 17px !important;
+                    position: absolute !important;
+                    top: -3px !important;
+                    right: -3px !important;
+                    left: auto !important;
+                    min-width: 16px !important;
+                    height: 16px !important;
+                    padding: 0 4px !important;
+                    border-radius: 8px !important;
+                    background: #e74c3c !important;
+                    color: #fff !important;
                     font-size: 9px !important;
+                    font-weight: 700 !important;
+                    line-height: 16px !important;
+                    text-align: center !important;
+                    border: 2px solid #1a1a1a !important;
+                    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.4) !important;
+                    display: inline-block !important;
+                    z-index: 5 !important;
                 }
+
+                /* LOGIN pill — same height as cart circle */
                 .ftco-navbar-light .mobile-action-strip .nav-item.auth-btn > a {
-                    height: 40px !important;
+                    height: 42px !important;
+                    min-height: 42px !important;
                     padding: 0 16px !important;
-                    border-radius: 20px !important;
                     font-size: 13px !important;
+                    border-radius: 21px !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    gap: 6px !important;
                 }
+                .ftco-navbar-light .mobile-action-strip .nav-item.auth-btn > a .ion-ios-person {
+                    font-size: 14px !important;
+                }
+
+                /* BOOK A TABLE — full width, tucked into hamburger */
                 .ftco-navbar-light .navbar-nav > .nav-item.cta:not(.cart-btn):not(.auth-btn) {
-                    margin-top: 8px;
+                    margin-top: 10px;
+                    margin-left: 0;
                     width: 100%;
                 }
                 .ftco-navbar-light .navbar-nav > .nav-item.cta:not(.cart-btn):not(.auth-btn) > a {
-                    width: 100%;
-                    justify-content: center;
+                    width: 100% !important;
+                    justify-content: center !important;
+                    height: 46px !important;
+                    border-radius: 23px !important;
                 }
+
+                /* Dropdown — full width */
                 .auth-dropdown {
                     position: fixed;
                     top: 70px;
@@ -337,13 +384,33 @@
                     left: 15px;
                     box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
                 }
+
+                /* SCROLLED mobile — keep identical size */
+                .ftco-navbar-light.scrolled .mobile-action-strip .nav-item.cart-btn > a.cart-link {
+                    width: 42px !important;
+                    height: 42px !important;
+                    padding: 0 !important;
+                    border-radius: 50% !important;
+                }
+                .ftco-navbar-light.scrolled .mobile-action-strip .cart-badge {
+                    top: -3px !important;
+                    right: -3px !important;
+                    left: auto !important;
+                    position: absolute !important;
+                }
+                .ftco-navbar-light.scrolled .mobile-action-strip .nav-item.auth-btn > a {
+                    height: 42px !important;
+                    padding: 0 16px !important;
+                    border-radius: 21px !important;
+                    font-size: 13px !important;
+                }
             }
         `;
         document.head.appendChild(style);
     }
 
     /* ============================================================
-       3. MOBILE LAYOUT
+       3. MOBILE LAYOUT — move cart + login into the strip
        ============================================================ */
     function forceMobileLayout() {
         const navbarContainer = document.querySelector(".ftco-navbar-light > .container");
