@@ -202,7 +202,7 @@
         fetch(`${BACKEND_URL}/`)
             .then(r => r.json())
             .then(() => console.log("Backend is warm"))
-            .catch(() => console.log("Backend cold — will warm on submit"));
+            .catch(() => console.log("Backend cold"));
 
         let navigating = false;
 
@@ -230,23 +230,22 @@
 
                 if (res.ok && data.success) {
                     navigating = true;
-
-                    // ---- CLEAR ANY PREVIOUS CART ----
                     localStorage.removeItem("cart");
-
-                    // ---- SAVE NEW SESSION ----
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("user", JSON.stringify(data.user));
 
-                    // Reset cart badge to 0
                     const badge = document.getElementById("nav-cart-count");
                     if (badge) {
                         badge.textContent = "0";
                         badge.setAttribute("data-count", "0");
                     }
 
+                    // ⬇️ NEW — go back to where they came from
+                    const backTo = sessionStorage.getItem("lg_return_to") || "/";
+                    sessionStorage.removeItem("lg_return_to");
+
                     setTimeout(() => {
-                        window.location.href = "/";
+                        window.location.href = backTo;
                     }, 100);
                     return;
                 }

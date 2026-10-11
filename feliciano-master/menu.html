@@ -1354,8 +1354,8 @@
 			if (!btn) return;
 			e.preventDefault();
 
-			if (window.LoginGate && !window.LoginGate.requireLogin()) {
-				return; // don't add to cart, show modal
+			if (window.LoginGate && !window.LoginGate.requireLogin("/menu")) {
+				return; // show modal, don't add to cart
 			}
 
 			var id = Number(btn.dataset.id);

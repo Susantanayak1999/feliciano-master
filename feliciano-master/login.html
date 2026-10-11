@@ -217,22 +217,17 @@
 
                 if (res.ok && data.success) {
                     navigating = true;
-
-                    // ---- CLEAR ANY PREVIOUS CART ----
                     localStorage.removeItem("cart");
-
-                    // ---- SAVE NEW SESSION ----
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("user", JSON.stringify(data.user));
 
-                    // Reset cart badge to 0
                     const badge = document.getElementById("nav-cart-count");
                     if (badge) {
                         badge.textContent = "0";
                         badge.setAttribute("data-count", "0");
                     }
 
-                    // Return to the page they came from, or home
+                    // ⬇️ NEW — go back to where they came from
                     const backTo = sessionStorage.getItem("lg_return_to") || "/";
                     sessionStorage.removeItem("lg_return_to");
 
