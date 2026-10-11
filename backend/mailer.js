@@ -1,21 +1,34 @@
 // ============================================================
-// MAILER — Uses Resend (works over HTTPS, no port blocks)
+// MAILER — Brevo SMTP (sends to ANY email, no domain needed)
 // ============================================================
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.BREVO_USER,
+        pass: process.env.BREVO_PASS,
+    },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
+});
 
-if (!process.env.RESEND_API_KEY) {
-    console.warn("⚠️ RESEND_API_KEY not set — emails will not send");
-} else {
-    console.log("✅ Mailer ready (Resend)");
-}
+transporter.verify((err) => {
+    if (err) console.warn("⚠️ Brevo not configured:", err.message);
+    else console.log("✅ Mailer ready (Brevo)");
+});
 
 // ------------------------------------------------------------
 // 1. RESERVATION CONFIRMATION
 // ------------------------------------------------------------
 async function sendReservationEmail({ to, name, date, time, persons, reservationId }) {
-    if (!process.env.RESEND_API_KEY) return { sent: false };
+    if (!process.env.BREVO_USER || !process.env.BREVO_PASS) {
+        console.warn("⚠️ Brevo env not set — skipping reservation email");
+        return { sent: false };
+    }
 
     const html = `
     <div style="font-family:'Poppins',Arial,sans-serif;background:#f6f2ea;padding:40px 20px;">
@@ -41,14 +54,14 @@ async function sendReservationEmail({ to, name, date, time, persons, reservation
     </div>`;
 
     try {
-        const info = await resend.emails.send({
-            from: "Mixtape Kitchen <onboarding@resend.dev>",
-            to: [to],
+        const info = await transporter.sendMail({
+            from: `"Mixtape Kitchen" <susantanayak01592@gmail.com>`,
+            to,
             subject: `Your Reservation is Confirmed — ${date} at ${time}`,
             html,
         });
-        console.log("✅ Reservation email sent to", to, "→", info.id);
-        return { sent: true, id: info.id };
+        console.log("✅ Reservation email sent to", to, "→", info.messageId);
+        return { sent: true, id: info.messageId };
     } catch (err) {
         console.error("❌ Reservation email failed:", err.message);
         return { sent: false, error: err.message };
@@ -59,7 +72,10 @@ async function sendReservationEmail({ to, name, date, time, persons, reservation
 // 2. ORDER CONFIRMATION (after payment)
 // ------------------------------------------------------------
 async function sendOrderEmail({ to, name, items, amount, paymentId, orderId }) {
-    if (!process.env.RESEND_API_KEY) return { sent: false };
+    if (!process.env.BREVO_USER || !process.env.BREVO_PASS) {
+        console.warn("⚠️ Brevo env not set — skipping order email");
+        return { sent: false };
+    }
 
     const itemRows = (items || []).map(item => `
       <tr>
@@ -94,14 +110,14 @@ async function sendOrderEmail({ to, name, items, amount, paymentId, orderId }) {
     </div>`;
 
     try {
-        const info = await resend.emails.send({
-            from: "Mixtape Kitchen <onboarding@resend.dev>",
-            to: [to],
+        const info = await transporter.sendMail({
+            from: `"Mixtape Kitchen" <susantanayak01592@gmail.com>`,
+            to,
             subject: `Your Order is Confirmed — ₹${Number(amount).toFixed(2)}`,
             html,
         });
-        console.log("✅ Order email sent to", to, "→", info.id);
-        return { sent: true, id: info.id };
+        console.log("✅ Order email sent to", to, "→", info.messageId);
+        return { sent: true, id: info.messageId };
     } catch (err) {
         console.error("❌ Order email failed:", err.message);
         return { sent: false, error: err.message };
