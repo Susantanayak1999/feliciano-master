@@ -509,18 +509,3 @@
 
 })();
 
-/* ============================================================
-   5. CART BADGE SYNC — ensure badge updates after layout moves
-   ============================================================ */
-setTimeout(function () {
-    if (typeof window.updateCartCount === "function") {
-        window.updateCartCount();
-    }
-}, 100);
-
-// Re-sync badge whenever items change in this tab
-document.addEventListener("cart:updated", function () {
-    if (typeof window.updateCartCount === "function") {
-        window.updateCartCount();
-    }
-});
