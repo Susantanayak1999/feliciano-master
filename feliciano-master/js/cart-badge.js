@@ -1,13 +1,11 @@
 /* ============================================================
-   CART BADGE — Shared across all pages
-   Reads localStorage["cart"] and updates #nav-cart-count.
-   Only shows the badge when a user is logged in AND cart has items.
+   CART BADGE — Hide for guests, hide when 0, show count only
+   when logged in AND cart has items.
    ============================================================ */
 
 (function () {
     "use strict";
 
-    /* ---------- Helpers ---------- */
     function isLoggedIn() {
         return !!localStorage.getItem("token") && !!localStorage.getItem("user");
     }
@@ -25,32 +23,37 @@
         return count;
     }
 
-    /* ---------- Update the badge in the navbar ---------- */
     function updateCartCount() {
         var badge = document.getElementById("nav-cart-count");
         if (!badge) return;
 
-        // 🔒 Not logged in → force 0 and hide the badge
+        // 🔒 Not logged in → force count=0 and HIDE badge
         if (!isLoggedIn()) {
             badge.textContent = "0";
             badge.setAttribute("data-count", "0");
             badge.style.display = "none";
+            badge.style.visibility = "hidden";
+            badge.style.opacity = "0";
             return;
         }
 
-        // Logged in → show the real count (hide if 0)
+        // Logged in → show real count (hide if 0)
         var count = getCartCount();
         badge.textContent = count;
         badge.setAttribute("data-count", count);
 
         if (count > 0) {
             badge.style.display = "";
+            badge.style.visibility = "";
+            badge.style.opacity = "";
         } else {
             badge.style.display = "none";
+            badge.style.visibility = "hidden";
+            badge.style.opacity = "0";
         }
     }
 
-    /* ---------- Clear any leftover cart for guests ---------- */
+    // Clear stale cart if guest
     function cleanStaleCart() {
         if (!isLoggedIn()) {
             if (localStorage.getItem("cart")) {
@@ -59,7 +62,6 @@
         }
     }
 
-    /* ---------- Init on page load ---------- */
     function boot() {
         cleanStaleCart();
         updateCartCount();
@@ -71,7 +73,7 @@
         boot();
     }
 
-    /* ---------- Cross-tab sync ---------- */
+    // Cross-tab sync
     window.addEventListener("storage", function (e) {
         if (e.key === "cart" || e.key === "token" || e.key === "user") {
             cleanStaleCart();
@@ -79,7 +81,7 @@
         }
     });
 
-    /* ---------- Expose globally for other scripts ---------- */
+    // Expose globally
     window.updateCartCount = updateCartCount;
 
 })();

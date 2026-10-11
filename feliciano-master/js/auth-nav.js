@@ -70,6 +70,7 @@
                     if (badge) {
                         badge.textContent = "0";
                         badge.setAttribute("data-count", "0");
+                        badge.style.display = "none";
                     }
                     location.href = "index.html";
                 }
@@ -87,6 +88,14 @@
                 cartBtn.parentNode.insertBefore(li, cartBtn.nextSibling);
             } else {
                 navList.appendChild(li);
+            }
+
+            // 🔒 Hide the badge for guests
+            const badge = document.getElementById("nav-cart-count");
+            if (badge) {
+                badge.textContent = "0";
+                badge.setAttribute("data-count", "0");
+                badge.style.display = "none";
             }
         }
     }
@@ -171,7 +180,9 @@
                 line-height: 1 !important;
             }
 
-            /* Cart badge (desktop) */
+            /* ============================================================
+               CART BADGE — only visible when data-count > 0
+               ============================================================ */
             .cart-badge {
                 position: absolute !important;
                 top: -7px !important;
@@ -194,8 +205,14 @@
                 display: inline-block !important;
                 z-index: 5 !important;
             }
-            .cart-badge[data-count="0"] {
+
+            /* 🔒 Hide badge when count is 0 OR no count set */
+            .cart-badge[data-count="0"],
+            .cart-badge[data-count=""],
+            .cart-badge:empty {
                 display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
             }
 
             /* AUTH pill */
@@ -352,6 +369,15 @@
                     box-shadow: 0 2px 4px rgba(231, 76, 60, 0.4) !important;
                     display: inline-block !important;
                     z-index: 5 !important;
+                }
+
+                /* 🔒 Hide mobile badge when count is 0 OR empty */
+                .ftco-navbar-light .mobile-action-strip .cart-badge[data-count="0"],
+                .ftco-navbar-light .mobile-action-strip .cart-badge[data-count=""],
+                .ftco-navbar-light .mobile-action-strip .cart-badge:empty {
+                    display: none !important;
+                    visibility: hidden !important;
+                    opacity: 0 !important;
                 }
 
                 /* LOGIN pill — same height as cart circle */
