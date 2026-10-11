@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>My Orders | Mixtape Kitchen</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ============================================================
+           HERO
+           ============================================================ */
+        .orders-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2418 100%);
+            padding: 70px 20px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .orders-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(200,169,126,0.12), transparent 45%),
+                radial-gradient(circle at 80% 70%, rgba(200,169,126,0.08), transparent 50%);
+            pointer-events: none;
+        }
+        .orders-hero .eyebrow {
+            color: #c8a97e;
+            font-family: "Great Vibes", cursive;
+            font-size: 32px;
+            display: block;
+            margin-bottom: 6px;
+            position: relative;
+        }
+        .orders-hero h1 {
+            color: #fff;
+            font-family: "Poppins", sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .orders-hero p {
+            color: rgba(255,255,255,0.7);
+            font-size: 15px;
+            max-width: 520px;
+            margin: 0 auto;
+            position: relative;
+            font-family: "Poppins", sans-serif;
+        }
+        .orders-hero .divider {
+            width: 70px;
+            height: 3px;
+            background: #c8a97e;
+            margin: 18px auto 0;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        /* ============================================================
+           ORDERS SECTION
+           ============================================================ */
+        .orders-section {
+            background: #f8f6f3;
+            padding: 60px 7% 90px;
+            min-height: 500px;
+        }
+        .orders-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Loading */
+        .orders-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+            font-family: "Poppins", sans-serif;
+        }
+        .orders-loading .spinner {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid rgba(200,169,126,0.2);
+            border-top-color: #c8a97e;
+            margin: 0 auto 18px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Empty state */
+        .orders-empty {
+            text-align: center;
+            padding: 70px 20px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 45px rgba(0,0,0,0.05);
+            border: 1px solid rgba(200,169,126,0.12);
+        }
+        .orders-empty .icon {
+            font-size: 60px;
+            color: #e8d9be;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-10px); }
+        }
+        .orders-empty h3 {
+            font-family: "Poppins", sans-serif;
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .orders-empty p {
+            color: #888;
+            font-size: 15px;
+            margin-bottom: 26px;
+            font-family: "Poppins", sans-serif;
+        }
+        .orders-empty .btn-menu {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #c8a97e, #b18f64);
+            color: #fff;
+            border-radius: 30px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(200,169,126,0.35);
+            transition: all 0.3s;
+        }
+        .orders-empty .btn-menu:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(200,169,126,0.5);
+            color: #fff;
+        }
+
+        /* Order card */
+        .order-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 26px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            border: 1px solid rgba(200,169,126,0.15);
+            animation: fadeUp 0.5s ease both;
+            transition: box-shadow 0.3s;
+        }
+        .order-card:hover {
+            box-shadow: 0 15px 50px rgba(200,169,126,0.15);
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed rgba(200,169,126,0.3);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .order-header .left h4 {
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            color: #1a1a1a;
+            margin: 0 0 4px;
+            font-weight: 600;
+        }
+        .order-header .left .order-id {
+            font-size: 12px;
+            color: #999;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .order-header .right {
+            text-align: right;
+        }
+        .order-header .total {
+            font-family: "Poppins", sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #c8a97e;
+            line-height: 1;
+        }
+        .order-header .status {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* Items list */
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            color: #444;
+        }
+        .order-item .info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+        .order-item img {
+            width: 46px;
+            height: 46px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        .order-item .name {
+            color: #1a1a1a;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .order-item .qty {
+            color: #999;
+            font-size: 12px;
+        }
+        .order-item .line-total {
+            color: #c8a97e;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 14px;
+            border-top: 1px dashed #eee;
+            font-size: 12px;
+            color: #999;
+            font-family: "Poppins", sans-serif;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .order-footer .payment-id {
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        /* Error */
+        .orders-error {
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .orders-hero { padding: 50px 20px 40px; }
+            .orders-hero h1 { font-size: 32px; }
+            .orders-hero .eyebrow { font-size: 24px; }
+            .orders-section { padding: 40px 5% 60px; }
+            .order-card { padding: 20px; }
+            .order-header .total { font-size: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR (same as your other pages) -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Mixtape</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
+
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="menu.html" class="nav-link">Menu</a></li>
+                    <li class="nav-item"><a href="blog.html" class="nav-link">Stories</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li class="nav-item cta"><a href="reservation.html" class="nav-link">Book a table</a></li>
+
+                    <li class="nav-item cta cart-btn">
+                        <a href="cart.html" class="nav-link cart-link">
+                            <span class="ion-ios-cart"></span>
+                            <span class="cart-badge" id="nav-cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="orders-hero">
+        <span class="eyebrow">Your History</span>
+        <h1>My Orders</h1>
+        <p>Every delicious moment you've shared with Mixtape Kitchen.</p>
+        <div class="divider"></div>
+    </section>
+
+    <!-- ORDERS LIST -->
+    <section class="orders-section">
+        <div class="orders-container">
+
+            <div id="ordersLoading" class="orders-loading">
+                <div class="spinner"></div>
+                Loading your orders...
+            </div>
+
+            <div id="ordersList"></div>
+
+            <div id="ordersEmpty" class="orders-empty" style="display:none;">
+                <div class="icon"><span class="ion-ios-basket"></span></div>
+                <h3>No orders yet</h3>
+                <p>Looks like you haven't placed an order. Browse our menu to get started!</p>
+                <a href="menu.html" class="btn-menu">
+                    <span class="ion-ios-restaurant"></span> Browse Menu
+                </a>
+            </div>
+
+            <div id="ordersError" class="orders-error" style="display:none;"></div>
+
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/cart-badge.js"></script>
+    <script src="js/auth-nav.js"></script>
+    <script src="js/login-gate.js"></script>
+
+    <script>
+        // ============================================================
+        // CONFIG
+        // ============================================================
+        const BACKEND_URL = "https://feliciano-master.onrender.com";
+        // 🔧 For local testing, uncomment below and comment above:
+        // const BACKEND_URL = "http://localhost:5000";
+
+        const loadingEl = document.getElementById("ordersLoading");
+        const listEl    = document.getElementById("ordersList");
+        const emptyEl   = document.getElementById("ordersEmpty");
+        const errorEl   = document.getElementById("ordersError");
+
+        function showError(msg) {
+            loadingEl.style.display = "none";
+            listEl.innerHTML = "";
+            emptyEl.style.display = "none";
+            errorEl.textContent = msg;
+            errorEl.style.display = "block";
+        }
+
+        function escapeHtml(s) {
+            return String(s || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function formatDate(iso) {
+            try {
+                const d = new Date(iso);
+                return d.toLocaleString("en-IN", {
+                    day: "2-digit", month: "short", year: "numeric",
+                    hour: "2-digit", minute: "2-digit"
+                });
+            } catch { return iso; }
+        }
+
+        function renderOrders(orders) {
+            loadingEl.style.display = "none";
+
+            if (!orders || orders.length === 0) {
+                emptyEl.style.display = "block";
+                return;
+            }
+
+            listEl.innerHTML = orders.map((order, i) => {
+                const items = order.items || [];
+                const itemsHtml = items.map(item => {
+                    const lineTotal = Number(item.price) * Number(item.quantity);
+                    return `
+                        <div class="order-item">
+                            <div class="info">
+                                <img src="${escapeHtml(item.image || 'images/default-food.jpg')}"
+                                     alt="${escapeHtml(item.name)}"
+                                     onerror="this.src='https://via.placeholder.com/46x46/c8a97e/ffffff?text=F'">
+                                <div>
+                                    <div class="name">${escapeHtml(item.name)}</div>
+                                    <div class="qty">Qty: ${item.quantity} × ₹${Number(item.price).toFixed(2)}</div>
+                                </div>
+                            </div>
+                            <div class="line-total">₹${lineTotal.toFixed(2)}</div>
+                        </div>
+                    `;
+                }).join("");
+
+                return `
+                    <div class="order-card" style="animation-delay:${i * 0.06}s;">
+                        <div class="order-header">
+                            <div class="left">
+                                <h4>Order #${escapeHtml(String(order._id || order.orderId || "").slice(-8).toUpperCase())}</h4>
+                                <div class="order-id">${escapeHtml(order.orderId || "")}</div>
+                            </div>
+                            <div class="right">
+                                <div class="total">₹${Number(order.amount || 0).toFixed(2)}</div>
+                                <span class="status">Confirmed</span>
+                            </div>
+                        </div>
+
+                        <div class="order-items">${itemsHtml || '<div style="color:#999;font-size:13px;">No items recorded</div>'}</div>
+
+                        <div class="order-footer">
+                            <span>${formatDate(order.createdAt)}</span>
+                            <span class="payment-id">Payment: ${escapeHtml(order.paymentId || "—")}</span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        async function loadOrders() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                // Not logged in → send to login
+                sessionStorage.setItem("lg_return_to", "/my-orders.html");
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/my-orders`, {
+                    headers: { "Authorization": "Bearer " + token },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 401) {
+                    // Token expired/invalid → logout and redirect
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    sessionStorage.setItem("lg_return_to", "/my-orders.html");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                if (!res.ok || !data.success) {
+                    showError(data.error || "Could not load orders.");
+                    return;
+                }
+
+                renderOrders(data.orders || []);
+            } catch (err) {
+                console.error("Load orders error:", err);
+                showError("Server is waking up. Please refresh in a moment.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadOrders);
+    </script>
+
+</body>
+
+</html>
