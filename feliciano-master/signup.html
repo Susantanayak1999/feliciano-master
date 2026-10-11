@@ -42,345 +42,196 @@
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
         }
 
-        .auth-card .brand {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .auth-card .brand { text-align: center; margin-bottom: 30px; }
 
         .auth-card .brand-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #c8a97e;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 30px;
+            width: 70px; height: 70px; border-radius: 50%;
+            background: #c8a97e; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px; font-size: 30px;
         }
 
         .auth-card h2 {
             font-family: "Great Vibes", cursive;
-            font-size: 42px;
-            color: #c8a97e;
-            margin-bottom: 5px;
-            font-weight: normal;
-            line-height: 1;
+            font-size: 42px; color: #c8a97e;
+            margin-bottom: 5px; font-weight: normal; line-height: 1;
         }
 
-        .auth-card .sub {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 0;
-        }
-
-        .auth-card label {
-            font-weight: 600;
-            color: #000;
-            font-size: 14px;
-        }
-
-        .auth-card .form-control {
-            height: 52px;
-            font-size: 15px;
-        }
+        .auth-card .sub { font-size: 14px; color: #888; margin-bottom: 0; }
+        .auth-card label { font-weight: 600; color: #000; font-size: 14px; }
+        .auth-card .form-control { height: 52px; font-size: 15px; }
 
         .auth-card .btn-primary {
-            background: #c8a97e;
-            border-color: #c8a97e;
-            color: #fff;
-            padding: 12px 30px;
-            font-size: 15px;
-            font-weight: 500;
-            width: 100%;
-            border-radius: 2px;
+            background: #c8a97e; border-color: #c8a97e; color: #fff;
+            padding: 12px 30px; font-size: 15px; font-weight: 500;
+            width: 100%; border-radius: 2px;
         }
-
         .auth-card .btn-primary:hover {
-            background: transparent;
-            color: #c8a97e;
-            border-color: #c8a97e;
+            background: transparent; color: #c8a97e; border-color: #c8a97e;
         }
 
         .auth-card .switch {
-            text-align: center;
-            margin-top: 22px;
-            font-size: 14px;
-            color: #666;
+            text-align: center; margin-top: 22px;
+            font-size: 14px; color: #666;
         }
-
-        .auth-card .switch a {
-            color: #c8a97e;
-            font-weight: 600;
-        }
+        .auth-card .switch a { color: #c8a97e; font-weight: 600; }
 
         .auth-card .error-msg {
-            display: none;
-            background: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 13px;
-            margin-bottom: 18px;
+            display: none; background: #fee; color: #c33;
+            padding: 12px; border-radius: 5px;
+            font-size: 13px; margin-bottom: 18px;
         }
-
-        .auth-card .error-msg.show {
-            display: block;
-        }
+        .auth-card .error-msg.show { display: block; }
 
         .auth-card .back-home {
-            display: block;
-            text-align: center;
-            margin-top: 18px;
-            font-size: 13px;
-            color: #999;
+            display: block; text-align: center; margin-top: 18px;
+            font-size: 13px; color: #999;
         }
+        .auth-card .back-home:hover { color: #c8a97e; }
 
-        .auth-card .back-home:hover {
-            color: #c8a97e;
-        }
-
-        /* ============================================================
-           Social Login Buttons
-           ============================================================ */
+        /* Social Login Buttons */
         .auth-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 26px 0 22px;
-            color: #bbb;
-            font-size: 13px;
-            font-family: "Poppins", sans-serif;
+            display: flex; align-items: center; text-align: center;
+            margin: 26px 0 22px; color: #bbb;
+            font-size: 13px; font-family: "Poppins", sans-serif;
         }
-
-        .auth-divider::before,
-        .auth-divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #eee;
+        .auth-divider::before, .auth-divider::after {
+            content: ""; flex: 1; height: 1px; background: #eee;
         }
-
         .auth-divider span {
-            padding: 0 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 11px;
+            padding: 0 14px; text-transform: uppercase;
+            letter-spacing: 1px; font-size: 11px;
         }
 
         .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            height: 52px;
-            padding: 0 20px;
-            border-radius: 8px;
-            font-family: "Poppins", sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all .25s ease;
-            text-decoration: none;
-            border: 1.5px solid #e5e5e5;
-            background: #fff;
-            color: #333;
-            margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px; width: 100%; height: 52px;
+            padding: 0 20px; border-radius: 8px;
+            font-family: "Poppins", sans-serif; font-size: 14px;
+            font-weight: 500; cursor: pointer;
+            transition: all .25s ease; text-decoration: none;
+            border: 1.5px solid #e5e5e5; background: #fff;
+            color: #333; margin-bottom: 12px;
         }
-
         .social-btn:hover {
-            background: #f8f6f3;
-            border-color: #c8a97e;
-            color: #1a1a1a;
-            transform: translateY(-1px);
+            background: #f8f6f3; border-color: #c8a97e;
+            color: #1a1a1a; transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
         }
-
-        .social-btn svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
+        .social-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
         .social-btn .icon-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 22px;
-            height: 22px;
-            flex-shrink: 0;
-            font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            width: 22px; height: 22px; flex-shrink: 0; font-size: 18px;
         }
+        .social-btn.google .icon-box { color: #4285F4; }
+        .social-btn.phone .icon-box { color: #c8a97e; }
 
-        .social-btn.google .icon-box {
-            color: #4285F4;
-        }
-
-        .social-btn.phone .icon-box {
-            color: #c8a97e;
-        }
-
-        /* Hidden Google SDK container (used only for the popup) */
         #googleSignInBtn {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+            position: absolute; left: -9999px;
+            width: 1px; height: 1px; overflow: hidden;
         }
 
-        /* ============================================================
-           Phone login modal
-           ============================================================ */
+        /* Phone Modal */
         .phone-modal {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(17, 17, 17, 0.75);
             backdrop-filter: blur(6px);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
+            z-index: 9999; display: none;
+            align-items: center; justify-content: center;
             padding: 20px;
         }
-
-        .phone-modal.active {
-            display: flex;
-        }
+        .phone-modal.active { display: flex; }
 
         .phone-card {
-            background: #fff;
-            border-radius: 14px;
-            padding: 36px 30px;
-            max-width: 400px;
-            width: 100%;
+            background: #fff; border-radius: 14px;
+            padding: 36px 30px; max-width: 400px; width: 100%;
             box-shadow: 0 25px 70px rgba(0, 0, 0, .4);
-            position: relative;
-            animation: popIn .3s ease both;
+            position: relative; animation: popIn .3s ease both;
         }
 
         @keyframes popIn {
-            from {
-                opacity: 0;
-                transform: scale(.94);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(.94); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .phone-card h3 {
             font-family: "Great Vibes", cursive;
-            font-size: 34px;
-            color: #c8a97e;
-            font-weight: normal;
-            line-height: 1;
-            margin-bottom: 6px;
+            font-size: 34px; color: #c8a97e;
+            font-weight: normal; line-height: 1; margin-bottom: 6px;
         }
-
         .phone-card p {
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 22px;
+            color: #888; font-size: 13px; margin-bottom: 22px;
             font-family: "Poppins", sans-serif;
         }
-
         .phone-card .close-btn {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            background: transparent;
-            border: none;
-            font-size: 22px;
-            color: #bbb;
-            cursor: pointer;
-            line-height: 1;
+            position: absolute; top: 12px; right: 16px;
+            background: transparent; border: none;
+            font-size: 22px; color: #bbb;
+            cursor: pointer; line-height: 1;
         }
-
-        .phone-card .close-btn:hover {
-            color: #c8a97e;
-        }
-
+        .phone-card .close-btn:hover { color: #c8a97e; }
         .phone-card label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            display: block;
+            font-size: 12px; font-weight: 600; color: #555;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 6px; display: block;
         }
-
         .phone-card .form-control {
-            height: 48px;
-            background: #faf8f4;
-            border: 1.5px solid #eee;
-            border-radius: 8px;
-            font-size: 15px;
-            padding: 0 14px;
-            width: 100%;
-            margin-bottom: 14px;
-            font-family: "Poppins", sans-serif;
-            outline: none;
-            transition: all .2s;
+            height: 48px; background: #faf8f4;
+            border: 1.5px solid #eee; border-radius: 8px;
+            font-size: 15px; padding: 0 14px; width: 100%;
+            margin-bottom: 14px; font-family: "Poppins", sans-serif;
+            outline: none; transition: all .2s;
         }
-
         .phone-card .form-control:focus {
-            background: #fff;
-            border-color: #c8a97e;
+            background: #fff; border-color: #c8a97e;
         }
-
         .phone-card .btn-send {
-            width: 100%;
-            height: 48px;
-            background: #c8a97e;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
+            width: 100%; height: 48px;
+            background: #c8a97e; color: #fff;
+            border: none; border-radius: 8px;
             font-family: "Poppins", sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all .25s;
+            font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all .25s;
         }
-
         .phone-card .btn-send:hover {
-            background: #b8956a;
-            transform: translateY(-1px);
+            background: #b8956a; transform: translateY(-1px);
         }
-
         .phone-card .btn-send:disabled {
-            opacity: .6;
-            cursor: not-allowed;
+            opacity: .6; cursor: not-allowed;
         }
-
         .phone-error {
-            color: #c33;
-            background: #fee;
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-bottom: 14px;
-            display: none;
-            font-family: "Poppins", sans-serif;
+            color: #c33; background: #fee;
+            padding: 10px 12px; border-radius: 6px;
+            font-size: 12px; margin-bottom: 14px;
+            display: none; font-family: "Poppins", sans-serif;
         }
+        .phone-error.show { display: block; }
 
-        .phone-error.show {
-            display: block;
+        /* Demo OTP box */
+        .demo-otp-box {
+            display: none; background: #fdf7e3;
+            border: 1px dashed #c8a97e;
+            padding: 12px; border-radius: 8px;
+            margin-bottom: 14px; font-family: "Poppins", sans-serif;
+            font-size: 13px; color: #8a6f3f; text-align: center;
+        }
+        .demo-otp-box.show { display: block; }
+        .demo-otp-box strong {
+            display: block; text-transform: uppercase;
+            font-size: 11px; letter-spacing: 1px; margin-bottom: 4px;
+        }
+        .demo-otp-box .otp-value {
+            font-size: 22px; font-weight: 700;
+            letter-spacing: 4px; color: #c8a97e; display: block;
+        }
+        .demo-otp-box .hint {
+            display: block; font-size: 11px; color: #999;
+            margin-top: 4px;
         }
 
         @media (max-width: 576px) {
-            .auth-card {
-                padding: 35px 25px;
-            }
-
-            .auth-card h2 {
-                font-size: 34px;
-            }
+            .auth-card { padding: 35px 25px; }
+            .auth-card h2 { font-size: 34px; }
         }
     </style>
 </head>
@@ -400,7 +251,7 @@
 
             <div class="error-msg" id="errorBox"></div>
 
-            <!-- ✅ Custom Google button -->
+            <!-- Custom Google button -->
             <button type="button" class="social-btn google" id="customGoogleBtn">
                 <span class="icon-box">
                     <svg viewBox="0 0 48 48" width="20" height="20">
@@ -452,9 +303,7 @@
     <!-- Hidden Google SDK container -->
     <div id="googleSignInBtn"></div>
 
-    <!-- ============================================================
-         Phone login modal
-         ============================================================ -->
+    <!-- Phone login modal -->
     <div class="phone-modal" id="phoneModal">
         <div class="phone-card">
             <button class="close-btn" id="phoneClose" aria-label="Close">×</button>
@@ -471,6 +320,13 @@
             </button>
 
             <div id="otpSection" style="display:none; margin-top:20px;">
+                <!-- Demo OTP display -->
+                <div class="demo-otp-box" id="demoOtpBox">
+                    <strong>Demo OTP</strong>
+                    <span class="otp-value" id="demoOtpValue">------</span>
+                    <span class="hint">(Copy this code and paste below)</span>
+                </div>
+
                 <label for="otpInput">Enter OTP</label>
                 <input type="text" id="otpInput" class="form-control" placeholder="6-digit code" maxlength="6"
                     inputmode="numeric">
@@ -479,30 +335,40 @@
                     Verify & Continue
                 </button>
             </div>
+
+            <!-- 🆕 Name entry (shown after verify for new users) -->
+            <div id="nameSection" style="display:none; margin-top:20px;">
+                <div class="demo-otp-box show" style="background:#e8f5e9; border-color:#4CAF50; color:#2e7d32;">
+                    <strong>✓ Phone Verified</strong>
+                    <span style="font-size:12px;">Just one more step</span>
+                </div>
+
+                <label for="nameInput">Your Name</label>
+                <input type="text" id="nameInput" class="form-control" placeholder="e.g. Susanta Nayak" maxlength="60" autocomplete="name">
+
+                <button type="button" class="btn-send" id="saveNameBtn">
+                    Continue
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- ============================================================
-         SCRIPTS
-         ============================================================ -->
     <script>
         // ============================================================
         // CONFIG
         // ============================================================
+        // 🚀 PRODUCTION — Render backend
         const BACKEND_URL = "https://feliciano-master.onrender.com";
+
+        // 🔧 FOR LOCAL TESTING — uncomment this line and comment above:
+         //const BACKEND_URL = "http://localhost:5000";
+
         const GOOGLE_CLIENT_ID = "69969918808-rs9in68mueshi3h9o95e1k7ekvnsjhbr.apps.googleusercontent.com";
 
-        // ============================================================
         // WARM UP BACKEND
-        // ============================================================
-        fetch(`${BACKEND_URL}/`)
-            .then(r => r.json())
-            .then(() => console.log("Backend is warm"))
-            .catch(() => console.log("Backend cold"));
+        fetch(`${BACKEND_URL}/`).then(r => r.json()).then(() => console.log("Backend is warm")).catch(() => console.log("Backend cold"));
 
-        // ============================================================
         // HELPERS
-        // ============================================================
         const errorBox = document.getElementById("errorBox");
         let navigating = false;
 
@@ -545,7 +411,7 @@
             submitBtn.textContent = "Connecting...";
 
             try {
-                await fetch(`${BACKEND_URL}/`, { method: "GET" }).catch(() => {});
+                await fetch(`${BACKEND_URL}/`, { method: "GET" }).catch(() => { });
                 submitBtn.textContent = "Creating...";
 
                 const res = await fetch(`${BACKEND_URL}/signup`, {
@@ -592,10 +458,7 @@
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        email: email,
-                        name: name,
-                        googleId: sub,
-                        picture: picture,
+                        email: email, name: name, googleId: sub, picture: picture,
                     }),
                 });
 
@@ -612,7 +475,6 @@
             }
         };
 
-        // Initialize Google Sign-In
         window.addEventListener("load", () => {
             if (typeof google === "undefined" || !google.accounts) {
                 console.warn("Google SDK not loaded");
@@ -626,30 +488,17 @@
                 cancel_on_tap_outside: true,
             });
 
-            // Render the hidden Google button (needed to use the SDK)
             google.accounts.id.renderButton(
                 document.getElementById("googleSignInBtn"),
-                {
-                    theme: "outline",
-                    size: "large",
-                    text: "continue_with",
-                    shape: "rectangular",
-                    logo_alignment: "left",
-                }
+                { theme: "outline", size: "large", text: "continue_with", shape: "rectangular", logo_alignment: "left" }
             );
 
-            // Wire up our custom button to trigger the Google flow
             const customBtn = document.getElementById("customGoogleBtn");
             if (customBtn) {
                 customBtn.addEventListener("click", () => {
-                    // Click the hidden Google button
                     const hiddenBtn = document.querySelector("#googleSignInBtn div[role='button']");
-                    if (hiddenBtn) {
-                        hiddenBtn.click();
-                    } else {
-                        // Fallback — trigger the One Tap prompt
-                        google.accounts.id.prompt();
-                    }
+                    if (hiddenBtn) hiddenBtn.click();
+                    else google.accounts.id.prompt();
                 });
             }
         });
@@ -665,16 +514,34 @@
         const otpSection = document.getElementById("otpSection");
         const otpInput = document.getElementById("otpInput");
         const phoneVerifyOtp = document.getElementById("phoneVerifyOtp");
+        const demoOtpBox = document.getElementById("demoOtpBox");
+        const demoOtpValue = document.getElementById("demoOtpValue");
+        const nameSection = document.getElementById("nameSection");
+        const nameInput = document.getElementById("nameInput");
+        const saveNameBtn = document.getElementById("saveNameBtn");
+
+        let currentPhone = "";
 
         document.getElementById("phoneLoginBtn").addEventListener("click", () => {
             phoneModal.classList.add("active");
         });
+
         phoneClose.addEventListener("click", () => {
             phoneModal.classList.remove("active");
             phoneErrorBox.classList.remove("show");
             otpSection.style.display = "none";
+            nameSection.style.display = "none";
+            demoOtpBox.classList.remove("show");
             phoneInput.value = "";
             otpInput.value = "";
+            nameInput.value = "";
+            currentPhone = "";
+            phoneSendOtp.disabled = false;
+            phoneSendOtp.textContent = "Send OTP";
+            phoneVerifyOtp.disabled = false;
+            phoneVerifyOtp.textContent = "Verify & Continue";
+            saveNameBtn.disabled = false;
+            saveNameBtn.textContent = "Continue";
         });
 
         function showPhoneError(msg) {
@@ -682,6 +549,7 @@
             phoneErrorBox.classList.add("show");
         }
 
+        // SEND OTP
         phoneSendOtp.addEventListener("click", async () => {
             phoneErrorBox.classList.remove("show");
             const phone = phoneInput.value.trim();
@@ -706,6 +574,13 @@
                 if (res.ok && data.success) {
                     otpSection.style.display = "block";
                     phoneSendOtp.textContent = "OTP Sent";
+                    currentPhone = phone;
+
+                    if (data.demoOtp) {
+                        demoOtpValue.textContent = data.demoOtp;
+                        demoOtpBox.classList.add("show");
+                        otpInput.value = data.demoOtp;
+                    }
                 } else {
                     showPhoneError(data.error || "Could not send OTP.");
                     phoneSendOtp.disabled = false;
@@ -718,6 +593,7 @@
             }
         });
 
+        // VERIFY OTP
         phoneVerifyOtp.addEventListener("click", async () => {
             phoneErrorBox.classList.remove("show");
             const phone = phoneInput.value.trim();
@@ -741,6 +617,17 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
+                    if (data.needsName) {
+                        // 🆕 Show name entry section
+                        otpSection.style.display = "none";
+                        nameSection.style.display = "block";
+                        nameInput.focus();
+                        phoneVerifyOtp.disabled = false;
+                        phoneVerifyOtp.textContent = "Verify & Continue";
+                        return;
+                    }
+
+                    // Existing user — log them in
                     completeLogin(data);
                 } else {
                     showPhoneError(data.error || "Invalid OTP.");
@@ -748,9 +635,55 @@
                     phoneVerifyOtp.textContent = "Verify & Continue";
                 }
             } catch (err) {
+                console.error(err);
                 showPhoneError("Server error. Please try again.");
                 phoneVerifyOtp.disabled = false;
                 phoneVerifyOtp.textContent = "Verify & Continue";
+            }
+        });
+
+        // 🆕 SAVE NAME
+        saveNameBtn.addEventListener("click", async () => {
+            phoneErrorBox.classList.remove("show");
+            const name = nameInput.value.trim();
+
+            if (!name || name.length < 2) {
+                showPhoneError("Please enter your name (at least 2 characters).");
+                return;
+            }
+
+            saveNameBtn.disabled = true;
+            saveNameBtn.textContent = "Saving...";
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/phone-save-name`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone: currentPhone, name: name }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    completeLogin(data);
+                } else {
+                    showPhoneError(data.error || "Could not save name.");
+                    saveNameBtn.disabled = false;
+                    saveNameBtn.textContent = "Continue";
+                }
+            } catch (err) {
+                console.error(err);
+                showPhoneError("Server error. Please try again.");
+                saveNameBtn.disabled = false;
+                saveNameBtn.textContent = "Continue";
+            }
+        });
+
+        // Enter key on name input
+        nameInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                saveNameBtn.click();
             }
         });
     </script>

@@ -26,6 +26,11 @@ if (MONGO_URI) {
 }
 
 // ============================================================
+// In-Memory OTP Store (for phone login)
+// ============================================================
+if (!global._otpStore) global._otpStore = {};
+
+// ============================================================
 // User Schema
 // ============================================================
 const userSchema = new mongoose.Schema({
@@ -53,7 +58,7 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model("Order", orderSchema);
 
 // ============================================================
-// Reservation Schema  ✨ NEW
+// Reservation Schema
 // ============================================================
 const reservationSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -165,9 +170,8 @@ app.post("/login", async (req, res) => {
     }
 });
 
-
 // ============================================================
-// GOOGLE LOGIN — creates/finds user by email
+// GOOGLE LOGIN
 // ============================================================
 app.post("/google-login", async (req, res) => {
     try {
@@ -180,7 +184,6 @@ app.post("/google-login", async (req, res) => {
         let user = await User.findOne({ email: email.toLowerCase() });
 
         if (!user) {
-            // New user — create with random password
             const randomPass = crypto.randomBytes(20).toString("hex");
             const hashed = await bcrypt.hash(randomPass, 10);
 
@@ -193,7 +196,6 @@ app.post("/google-login", async (req, res) => {
             });
             console.log("✅ Google signup:", email);
         } else {
-            // Existing user — attach googleId if missing
             if (!user.googleId) {
                 user.googleId = googleId;
                 await user.save();
@@ -211,6 +213,156 @@ app.post("/google-login", async (req, res) => {
 
     } catch (err) {
         console.error("❌ Google login error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// PHONE: SEND OTP
+// ============================================================
+app.post("/phone-send-otp", async (req, res) => {
+    try {
+        const { phone } = req.body;
+
+        if (!phone || phone.length < 8) {
+            return res.status(400).json({ success: false, error: "Invalid phone number" });
+        }
+
+        // Generate a random 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Store OTP for 5 minutes
+        global._otpStore[phone] = {
+            otp: otp,
+            expiresAt: Date.now() + 5 * 60 * 1000,
+        };
+
+        console.log(`📱 OTP for ${phone}: ${otp}`);
+
+        // ⚠️ DEMO MODE — returns OTP in response
+        // In production, integrate Twilio / MSG91 here and remove `demoOtp`
+        res.json({
+            success: true,
+            message: "OTP sent (demo mode)",
+            demoOtp: otp,
+        });
+
+    } catch (err) {
+        console.error("❌ OTP send error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// PHONE: VERIFY OTP
+// ------------------------------------------------------------
+// If user exists with a real name → log them in
+// If user is new OR has "Guest XXXX" name → return needsName: true
+// ============================================================
+app.post("/phone-verify-otp", async (req, res) => {
+    try {
+        const { phone, otp } = req.body;
+
+        if (!phone || !otp) {
+            return res.status(400).json({ success: false, error: "Phone and OTP required" });
+        }
+
+        const record = global._otpStore[phone];
+
+        if (!record) {
+            return res.status(400).json({ success: false, error: "No OTP requested for this number" });
+        }
+
+        if (Date.now() > record.expiresAt) {
+            delete global._otpStore[phone];
+            return res.status(400).json({ success: false, error: "OTP expired. Please request a new one." });
+        }
+
+        if (record.otp !== otp) {
+            return res.status(400).json({ success: false, error: "Invalid OTP" });
+        }
+
+        // ✅ OTP verified — clear it
+        delete global._otpStore[phone];
+
+        // Look for existing user
+        let user = await User.findOne({ phone: phone });
+
+        // 🧠 Truecaller-style logic:
+        // If user has a REAL name (not "Guest XXXX"), log them in directly
+        if (user && user.name && !user.name.startsWith("Guest ")) {
+            console.log("✅ Phone login (returning user):", phone);
+
+            const token = generateToken(user._id);
+
+            return res.json({
+                success: true,
+                needsName: false,
+                token,
+                user: { id: user._id, name: user.name, email: user.email },
+            });
+        }
+
+        // 📝 First-time user OR user still has "Guest" name → ask for name
+        console.log("📝 Phone needs name:", phone);
+
+        res.json({
+            success: true,
+            needsName: true,
+            phone: phone,
+        });
+
+    } catch (err) {
+        console.error("❌ Phone verify error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// PHONE: SAVE NAME (after verify when needsName: true)
+// ============================================================
+app.post("/phone-save-name", async (req, res) => {
+    try {
+        const { phone, name } = req.body;
+
+        if (!phone || !name || name.trim().length < 2) {
+            return res.status(400).json({ success: false, error: "Please enter a valid name" });
+        }
+
+        const cleanName = name.trim().slice(0, 60);
+
+        // Find or create user with the given name
+        let user = await User.findOne({ phone: phone });
+
+        if (!user) {
+            // Brand new user
+            const randomPass = crypto.randomBytes(20).toString("hex");
+            const hashed = await bcrypt.hash(randomPass, 10);
+
+            user = await User.create({
+                name: cleanName,
+                email: `phone_${phone}@mixtape.local`,
+                password: hashed,
+                phone: phone,
+            });
+            console.log("✅ Phone signup with name:", phone, "→", cleanName);
+        } else {
+            // Update the name for existing user
+            user.name = cleanName;
+            await user.save();
+            console.log("✅ Phone name updated:", phone, "→", cleanName);
+        }
+
+        const token = generateToken(user._id);
+
+        res.json({
+            success: true,
+            token,
+            user: { id: user._id, name: user.name, email: user.email },
+        });
+
+    } catch (err) {
+        console.error("❌ Save name error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
@@ -315,7 +467,7 @@ app.get("/my-orders", authMiddleware, async (req, res) => {
 });
 
 // ============================================================
-// RESERVATION: CREATE  ✨ NEW
+// RESERVATION: CREATE
 // ============================================================
 app.post("/reserve", async (req, res) => {
     try {
@@ -325,7 +477,6 @@ app.post("/reserve", async (req, res) => {
             return res.status(400).json({ success: false, error: "All fields required" });
         }
 
-        // Optional: attach user id if authenticated
         let userId = null;
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
@@ -365,7 +516,7 @@ app.post("/reserve", async (req, res) => {
 });
 
 // ============================================================
-// RESERVATION: MY RESERVATIONS  ✨ NEW
+// RESERVATION: MY RESERVATIONS
 // ============================================================
 app.get("/my-reservations", authMiddleware, async (req, res) => {
     try {
