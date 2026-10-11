@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
+    googleId: { type: String, default: null },
+    phone: { type: String, default: null },
+    picture: { type: String, default: null },
     createdAt: { type: Date, default: Date.now },
 });
 const User = mongoose.model("User", userSchema);
@@ -53,14 +56,14 @@ const Order = mongoose.model("Order", orderSchema);
 // Reservation Schema  ✨ NEW
 // ============================================================
 const reservationSchema = new mongoose.Schema({
-    userId:    { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    name:      { type: String, required: true },
-    email:     { type: String, required: true },
-    phone:     { type: String, required: true },
-    date:      { type: String, required: true },
-    time:      { type: String, required: true },
-    persons:   { type: String, required: true },
-    status:    { type: String, default: "pending" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    date: { type: String, required: true },
+    time: { type: String, required: true },
+    persons: { type: String, required: true },
+    status: { type: String, default: "pending" },
     createdAt: { type: Date, default: Date.now },
 });
 const Reservation = mongoose.model("Reservation", reservationSchema);
@@ -158,6 +161,56 @@ app.post("/login", async (req, res) => {
         });
     } catch (err) {
         console.error("❌ Login error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+
+// ============================================================
+// GOOGLE LOGIN — creates/finds user by email
+// ============================================================
+app.post("/google-login", async (req, res) => {
+    try {
+        const { email, name, googleId, picture } = req.body;
+
+        if (!email || !googleId) {
+            return res.status(400).json({ success: false, error: "Missing fields" });
+        }
+
+        let user = await User.findOne({ email: email.toLowerCase() });
+
+        if (!user) {
+            // New user — create with random password
+            const randomPass = crypto.randomBytes(20).toString("hex");
+            const hashed = await bcrypt.hash(randomPass, 10);
+
+            user = await User.create({
+                name: name || email.split("@")[0],
+                email: email.toLowerCase(),
+                password: hashed,
+                googleId: googleId,
+                picture: picture,
+            });
+            console.log("✅ Google signup:", email);
+        } else {
+            // Existing user — attach googleId if missing
+            if (!user.googleId) {
+                user.googleId = googleId;
+                await user.save();
+            }
+            console.log("✅ Google login:", email);
+        }
+
+        const token = generateToken(user._id);
+
+        res.json({
+            success: true,
+            token,
+            user: { id: user._id, name: user.name, email: user.email },
+        });
+
+    } catch (err) {
+        console.error("❌ Google login error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });

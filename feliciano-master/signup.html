@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Google Sign-In SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
         .auth-section {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2418 100%);
@@ -138,14 +141,208 @@
             color: #c8a97e;
         }
 
-        @media (max-width: 576px) {
-            .auth-card {
-                padding: 35px 25px;
-            }
+        /* ============================================================
+           NEW: Social Login Buttons
+           ============================================================ */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 26px 0 22px;
+            color: #bbb;
+            font-size: 13px;
+            font-family: "Poppins", sans-serif;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+        .auth-divider span {
+            padding: 0 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 11px;
+        }
 
-            .auth-card h2 {
-                font-size: 34px;
-            }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            height: 52px;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .25s ease;
+            text-decoration: none;
+            border: 1.5px solid #e5e5e5;
+            background: #fff;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .social-btn:hover {
+            background: #f8f6f3;
+            border-color: #c8a97e;
+            color: #1a1a1a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,.06);
+        }
+        .social-btn img,
+        .social-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .social-btn .icon-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+        .social-btn.google .icon-box { color: #4285F4; }
+        .social-btn.phone .icon-box { color: #c8a97e; }
+
+        /* Google button rendered by GIS SDK */
+        #googleSignInBtn {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        #googleSignInBtn > div {
+            width: 100% !important;
+        }
+        #googleSignInBtn iframe {
+            margin: 0 auto !important;
+        }
+
+        /* ============================================================
+           NEW: Phone login modal
+           ============================================================ */
+        .phone-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 17, 17, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .phone-modal.active { display: flex; }
+        .phone-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 36px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .4);
+            position: relative;
+            animation: popIn .3s ease both;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(.94); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .phone-card h3 {
+            font-family: "Great Vibes", cursive;
+            font-size: 34px;
+            color: #c8a97e;
+            font-weight: normal;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .phone-card p {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 22px;
+            font-family: "Poppins", sans-serif;
+        }
+        .phone-card .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            font-size: 22px;
+            color: #bbb;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .phone-card .close-btn:hover { color: #c8a97e; }
+        .phone-card label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .phone-card .form-control {
+            height: 48px;
+            background: #faf8f4;
+            border: 1.5px solid #eee;
+            border-radius: 8px;
+            font-size: 15px;
+            padding: 0 14px;
+            width: 100%;
+            margin-bottom: 14px;
+            font-family: "Poppins", sans-serif;
+            outline: none;
+            transition: all .2s;
+        }
+        .phone-card .form-control:focus {
+            background: #fff;
+            border-color: #c8a97e;
+        }
+        .phone-card .btn-send {
+            width: 100%;
+            height: 48px;
+            background: #c8a97e;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s;
+        }
+        .phone-card .btn-send:hover {
+            background: #b8956a;
+            transform: translateY(-1px);
+        }
+        .phone-card .btn-send:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+        .phone-error {
+            color: #c33;
+            background: #fee;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 14px;
+            display: none;
+            font-family: "Poppins", sans-serif;
+        }
+        .phone-error.show { display: block; }
+
+        @media (max-width: 576px) {
+            .auth-card { padding: 35px 25px; }
+            .auth-card h2 { font-size: 34px; }
         }
     </style>
 </head>
@@ -165,6 +362,19 @@
 
             <div class="error-msg" id="errorBox"></div>
 
+            <!-- ✅ NEW: Social login buttons -->
+            <!-- Google Sign-In (rendered by Google SDK) -->
+            <div id="googleSignInBtn"></div>
+
+            <!-- Phone login button -->
+            <button type="button" class="social-btn phone" id="phoneLoginBtn">
+                <span class="icon-box ion-ios-telephone"></span>
+                Continue with Phone
+            </button>
+
+            <div class="auth-divider"><span>or</span></div>
+
+            <!-- Email signup form -->
             <form id="signupForm">
                 <div class="form-group">
                     <label for="name">Full Name</label>
@@ -192,19 +402,92 @@
         </div>
     </section>
 
+    <!-- ============================================================
+         NEW: Phone login modal
+         ============================================================ -->
+    <div class="phone-modal" id="phoneModal">
+        <div class="phone-card">
+            <button class="close-btn" id="phoneClose" aria-label="Close">×</button>
+            <h3>Continue with Phone</h3>
+            <p>Enter your phone number. We'll send a verification code.</p>
+
+            <div class="phone-error" id="phoneError"></div>
+
+            <label for="phoneInput">Phone Number</label>
+            <input type="tel" id="phoneInput" class="form-control" placeholder="+91 98765 43210" autocomplete="tel">
+
+            <button type="button" class="btn-send" id="phoneSendOtp">
+                Send OTP
+            </button>
+
+            <div id="otpSection" style="display:none; margin-top:20px;">
+                <label for="otpInput">Enter OTP</label>
+                <input type="text" id="otpInput" class="form-control" placeholder="6-digit code" maxlength="6" inputmode="numeric">
+
+                <button type="button" class="btn-send" id="phoneVerifyOtp">
+                    Verify & Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SCRIPTS
+         ============================================================ -->
     <script>
+        // ============================================================
+        // CONFIG
+        // ============================================================
         const BACKEND_URL = "https://feliciano-master.onrender.com";
 
-        const form = document.getElementById("signupForm");
-        const errorBox = document.getElementById("errorBox");
-        const submitBtn = document.getElementById("submitBtn");
+        // 🔴 Replace with your real Google Client ID
+        const GOOGLE_CLIENT_ID = "69969918808-rs9in68mueshi3h9o95e1k7ekvnsjhbr.apps.googleusercontent.com";
 
+        // ============================================================
+        // WARM UP BACKEND
+        // ============================================================
         fetch(`${BACKEND_URL}/`)
             .then(r => r.json())
             .then(() => console.log("Backend is warm"))
             .catch(() => console.log("Backend cold"));
 
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        const errorBox = document.getElementById("errorBox");
         let navigating = false;
+
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.classList.add("show");
+        }
+
+        function redirectAfterAuth() {
+            const backTo = sessionStorage.getItem("lg_return_to") || "/";
+            sessionStorage.removeItem("lg_return_to");
+            setTimeout(() => { window.location.href = backTo; }, 100);
+        }
+
+        function completeLogin(data) {
+            navigating = true;
+            localStorage.removeItem("cart");
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            const badge = document.getElementById("nav-cart-count");
+            if (badge) {
+                badge.textContent = "0";
+                badge.setAttribute("data-count", "0");
+            }
+
+            redirectAfterAuth();
+        }
+
+        // ============================================================
+        // EMAIL SIGNUP
+        // ============================================================
+        const form = document.getElementById("signupForm");
+        const submitBtn = document.getElementById("submitBtn");
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -213,7 +496,7 @@
             submitBtn.textContent = "Connecting...";
 
             try {
-                await fetch(`${BACKEND_URL}/`, { method: "GET" }).catch(() => { });
+                await fetch(`${BACKEND_URL}/`, { method: "GET" }).catch(() => {});
                 submitBtn.textContent = "Creating...";
 
                 const res = await fetch(`${BACKEND_URL}/signup`, {
@@ -229,39 +512,181 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    navigating = true;
-                    localStorage.removeItem("cart");
-                    localStorage.setItem("token", data.token);
-                    localStorage.setItem("user", JSON.stringify(data.user));
-
-                    const badge = document.getElementById("nav-cart-count");
-                    if (badge) {
-                        badge.textContent = "0";
-                        badge.setAttribute("data-count", "0");
-                    }
-
-                    // ⬇️ NEW — go back to where they came from
-                    const backTo = sessionStorage.getItem("lg_return_to") || "/";
-                    sessionStorage.removeItem("lg_return_to");
-
-                    setTimeout(() => {
-                        window.location.href = backTo;
-                    }, 100);
+                    completeLogin(data);
                     return;
                 }
 
-                errorBox.textContent = data.error || "Signup failed";
-                errorBox.classList.add("show");
+                showError(data.error || "Signup failed");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Create Account";
 
             } catch (err) {
                 if (navigating) return;
                 console.error(err);
-                errorBox.textContent = "Server is waking up. Please wait a few seconds and try again.";
-                errorBox.classList.add("show");
+                showError("Server is waking up. Please wait a few seconds and try again.");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Create Account";
+            }
+        });
+
+        // ============================================================
+        // GOOGLE SIGN-IN
+        // ============================================================
+        window.handleCredentialResponse = async function (response) {
+            try {
+                // response.credential is a JWT with the user's info (email, name, picture)
+                const payload = JSON.parse(atob(response.credential.split(".")[1]));
+                const { email, name, picture, sub } = payload;
+
+                console.log("Google user:", { email, name, sub });
+
+                // Send to backend to create/find the user
+                const res = await fetch(`${BACKEND_URL}/google-login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: email,
+                        name: name,
+                        googleId: sub,
+                        picture: picture,
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    completeLogin(data);
+                } else {
+                    showError(data.error || "Google login failed");
+                }
+            } catch (err) {
+                console.error("Google login error:", err);
+                showError("Google login failed. Please try email signup instead.");
+            }
+        };
+
+        // Initialize the Google button once the SDK loads
+        window.addEventListener("load", () => {
+            if (typeof google !== "undefined" && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse,
+                });
+
+                google.accounts.id.renderButton(
+                    document.getElementById("googleSignInBtn"),
+                    {
+                        theme: "outline",
+                        size: "large",
+                        width: 380,
+                        text: "continue_with",
+                        shape: "rectangular",
+                        logo_alignment: "left",
+                    }
+                );
+            }
+        });
+
+        // ============================================================
+        // PHONE LOGIN (UI + placeholder flow)
+        // ============================================================
+        const phoneModal     = document.getElementById("phoneModal");
+        const phoneClose     = document.getElementById("phoneClose");
+        const phoneInput     = document.getElementById("phoneInput");
+        const phoneErrorBox  = document.getElementById("phoneError");
+        const phoneSendOtp   = document.getElementById("phoneSendOtp");
+        const otpSection     = document.getElementById("otpSection");
+        const otpInput       = document.getElementById("otpInput");
+        const phoneVerifyOtp = document.getElementById("phoneVerifyOtp");
+
+        document.getElementById("phoneLoginBtn").addEventListener("click", () => {
+            phoneModal.classList.add("active");
+        });
+        phoneClose.addEventListener("click", () => {
+            phoneModal.classList.remove("active");
+            phoneErrorBox.classList.remove("show");
+            otpSection.style.display = "none";
+            phoneInput.value = "";
+            otpInput.value = "";
+        });
+
+        function showPhoneError(msg) {
+            phoneErrorBox.textContent = msg;
+            phoneErrorBox.classList.add("show");
+        }
+
+        // Send OTP — plug in your SMS provider here
+        phoneSendOtp.addEventListener("click", async () => {
+            phoneErrorBox.classList.remove("show");
+            const phone = phoneInput.value.trim();
+
+            if (!phone || phone.length < 8) {
+                showPhoneError("Please enter a valid phone number.");
+                return;
+            }
+
+            phoneSendOtp.disabled = true;
+            phoneSendOtp.textContent = "Sending...";
+
+            try {
+                // ⬇️ Placeholder — replace with your SMS backend endpoint
+                const res = await fetch(`${BACKEND_URL}/phone-send-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    otpSection.style.display = "block";
+                    phoneSendOtp.textContent = "OTP Sent";
+                } else {
+                    showPhoneError(data.error || "Could not send OTP.");
+                    phoneSendOtp.disabled = false;
+                    phoneSendOtp.textContent = "Send OTP";
+                }
+            } catch (err) {
+                showPhoneError("Server is waking up. Please try again.");
+                phoneSendOtp.disabled = false;
+                phoneSendOtp.textContent = "Send OTP";
+            }
+        });
+
+        // Verify OTP — plug in your SMS provider here
+        phoneVerifyOtp.addEventListener("click", async () => {
+            phoneErrorBox.classList.remove("show");
+            const phone = phoneInput.value.trim();
+            const otp   = otpInput.value.trim();
+
+            if (!otp || otp.length !== 6) {
+                showPhoneError("Please enter the 6-digit code.");
+                return;
+            }
+
+            phoneVerifyOtp.disabled = true;
+            phoneVerifyOtp.textContent = "Verifying...";
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/phone-verify-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone, otp }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    completeLogin(data);
+                } else {
+                    showPhoneError(data.error || "Invalid OTP.");
+                    phoneVerifyOtp.disabled = false;
+                    phoneVerifyOtp.textContent = "Verify & Continue";
+                }
+            } catch (err) {
+                showPhoneError("Server error. Please try again.");
+                phoneVerifyOtp.disabled = false;
+                phoneVerifyOtp.textContent = "Verify & Continue";
             }
         });
     </script>
