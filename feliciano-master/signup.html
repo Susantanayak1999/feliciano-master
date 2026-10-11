@@ -142,7 +142,7 @@
         }
 
         /* ============================================================
-           NEW: Social Login Buttons
+           Social Login Buttons
            ============================================================ */
         .auth-divider {
             display: flex;
@@ -153,6 +153,7 @@
             font-size: 13px;
             font-family: "Poppins", sans-serif;
         }
+
         .auth-divider::before,
         .auth-divider::after {
             content: "";
@@ -160,6 +161,7 @@
             height: 1px;
             background: #eee;
         }
+
         .auth-divider span {
             padding: 0 14px;
             text-transform: uppercase;
@@ -187,19 +189,21 @@
             color: #333;
             margin-bottom: 12px;
         }
+
         .social-btn:hover {
             background: #f8f6f3;
             border-color: #c8a97e;
             color: #1a1a1a;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
         }
-        .social-btn img,
+
         .social-btn svg {
             width: 20px;
             height: 20px;
             flex-shrink: 0;
         }
+
         .social-btn .icon-box {
             display: flex;
             align-items: center;
@@ -209,25 +213,26 @@
             flex-shrink: 0;
             font-size: 18px;
         }
-        .social-btn.google .icon-box { color: #4285F4; }
-        .social-btn.phone .icon-box { color: #c8a97e; }
 
-        /* Google button rendered by GIS SDK */
+        .social-btn.google .icon-box {
+            color: #4285F4;
+        }
+
+        .social-btn.phone .icon-box {
+            color: #c8a97e;
+        }
+
+        /* Hidden Google SDK container (used only for the popup) */
         #googleSignInBtn {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        #googleSignInBtn > div {
-            width: 100% !important;
-        }
-        #googleSignInBtn iframe {
-            margin: 0 auto !important;
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
 
         /* ============================================================
-           NEW: Phone login modal
+           Phone login modal
            ============================================================ */
         .phone-modal {
             position: fixed;
@@ -240,7 +245,11 @@
             justify-content: center;
             padding: 20px;
         }
-        .phone-modal.active { display: flex; }
+
+        .phone-modal.active {
+            display: flex;
+        }
+
         .phone-card {
             background: #fff;
             border-radius: 14px;
@@ -251,10 +260,19 @@
             position: relative;
             animation: popIn .3s ease both;
         }
+
         @keyframes popIn {
-            from { opacity: 0; transform: scale(.94); }
-            to   { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(.94);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
+
         .phone-card h3 {
             font-family: "Great Vibes", cursive;
             font-size: 34px;
@@ -263,12 +281,14 @@
             line-height: 1;
             margin-bottom: 6px;
         }
+
         .phone-card p {
             color: #888;
             font-size: 13px;
             margin-bottom: 22px;
             font-family: "Poppins", sans-serif;
         }
+
         .phone-card .close-btn {
             position: absolute;
             top: 12px;
@@ -280,7 +300,11 @@
             cursor: pointer;
             line-height: 1;
         }
-        .phone-card .close-btn:hover { color: #c8a97e; }
+
+        .phone-card .close-btn:hover {
+            color: #c8a97e;
+        }
+
         .phone-card label {
             font-size: 12px;
             font-weight: 600;
@@ -290,6 +314,7 @@
             margin-bottom: 6px;
             display: block;
         }
+
         .phone-card .form-control {
             height: 48px;
             background: #faf8f4;
@@ -303,10 +328,12 @@
             outline: none;
             transition: all .2s;
         }
+
         .phone-card .form-control:focus {
             background: #fff;
             border-color: #c8a97e;
         }
+
         .phone-card .btn-send {
             width: 100%;
             height: 48px;
@@ -320,14 +347,17 @@
             cursor: pointer;
             transition: all .25s;
         }
+
         .phone-card .btn-send:hover {
             background: #b8956a;
             transform: translateY(-1px);
         }
+
         .phone-card .btn-send:disabled {
             opacity: .6;
             cursor: not-allowed;
         }
+
         .phone-error {
             color: #c33;
             background: #fee;
@@ -338,11 +368,19 @@
             display: none;
             font-family: "Poppins", sans-serif;
         }
-        .phone-error.show { display: block; }
+
+        .phone-error.show {
+            display: block;
+        }
 
         @media (max-width: 576px) {
-            .auth-card { padding: 35px 25px; }
-            .auth-card h2 { font-size: 34px; }
+            .auth-card {
+                padding: 35px 25px;
+            }
+
+            .auth-card h2 {
+                font-size: 34px;
+            }
         }
     </style>
 </head>
@@ -362,9 +400,18 @@
 
             <div class="error-msg" id="errorBox"></div>
 
-            <!-- ✅ NEW: Social login buttons -->
-            <!-- Google Sign-In (rendered by Google SDK) -->
-            <div id="googleSignInBtn"></div>
+            <!-- ✅ Custom Google button -->
+            <button type="button" class="social-btn google" id="customGoogleBtn">
+                <span class="icon-box">
+                    <svg viewBox="0 0 48 48" width="20" height="20">
+                        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    </svg>
+                </span>
+                Continue with Google
+            </button>
 
             <!-- Phone login button -->
             <button type="button" class="social-btn phone" id="phoneLoginBtn">
@@ -402,8 +449,11 @@
         </div>
     </section>
 
+    <!-- Hidden Google SDK container -->
+    <div id="googleSignInBtn"></div>
+
     <!-- ============================================================
-         NEW: Phone login modal
+         Phone login modal
          ============================================================ -->
     <div class="phone-modal" id="phoneModal">
         <div class="phone-card">
@@ -422,7 +472,8 @@
 
             <div id="otpSection" style="display:none; margin-top:20px;">
                 <label for="otpInput">Enter OTP</label>
-                <input type="text" id="otpInput" class="form-control" placeholder="6-digit code" maxlength="6" inputmode="numeric">
+                <input type="text" id="otpInput" class="form-control" placeholder="6-digit code" maxlength="6"
+                    inputmode="numeric">
 
                 <button type="button" class="btn-send" id="phoneVerifyOtp">
                     Verify & Continue
@@ -439,8 +490,6 @@
         // CONFIG
         // ============================================================
         const BACKEND_URL = "https://feliciano-master.onrender.com";
-
-        // 🔴 Replace with your real Google Client ID
         const GOOGLE_CLIENT_ID = "69969918808-rs9in68mueshi3h9o95e1k7ekvnsjhbr.apps.googleusercontent.com";
 
         // ============================================================
@@ -534,13 +583,11 @@
         // ============================================================
         window.handleCredentialResponse = async function (response) {
             try {
-                // response.credential is a JWT with the user's info (email, name, picture)
                 const payload = JSON.parse(atob(response.credential.split(".")[1]));
                 const { email, name, picture, sub } = payload;
 
                 console.log("Google user:", { email, name, sub });
 
-                // Send to backend to create/find the user
                 const res = await fetch(`${BACKEND_URL}/google-login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -565,38 +612,58 @@
             }
         };
 
-        // Initialize the Google button once the SDK loads
+        // Initialize Google Sign-In
         window.addEventListener("load", () => {
-            if (typeof google !== "undefined" && google.accounts) {
-                google.accounts.id.initialize({
-                    client_id: GOOGLE_CLIENT_ID,
-                    callback: handleCredentialResponse,
-                });
+            if (typeof google === "undefined" || !google.accounts) {
+                console.warn("Google SDK not loaded");
+                return;
+            }
 
-                google.accounts.id.renderButton(
-                    document.getElementById("googleSignInBtn"),
-                    {
-                        theme: "outline",
-                        size: "large",
-                        width: 380,
-                        text: "continue_with",
-                        shape: "rectangular",
-                        logo_alignment: "left",
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse,
+                auto_select: false,
+                cancel_on_tap_outside: true,
+            });
+
+            // Render the hidden Google button (needed to use the SDK)
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInBtn"),
+                {
+                    theme: "outline",
+                    size: "large",
+                    text: "continue_with",
+                    shape: "rectangular",
+                    logo_alignment: "left",
+                }
+            );
+
+            // Wire up our custom button to trigger the Google flow
+            const customBtn = document.getElementById("customGoogleBtn");
+            if (customBtn) {
+                customBtn.addEventListener("click", () => {
+                    // Click the hidden Google button
+                    const hiddenBtn = document.querySelector("#googleSignInBtn div[role='button']");
+                    if (hiddenBtn) {
+                        hiddenBtn.click();
+                    } else {
+                        // Fallback — trigger the One Tap prompt
+                        google.accounts.id.prompt();
                     }
-                );
+                });
             }
         });
 
         // ============================================================
-        // PHONE LOGIN (UI + placeholder flow)
+        // PHONE LOGIN
         // ============================================================
-        const phoneModal     = document.getElementById("phoneModal");
-        const phoneClose     = document.getElementById("phoneClose");
-        const phoneInput     = document.getElementById("phoneInput");
-        const phoneErrorBox  = document.getElementById("phoneError");
-        const phoneSendOtp   = document.getElementById("phoneSendOtp");
-        const otpSection     = document.getElementById("otpSection");
-        const otpInput       = document.getElementById("otpInput");
+        const phoneModal = document.getElementById("phoneModal");
+        const phoneClose = document.getElementById("phoneClose");
+        const phoneInput = document.getElementById("phoneInput");
+        const phoneErrorBox = document.getElementById("phoneError");
+        const phoneSendOtp = document.getElementById("phoneSendOtp");
+        const otpSection = document.getElementById("otpSection");
+        const otpInput = document.getElementById("otpInput");
         const phoneVerifyOtp = document.getElementById("phoneVerifyOtp");
 
         document.getElementById("phoneLoginBtn").addEventListener("click", () => {
@@ -615,7 +682,6 @@
             phoneErrorBox.classList.add("show");
         }
 
-        // Send OTP — plug in your SMS provider here
         phoneSendOtp.addEventListener("click", async () => {
             phoneErrorBox.classList.remove("show");
             const phone = phoneInput.value.trim();
@@ -629,7 +695,6 @@
             phoneSendOtp.textContent = "Sending...";
 
             try {
-                // ⬇️ Placeholder — replace with your SMS backend endpoint
                 const res = await fetch(`${BACKEND_URL}/phone-send-otp`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -653,11 +718,10 @@
             }
         });
 
-        // Verify OTP — plug in your SMS provider here
         phoneVerifyOtp.addEventListener("click", async () => {
             phoneErrorBox.classList.remove("show");
             const phone = phoneInput.value.trim();
-            const otp   = otpInput.value.trim();
+            const otp = otpInput.value.trim();
 
             if (!otp || otp.length !== 6) {
                 showPhoneError("Please enter the 6-digit code.");
