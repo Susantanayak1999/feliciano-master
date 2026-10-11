@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Shopping Cart | Mixtape Kitchen</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
 
     <!-- Google Fonts -->
     <link
@@ -1519,187 +1520,207 @@
             checkoutBtn.disabled = true;
 
             try {
-                // -------- STEP 1: Create Razorpay order --------
-                const createRes = await fetch(`${BACKEND_URL}/create-order`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        amount: totalAmount,
-                        currency: "INR",
-                        items: cart,
-                    }),
-                });
+                try {
+                    // 🔐 Require login before checkout
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        overlay.classList.remove("active");
+                        checkoutBtn.disabled = false;
+                        alert("Please sign in to place an order.");
+                        sessionStorage.setItem("lg_return_to", "/cart.html");
+                        window.location.href = "login.html";
+                        return;
+                    }
 
-                const orderData = await createRes.json();
+                    // -------- STEP 1: Create Razorpay order --------
+                    const createRes = await fetch(`${BACKEND_URL}/create-order`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token,
+                        },
+                        body: JSON.stringify({
+                            amount: totalAmount,
+                            currency: "INR",
+                            items: cart,
+                        }),
+                    });
 
-                if (!createRes.ok || !orderData.success) {
-                    throw new Error(orderData.error || "Failed to create order");
-                }
+                    const orderData = await createRes.json();
 
-                // -------- STEP 2: Open Razorpay modal --------
-                const options = {
-                    key: orderData.key_id,
-                    amount: orderData.amount,
-                    currency: orderData.currency,
-                    name: "Feliciano",
-                    description: `Order of ${cart.length} item(s)`,
-                    order_id: orderData.order_id,
-                    theme: { color: "#c8a97e" },
+                    if (!createRes.ok || !orderData.success) {
+                        throw new Error(orderData.error || "Failed to create order");
+                    }
 
-                    prefill: {
-                        name: "",
-                        email: "",
-                        contact: "",
-                    },
+                    // -------- STEP 2: Open Razorpay modal --------
+                    const options = {
+                        key: orderData.key_id,
+                        amount: orderData.amount,
+                        currency: orderData.currency,
+                        name: "Feliciano",
+                        description: `Order of ${cart.length} item(s)`,
+                        order_id: orderData.order_id,
+                        theme: { color: "#c8a97e" },
 
-                    handler: async function (response) {
-                        try {
-                            const verifyRes = await fetch(`${BACKEND_URL}/verify-payment`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature,
-                                }),
-                            });
+                        prefill: {
+                            name: "",
+                            email: "",
+                            contact: "",
+                        },
 
-                            const verifyData = await verifyRes.json();
+                        handler: async function (response) {
+                            try {
+                                const verifyRes = await fetch(`${BACKEND_URL}/verify-payment`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + token,
+                                    },
+                                    body: JSON.stringify({
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                        razorpay_signature: response.razorpay_signature,
+                                        items: cart,
+                                        amount: totalAmount,
+                                    }),
+                                });
 
-                            if (verifyRes.ok && verifyData.success) {
-                                localStorage.setItem("lastOrder", JSON.stringify({
-                                    payment_id: response.razorpay_payment_id,
-                                    order_id: response.razorpay_order_id,
-                                    amount: totalAmount,
-                                    items: cart,
-                                    date: new Date().toISOString(),
-                                }));
+                                const verifyData = await verifyRes.json();
 
-                                cart = [];
-                                saveCart();
-                                window.location.href = "success.html";
+                                if (verifyRes.ok && verifyData.success) {
+                                    localStorage.setItem("lastOrder", JSON.stringify({
+                                        payment_id: response.razorpay_payment_id,
+                                        order_id: response.razorpay_order_id,
+                                        amount: totalAmount,
+                                        items: cart,
+                                        date: new Date().toISOString(),
+                                    }));
 
-                            } else {
+                                    cart = [];
+                                    saveCart();
+                                    window.location.href = "success.html";
+
+                                } else {
+                                    overlay.classList.remove("active");
+                                    checkoutBtn.disabled = false;
+                                    alert("⚠️ Payment verification failed.");
+                                }
+                            } catch (err) {
+                                console.error("Verify error:", err);
                                 overlay.classList.remove("active");
                                 checkoutBtn.disabled = false;
-                                alert("⚠️ Payment verification failed.");
+                                alert("⚠️ Could not verify payment.");
                             }
-                        } catch (err) {
-                            console.error("Verify error:", err);
-                            overlay.classList.remove("active");
-                            checkoutBtn.disabled = false;
-                            alert("⚠️ Could not verify payment.");
-                        }
-                    },
-
-                    modal: {
-                        ondismiss: function () {
-                            overlay.classList.remove("active");
-                            checkoutBtn.disabled = false;
                         },
-                    },
-                };
 
-                const rzp = new Razorpay(options);
+                        modal: {
+                            ondismiss: function () {
+                                overlay.classList.remove("active");
+                                checkoutBtn.disabled = false;
+                            },
+                        },
+                    };
 
-                rzp.on("payment.failed", function (response) {
+                    const rzp = new Razorpay(options);
+
+                    rzp.on("payment.failed", function (response) {
+                        overlay.classList.remove("active");
+                        checkoutBtn.disabled = false;
+                        alert("❌ Payment failed: " + (response.error?.description || "Try again"));
+                    });
+
+                    overlay.classList.remove("active");
+                    rzp.open();
+
+                } catch (err) {
+                    console.error("Checkout error:", err);
                     overlay.classList.remove("active");
                     checkoutBtn.disabled = false;
-                    alert("❌ Payment failed: " + (response.error?.description || "Try again"));
-                });
-
-                overlay.classList.remove("active");
-                rzp.open();
-
-            } catch (err) {
-                console.error("Checkout error:", err);
-                overlay.classList.remove("active");
-                checkoutBtn.disabled = false;
-                alert("⚠️ Could not start checkout.\n\n" + err.message);
+                    alert("⚠️ Could not start checkout.\n\n" + err.message);
+                }
             }
-        }
 
         /* ============================================
            SYNC CART ACROSS TABS
            ============================================ */
 
         window.addEventListener("storage", function (event) {
-            if (event.key !== "cart") return;
-            cart = JSON.parse(localStorage.getItem("cart")) || [];
-            displayCart();
-            showCartSyncToast();
-        });
+                if (event.key !== "cart") return;
+                cart = JSON.parse(localStorage.getItem("cart")) || [];
+                displayCart();
+                showCartSyncToast();
+            });
 
 
-        /* ============================================
-           SYNC TOAST
-           ============================================ */
+            /* ============================================
+               SYNC TOAST
+               ============================================ */
 
-        function showCartSyncToast() {
+            function showCartSyncToast() {
 
-            let toast = document.getElementById("cart-sync-toast");
+                let toast = document.getElementById("cart-sync-toast");
 
-            if (!toast) {
+                if (!toast) {
 
-                toast = document.createElement("div");
-                toast.id = "cart-sync-toast";
+                    toast = document.createElement("div");
+                    toast.id = "cart-sync-toast";
 
-                toast.style.cssText =
-                    "position:fixed;bottom:30px;left:30px;" +
-                    "background:linear-gradient(135deg,#c8a97e,#b18f64);color:#fff;" +
-                    "padding:14px 22px;border-radius:50px;" +
-                    "font-family:Poppins,sans-serif;font-size:13px;font-weight:500;" +
-                    "box-shadow:0 8px 25px rgba(200,169,126,0.45);" +
-                    "opacity:0;transform:translateY(20px);" +
-                    "transition:0.35s;z-index:9999;" +
-                    "display:flex;align-items:center;gap:10px;";
+                    toast.style.cssText =
+                        "position:fixed;bottom:30px;left:30px;" +
+                        "background:linear-gradient(135deg,#c8a97e,#b18f64);color:#fff;" +
+                        "padding:14px 22px;border-radius:50px;" +
+                        "font-family:Poppins,sans-serif;font-size:13px;font-weight:500;" +
+                        "box-shadow:0 8px 25px rgba(200,169,126,0.45);" +
+                        "opacity:0;transform:translateY(20px);" +
+                        "transition:0.35s;z-index:9999;" +
+                        "display:flex;align-items:center;gap:10px;";
 
-                document.body.appendChild(toast);
+                    document.body.appendChild(toast);
+                }
+
+                toast.innerHTML = '<i class="fas fa-sync-alt"></i> Cart updated from another tab';
+
+                toast.style.opacity = "1";
+                toast.style.transform = "translateY(0)";
+
+                clearTimeout(toast._timeout);
+
+                toast._timeout = setTimeout(function () {
+                    toast.style.opacity = "0";
+                    toast.style.transform = "translateY(20px)";
+                }, 2400);
             }
 
-            toast.innerHTML = '<i class="fas fa-sync-alt"></i> Cart updated from another tab';
 
-            toast.style.opacity = "1";
-            toast.style.transform = "translateY(0)";
+            /* ============================================
+               HAMBURGER MENU
+               ============================================ */
 
-            clearTimeout(toast._timeout);
+            document.getElementById("hamburger").addEventListener("click", function () {
 
-            toast._timeout = setTimeout(function () {
-                toast.style.opacity = "0";
-                toast.style.transform = "translateY(20px)";
-            }, 2400);
-        }
+                const nav = document.getElementById("navLinks");
+                nav.classList.toggle("open");
 
+                const icon = this.querySelector("i");
 
-        /* ============================================
-           HAMBURGER MENU
-           ============================================ */
-
-        document.getElementById("hamburger").addEventListener("click", function () {
-
-            const nav = document.getElementById("navLinks");
-            nav.classList.toggle("open");
-
-            const icon = this.querySelector("i");
-
-            if (nav.classList.contains("open")) {
-                icon.classList.remove("fa-bars");
-                icon.classList.add("fa-times");
-            } else {
-                icon.classList.remove("fa-times");
-                icon.classList.add("fa-bars");
-            }
-        });
+                if (nav.classList.contains("open")) {
+                    icon.classList.remove("fa-bars");
+                    icon.classList.add("fa-times");
+                } else {
+                    icon.classList.remove("fa-times");
+                    icon.classList.add("fa-bars");
+                }
+            });
 
 
-        /* ============================================
-           LOAD
-           ============================================ */
+            /* ============================================
+               LOAD
+               ============================================ */
 
-        document.addEventListener("DOMContentLoaded", function () {
-            cart = JSON.parse(localStorage.getItem("cart")) || [];
-            displayCart();
-        });
+            document.addEventListener("DOMContentLoaded", function () {
+                cart = JSON.parse(localStorage.getItem("cart")) || [];
+                displayCart();
+            });
 
     </script>
 
