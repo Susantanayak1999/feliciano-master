@@ -308,13 +308,13 @@
         .res-side-contact .ic { color: #c8a97e; font-size: 18px; }
 
         /* ============================================================
-           SUCCESS MODAL
+           SUCCESS MODAL — REDESIGNED (NEW)
            ============================================================ */
         .res-success-modal {
             position: fixed;
             inset: 0;
-            background: rgba(17, 17, 17, 0.75);
-            backdrop-filter: blur(6px);
+            background: radial-gradient(circle at center, rgba(26,26,26,0.85) 0%, rgba(10,10,10,0.95) 100%);
+            backdrop-filter: blur(8px);
             z-index: 9999;
             display: none;
             align-items: center;
@@ -322,83 +322,232 @@
             padding: 20px;
             overflow-y: auto;
         }
-        .res-success-modal.active { display: flex; }
+        .res-success-modal.active {
+            display: flex;
+            animation: resFadeIn 0.3s ease both;
+        }
+        @keyframes resFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* ---- CARD ---- */
         .res-success-card {
+            position: relative;
             background: #fff;
-            border-radius: 16px;
-            padding: 50px 40px;
-            max-width: 440px;
+            border-radius: 22px;
+            padding: 55px 42px 42px;
+            max-width: 460px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, .4);
-            animation: popIn .35s ease both;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(200, 169, 126, 0.15);
+            animation: resPopIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            overflow: hidden;
             margin: auto;
         }
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(.92); }
-            to   { opacity: 1; transform: scale(1); }
+        @keyframes resPopIn {
+            0%   { opacity: 0; transform: scale(0.85) translateY(30px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .res-success-card .check {
-            width: 80px; height: 80px;
+
+        /* Gold gradient top border */
+        .res-success-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c8a97e, #e8d4b8, #c8a97e);
+        }
+
+        /* Soft golden glow ring behind the checkmark */
+        .res-success-glow {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #c8a97e, #b18f64);
-            color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 22px;
-            font-size: 36px;
-            box-shadow: 0 10px 30px rgba(200,169,126,.45);
+            background: radial-gradient(circle, rgba(200, 169, 126, 0.25) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+            animation: resGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes resGlow {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50%      { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* ---- ANIMATED SVG CHECKMARK ---- */
+        .res-check-wrap {
+            position: relative;
+            z-index: 1;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+        }
+        .res-check-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .res-check-circle {
+            stroke: #c8a97e;
+            stroke-width: 2.5;
+            stroke-dasharray: 160;
+            stroke-dashoffset: 160;
+            animation: resDrawCircle 0.7s 0.15s ease forwards;
+        }
+        .res-check-mark {
+            stroke: #c8a97e;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 50;
+            stroke-dashoffset: 50;
+            animation: resDrawCheck 0.4s 0.7s ease forwards;
+        }
+        @keyframes resDrawCircle {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes resDrawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* ---- TEXT ---- */
+        .res-success-eyebrow {
+            display: inline-block;
+            font-family: "Poppins", sans-serif;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #c8a97e;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
         .res-success-card h3 {
             font-family: "Great Vibes", cursive;
-            font-size: 40px;
-            color: #c8a97e;
+            font-size: 46px;
+            color: #1a1a1a;
             font-weight: normal;
             line-height: 1;
-            margin: 0 0 10px;
+            margin: 0 0 12px;
+            position: relative;
+            z-index: 1;
         }
-        .res-success-card p {
-            color: #666;
-            font-size: 15px;
-            margin-bottom: 10px;
+        .res-success-sub {
+            color: #777;
+            font-size: 14.5px;
+            line-height: 1.6;
+            margin-bottom: 24px;
             font-family: "Poppins", sans-serif;
+            position: relative;
+            z-index: 1;
         }
-        .res-success-card .details {
-            background: #faf8f4;
-            border-radius: 10px;
-            padding: 18px;
-            margin: 20px 0;
+
+        /* ---- DETAILS CARD ---- */
+        .res-success-details {
+            background: linear-gradient(160deg, #fdfaf5 0%, #f8f3ea 100%);
+            border-radius: 14px;
+            padding: 20px 22px;
+            margin: 0 0 22px;
             text-align: left;
             font-family: "Poppins", sans-serif;
             font-size: 14px;
-            border: 1px dashed rgba(200,169,126,.4);
+            border: 1px dashed rgba(200, 169, 126, 0.4);
+            position: relative;
+            z-index: 1;
         }
-        .res-success-card .details div {
-            display: flex; justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px dashed #eee;
+        .res-success-details:empty {
+            display: none;
+        }
+        .res-success-details > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 0;
+            border-bottom: 1px dashed rgba(200, 169, 126, 0.25);
             gap: 12px;
         }
-        .res-success-card .details div:last-child { border-bottom: none; }
-        .res-success-card .details strong { color: #1a1a1a; text-align: right; }
+        .res-success-details > div:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .res-success-details > div:first-child {
+            padding-top: 0;
+        }
+        .res-success-details > div span {
+            color: #999;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        .res-success-details > div strong {
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: right;
+        }
 
+        /* ---- INFO STRIP ---- */
+        .res-success-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 12.5px;
+            color: #c8a97e;
+            background: rgba(200, 169, 126, 0.1);
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+        .res-success-info .ion-ios-information-circle-outline {
+            font-size: 16px;
+        }
+
+        /* ---- CTA BUTTON ---- */
         .res-success-btn {
-            display: inline-block;
-            padding: 13px 30px;
-            background: #c8a97e;
-            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 34px;
+            background: linear-gradient(135deg, #c8a97e 0%, #b18f64 100%);
+            color: #fff !important;
             border-radius: 30px;
             font-family: "Poppins", sans-serif;
             font-size: 14px;
             font-weight: 600;
-            text-decoration: none;
-            margin-top: 8px;
-            transition: all .3s ease;
-            box-shadow: 0 6px 18px rgba(200,169,126,.4);
+            letter-spacing: 0.5px;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 26px rgba(200, 169, 126, 0.4);
+            position: relative;
+            z-index: 1;
+            border: none;
+            cursor: pointer;
         }
         .res-success-btn:hover {
-            background: #b8956a;
-            color: #fff;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 34px rgba(200, 169, 126, 0.55);
+            color: #fff !important;
+        }
+        .res-success-btn .ion-ios-restaurant {
+            font-size: 16px;
+        }
+
+        /* Confetti pieces */
+        @keyframes resConfetti {
+            0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.3); }
         }
 
         /* Error */
@@ -455,12 +604,12 @@
             .res-side-hours { gap: 20px; }
             .res-side-btn { align-self: stretch; justify-content: center; }
 
-            .res-success-card { padding: 36px 22px; border-radius: 14px; }
-            .res-success-card .check { width: 64px; height: 64px; font-size: 28px; margin-bottom: 16px; }
-            .res-success-card h3 { font-size: 32px; }
-            .res-success-card p { font-size: 14px; }
-            .res-success-card .details { font-size: 13px; padding: 14px; }
-            .res-success-btn { width: 100%; text-align: center; padding: 13px 20px; }
+            .res-success-card { padding: 44px 24px 32px; border-radius: 18px; }
+            .res-check-wrap { width: 76px; height: 76px; }
+            .res-success-card h3 { font-size: 38px; }
+            .res-success-sub { font-size: 13.5px; }
+            .res-success-details { padding: 16px 16px; font-size: 13px; }
+            .res-success-btn { width: 100%; padding: 14px 20px; }
         }
 
         @media (max-width: 480px) {
@@ -735,18 +884,40 @@
         </div>
     </section>
 
-    <!-- SUCCESS MODAL -->
+    <!-- SUCCESS MODAL — REDESIGNED -->
     <div class="res-success-modal" id="resSuccessModal">
         <div class="res-success-card">
-            <div class="check">✓</div>
+
+            <!-- Gold confetti ring behind the checkmark -->
+            <div class="res-success-glow"></div>
+
+            <!-- Animated checkmark (SVG stroke draw) -->
+            <div class="res-check-wrap">
+                <svg class="res-check-svg" viewBox="0 0 52 52">
+                    <circle class="res-check-circle" cx="26" cy="26" r="24" fill="none"/>
+                    <path class="res-check-mark" fill="none" d="M14 27l8 8 16-16"/>
+                </svg>
+            </div>
+
+            <!-- Small eyebrow label -->
+            <span class="res-success-eyebrow">Reservation Confirmed</span>
+
+            <!-- Title -->
             <h3>Table Booked!</h3>
-            <p>We've received your reservation.</p>
-            <div class="details" id="resSuccessDetails"></div>
-            <p style="color:#888; font-size:13px; margin-bottom:20px;">
-                We'll contact you shortly to confirm.
-            </p>
+            <p class="res-success-sub">Your table has been reserved. We can't wait to host you.</p>
+
+            <!-- Details card -->
+            <div class="res-success-details" id="resSuccessDetails"></div>
+
+            <!-- Info strip -->
+            <div class="res-success-info">
+                <span class="ion-ios-information-circle-outline"></span>
+                <span>We'll text you shortly to confirm</span>
+            </div>
+
+            <!-- CTA -->
             <a href="menu.html" class="res-success-btn" id="resSuccessClose">
-                Browse Menu
+                <span class="ion-ios-restaurant"></span> Browse Menu
             </a>
         </div>
     </div>
@@ -912,6 +1083,29 @@
                     `;
                     successModal.classList.add("active");
                     form.reset();
+
+                    // 🎉 Gold confetti burst
+                    (function confettiBurst() {
+                        const card = document.querySelector(".res-success-card");
+                        if (!card) return;
+                        for (let i = 0; i < 14; i++) {
+                            const dot = document.createElement("span");
+                            dot.style.cssText = `
+                                position:absolute; top:50%; left:50%;
+                                width:8px; height:8px; border-radius:50%;
+                                background:${["#c8a97e","#e8d4b8","#b18f64"][i % 3]};
+                                pointer-events:none; z-index:2;
+                                animation: resConfetti 0.9s ease-out forwards;
+                            `;
+                            const angle = (i / 14) * Math.PI * 2;
+                            const dist = 100 + Math.random() * 60;
+                            dot.style.setProperty("--tx", Math.cos(angle) * dist + "px");
+                            dot.style.setProperty("--ty", Math.sin(angle) * dist + "px");
+                            card.appendChild(dot);
+                            setTimeout(() => dot.remove(), 1000);
+                        }
+                    })();
+
                 } else {
                     errorBox.textContent = data.error || "Could not book table.";
                     errorBox.classList.add("show");

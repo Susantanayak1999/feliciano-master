@@ -7,6 +7,7 @@ const Razorpay = require("razorpay");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendReservationEmail, sendOrderEmail } = require("./mailer");
 
 const app = express();
 app.use(cors());
@@ -427,26 +428,67 @@ app.post("/verify-payment", async (req, res) => {
             .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
             .update(body.toString())
             .digest("hex");
+        // if (expectedSignature === razorpay_signature) {
+        //     console.log("✅ Payment verified:", razorpay_payment_id);
+        //     try {
+        //         const token = req.headers.authorization?.replace("Bearer ", "");
+        //         if (token) {
+        //             const decoded = jwt.verify(token, JWT_SECRET);
+        //             await Order.create({
+        //                 userId: decoded.userId,
+        //                 items,
+        //                 amount,
+        //                 paymentId: razorpay_payment_id,
+        //                 orderId: razorpay_order_id,
+        //             });
+        //             console.log("✅ Order saved to DB");
+        //         }
+        //     } catch (e) {
+        //         console.warn("⚠️ Could not save order:", e.message);
+        //     }
+        //     return res.json({ success: true, payment_id: razorpay_payment_id });
+        // }
+
+
         if (expectedSignature === razorpay_signature) {
             console.log("✅ Payment verified:", razorpay_payment_id);
+
+            let savedUser = null;
+            let savedOrder = null;
+
             try {
                 const token = req.headers.authorization?.replace("Bearer ", "");
                 if (token) {
                     const decoded = jwt.verify(token, JWT_SECRET);
-                    await Order.create({
+                    savedOrder = await Order.create({
                         userId: decoded.userId,
                         items,
                         amount,
                         paymentId: razorpay_payment_id,
                         orderId: razorpay_order_id,
                     });
+                    savedUser = await User.findById(decoded.userId);
                     console.log("✅ Order saved to DB");
                 }
             } catch (e) {
                 console.warn("⚠️ Could not save order:", e.message);
             }
+
+            // 📧 Send order confirmation email — only if we have a user email
+            if (savedUser && savedUser.email) {
+                sendOrderEmail({
+                    to: savedUser.email,
+                    name: savedUser.name,
+                    items: items || [],
+                    amount: amount || 0,
+                    paymentId: razorpay_payment_id,
+                    orderId: razorpay_order_id,
+                }).catch((err) => console.error("Order email error:", err.message));
+            }
+
             return res.json({ success: true, payment_id: razorpay_payment_id });
         }
+
         return res.status(400).json({ success: false, error: "Invalid signature" });
     } catch (err) {
         console.error("❌ Verify error:", err);
@@ -486,6 +528,30 @@ app.post("/reserve", async (req, res) => {
             }
         } catch (e) { /* guest booking is fine */ }
 
+        // const reservation = await Reservation.create({
+        //     userId,
+        //     name: name.trim(),
+        //     email: email.trim(),
+        //     phone: phone.trim(),
+        //     date,
+        //     time,
+        //     persons,
+        // });
+
+        // console.log("✅ Reservation created:", reservation._id, name, date, time);
+
+        // res.json({
+        //     success: true,
+        //     message: "Reservation confirmed!",
+        //     reservation: {
+        //         id: reservation._id,
+        //         name: reservation.name,
+        //         date: reservation.date,
+        //         time: reservation.time,
+        //         persons: reservation.persons,
+        //     },
+        // });
+
         const reservation = await Reservation.create({
             userId,
             name: name.trim(),
@@ -497,6 +563,16 @@ app.post("/reserve", async (req, res) => {
         });
 
         console.log("✅ Reservation created:", reservation._id, name, date, time);
+
+        // 📧 Send confirmation email (fire-and-forget — doesn't block response)
+        sendReservationEmail({
+            to: reservation.email,
+            name: reservation.name,
+            date: reservation.date,
+            time: reservation.time,
+            persons: reservation.persons,
+            reservationId: reservation._id,
+        }).catch((err) => console.error("Reservation email error:", err.message));
 
         res.json({
             success: true,
