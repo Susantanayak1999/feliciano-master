@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Google Sign-In SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
         .auth-section {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2418 100%);
@@ -39,113 +42,217 @@
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
         }
 
-        .auth-card .brand {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .auth-card .brand { text-align: center; margin-bottom: 30px; }
 
         .auth-card .brand-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #c8a97e;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 30px;
+            width: 70px; height: 70px; border-radius: 50%;
+            background: #c8a97e; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px; font-size: 30px;
         }
 
         .auth-card h2 {
             font-family: "Great Vibes", cursive;
-            font-size: 42px;
-            color: #c8a97e;
-            margin-bottom: 5px;
-            font-weight: normal;
-            line-height: 1;
+            font-size: 42px; color: #c8a97e;
+            margin-bottom: 5px; font-weight: normal; line-height: 1;
         }
 
-        .auth-card .sub {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 0;
-        }
-
-        .auth-card label {
-            font-weight: 600;
-            color: #000;
-            font-size: 14px;
-        }
-
-        .auth-card .form-control {
-            height: 52px;
-            font-size: 15px;
-        }
+        .auth-card .sub { font-size: 14px; color: #888; margin-bottom: 0; }
+        .auth-card label { font-weight: 600; color: #000; font-size: 14px; }
+        .auth-card .form-control { height: 52px; font-size: 15px; }
 
         .auth-card .btn-primary {
-            background: #c8a97e;
-            border-color: #c8a97e;
-            color: #fff;
-            padding: 12px 30px;
-            font-size: 15px;
-            font-weight: 500;
-            width: 100%;
-            border-radius: 2px;
+            background: #c8a97e; border-color: #c8a97e; color: #fff;
+            padding: 12px 30px; font-size: 15px; font-weight: 500;
+            width: 100%; border-radius: 2px;
         }
-
         .auth-card .btn-primary:hover {
-            background: transparent;
-            color: #c8a97e;
-            border-color: #c8a97e;
+            background: transparent; color: #c8a97e; border-color: #c8a97e;
         }
 
         .auth-card .switch {
-            text-align: center;
-            margin-top: 22px;
-            font-size: 14px;
-            color: #666;
+            text-align: center; margin-top: 22px;
+            font-size: 14px; color: #666;
         }
-
-        .auth-card .switch a {
-            color: #c8a97e;
-            font-weight: 600;
-        }
+        .auth-card .switch a { color: #c8a97e; font-weight: 600; }
 
         .auth-card .error-msg {
-            display: none;
-            background: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 13px;
-            margin-bottom: 18px;
+            display: none; background: #fee; color: #c33;
+            padding: 12px; border-radius: 5px;
+            font-size: 13px; margin-bottom: 18px;
         }
+        .auth-card .error-msg.show { display: block; }
 
-        .auth-card .error-msg.show {
-            display: block;
+        /* Success message */
+        .auth-card .success-msg {
+            display: none; background: #e8f5e9; color: #2e7d32;
+            padding: 12px; border-radius: 5px;
+            font-size: 13px; margin-bottom: 18px;
+            border: 1px solid #c8e6c9;
         }
+        .auth-card .success-msg.show { display: block; }
 
         .auth-card .back-home {
+            display: block; text-align: center; margin-top: 18px;
+            font-size: 13px; color: #999;
+        }
+        .auth-card .back-home:hover { color: #c8a97e; }
+
+        /* ============================================================
+           FORGOT PASSWORD LINK
+           ============================================================ */
+        .forgot-link {
             display: block;
-            text-align: center;
-            margin-top: 18px;
+            text-align: right;
             font-size: 13px;
-            color: #999;
+            color: #c8a97e;
+            font-weight: 500;
+            margin-top: -8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: color .2s;
+        }
+        .forgot-link:hover {
+            color: #b18f64;
+            text-decoration: underline;
         }
 
-        .auth-card .back-home:hover {
-            color: #c8a97e;
+        /* ============================================================
+           GOOGLE SIGN-IN BUTTON
+           ============================================================ */
+        .auth-divider {
+            display: flex; align-items: center; text-align: center;
+            margin: 26px 0 22px; color: #bbb;
+            font-size: 13px; font-family: "Poppins", sans-serif;
         }
+        .auth-divider::before, .auth-divider::after {
+            content: ""; flex: 1; height: 1px; background: #eee;
+        }
+        .auth-divider span {
+            padding: 0 14px; text-transform: uppercase;
+            letter-spacing: 1px; font-size: 11px;
+        }
+
+        .social-btn {
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px; width: 100%; height: 52px;
+            padding: 0 20px; border-radius: 8px;
+            font-family: "Poppins", sans-serif; font-size: 14px;
+            font-weight: 500; cursor: pointer;
+            transition: all .25s ease; text-decoration: none;
+            border: 1.5px solid #e5e5e5; background: #fff;
+            color: #333; margin-bottom: 12px;
+        }
+        .social-btn:hover {
+            background: #f8f6f3; border-color: #c8a97e;
+            color: #1a1a1a; transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+        }
+        .social-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        #googleSignInBtn {
+            position: absolute; left: -9999px;
+            width: 1px; height: 1px; overflow: hidden;
+        }
+
+        /* ============================================================
+           FORGOT PASSWORD MODAL
+           ============================================================ */
+        .fp-modal {
+            position: fixed; inset: 0;
+            background: rgba(17, 17, 17, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 9999; display: none;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .fp-modal.active { display: flex; }
+
+        .fp-card {
+            background: #fff; border-radius: 14px;
+            padding: 40px 34px; max-width: 420px; width: 100%;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .4);
+            position: relative;
+            animation: fpPop .3s ease both;
+        }
+        @keyframes fpPop {
+            from { opacity: 0; transform: scale(.94) translateY(20px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .fp-card .fp-close {
+            position: absolute; top: 12px; right: 16px;
+            background: transparent; border: none;
+            font-size: 22px; color: #bbb;
+            cursor: pointer; line-height: 1;
+        }
+        .fp-card .fp-close:hover { color: #c8a97e; }
+
+        .fp-card .fp-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: rgba(200, 169, 126, 0.15);
+            color: #c8a97e;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 18px; font-size: 28px;
+        }
+        .fp-card h3 {
+            font-family: "Great Vibes", cursive;
+            font-size: 34px; color: #c8a97e;
+            font-weight: normal; line-height: 1;
+            margin-bottom: 6px; text-align: center;
+        }
+        .fp-card p {
+            color: #888; font-size: 13px;
+            margin-bottom: 22px; text-align: center;
+            font-family: "Poppins", sans-serif;
+        }
+        .fp-card label {
+            font-size: 12px; font-weight: 600; color: #555;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 6px; display: block;
+        }
+        .fp-card .form-control {
+            height: 48px; background: #faf8f4;
+            border: 1.5px solid #eee; border-radius: 8px;
+            font-size: 15px; padding: 0 14px; width: 100%;
+            margin-bottom: 14px; font-family: "Poppins", sans-serif;
+            outline: none; transition: all .2s;
+        }
+        .fp-card .form-control:focus {
+            background: #fff; border-color: #c8a97e;
+        }
+        .fp-card .btn-send {
+            width: 100%; height: 48px;
+            background: #c8a97e; color: #fff;
+            border: none; border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all .25s;
+        }
+        .fp-card .btn-send:hover { background: #b8956a; }
+        .fp-card .btn-send:disabled { opacity: .6; cursor: not-allowed; }
+
+        .fp-error {
+            color: #c33; background: #fee;
+            padding: 10px 12px; border-radius: 6px;
+            font-size: 12px; margin-bottom: 14px;
+            display: none; font-family: "Poppins", sans-serif;
+        }
+        .fp-error.show { display: block; }
+
+        .fp-success {
+            color: #2e7d32; background: #e8f5e9;
+            padding: 10px 12px; border-radius: 6px;
+            font-size: 12px; margin-bottom: 14px;
+            display: none; font-family: "Poppins", sans-serif;
+            border: 1px solid #c8e6c9;
+        }
+        .fp-success.show { display: block; }
 
         @media (max-width: 576px) {
-            .auth-card {
-                padding: 35px 25px;
-            }
-
-            .auth-card h2 {
-                font-size: 34px;
-            }
+            .auth-card { padding: 35px 25px; }
+            .auth-card h2 { font-size: 34px; }
+            .fp-card { padding: 30px 22px; }
         }
     </style>
 </head>
@@ -164,6 +271,20 @@
             </div>
 
             <div class="error-msg" id="errorBox"></div>
+            <div class="success-msg" id="successBox"></div>
+
+            <!-- Custom Google button -->
+            <button type="button" class="social-btn google" id="customGoogleBtn">
+                <svg viewBox="0 0 48 48" width="20" height="20">
+                    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <div class="auth-divider"><span>or</span></div>
 
             <form id="loginForm">
                 <div class="form-group">
@@ -174,6 +295,10 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" class="form-control" placeholder="••••••••" required>
                 </div>
+
+                <!-- Forgot password link -->
+                <a class="forgot-link" id="forgotLink">Forgot password?</a>
+
                 <div class="form-group text-center mt-4">
                     <button type="submit" class="btn btn-primary py-3 px-4" id="submitBtn">
                         Sign In
@@ -186,24 +311,95 @@
 
         </div>
     </section>
-    <script>
-        const BACKEND_URL = "https://feliciano-master.onrender.com";
 
+    <!-- Hidden Google SDK container -->
+    <div id="googleSignInBtn"></div>
+
+    <!-- ============================================================
+         FORGOT PASSWORD MODAL
+         ============================================================ -->
+    <div class="fp-modal" id="fpModal">
+        <div class="fp-card">
+            <button class="fp-close" id="fpClose">×</button>
+
+            <div class="fp-icon">✉</div>
+            <h3>Forgot Password?</h3>
+            <p>Enter your registered email. We'll send you a reset link.</p>
+
+            <div class="fp-error" id="fpError"></div>
+            <div class="fp-success" id="fpSuccess"></div>
+
+            <label for="fpEmail">Email Address</label>
+            <input type="email" id="fpEmail" class="form-control" placeholder="you@example.com" autocomplete="email">
+
+            <button class="btn-send" id="fpSend">Send Reset Link</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // CONFIG
+        // ============================================================
+        const BACKEND_URL = "https://feliciano-master.onrender.com";
+        // 🔧 For local testing, uncomment the line below and comment above:
+        // const BACKEND_URL = "http://localhost:5000";
+
+        const GOOGLE_CLIENT_ID = "69969918808-rs9in68mueshi3h9o95e1k7ekvnsjhbr.apps.googleusercontent.com";
+
+        fetch(`${BACKEND_URL}/`).then(r => r.json()).then(() => console.log("Backend is warm")).catch(() => console.log("Backend cold"));
+
+        // HELPERS
         const form = document.getElementById("loginForm");
         const errorBox = document.getElementById("errorBox");
+        const successBox = document.getElementById("successBox");
         const submitBtn = document.getElementById("submitBtn");
-
-        fetch(`${BACKEND_URL}/`).catch(() => { });
-
         let navigating = false;
 
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.classList.add("show");
+            successBox.classList.remove("show");
+        }
+
+        function showSuccess(msg) {
+            successBox.textContent = msg;
+            successBox.classList.add("show");
+            errorBox.classList.remove("show");
+        }
+
+        function redirectAfterAuth() {
+            const backTo = sessionStorage.getItem("lg_return_to") || "/";
+            sessionStorage.removeItem("lg_return_to");
+            setTimeout(() => { window.location.href = backTo; }, 100);
+        }
+
+        function completeLogin(data) {
+            navigating = true;
+            localStorage.removeItem("cart");
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            const badge = document.getElementById("nav-cart-count");
+            if (badge) {
+                badge.textContent = "0";
+                badge.setAttribute("data-count", "0");
+            }
+            redirectAfterAuth();
+        }
+
+        // ============================================================
+        // EMAIL LOGIN
+        // ============================================================
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             errorBox.classList.remove("show");
+            successBox.classList.remove("show");
             submitBtn.disabled = true;
             submitBtn.textContent = "Signing in...";
 
             try {
+                await fetch(`${BACKEND_URL}/`, { method: "GET" }).catch(() => { });
+
                 const res = await fetch(`${BACKEND_URL}/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -216,38 +412,151 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    navigating = true;
-                    localStorage.removeItem("cart");
-                    localStorage.setItem("token", data.token);
-                    localStorage.setItem("user", JSON.stringify(data.user));
-
-                    const badge = document.getElementById("nav-cart-count");
-                    if (badge) {
-                        badge.textContent = "0";
-                        badge.setAttribute("data-count", "0");
-                    }
-
-                    // ⬇️ NEW — go back to where they came from
-                    const backTo = sessionStorage.getItem("lg_return_to") || "/";
-                    sessionStorage.removeItem("lg_return_to");
-
-                    setTimeout(() => {
-                        window.location.href = backTo;
-                    }, 100);
+                    completeLogin(data);
                     return;
                 }
 
-                errorBox.textContent = data.error || "Invalid email or password";
-                errorBox.classList.add("show");
+                showError(data.error || "Invalid email or password");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Sign In";
-
             } catch (err) {
                 if (navigating) return;
-                errorBox.textContent = "Server is waking up. Please try again.";
-                errorBox.classList.add("show");
+                showError("Server is waking up. Please try again.");
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Sign In";
+            }
+        });
+
+        // ============================================================
+        // GOOGLE SIGN-IN
+        // ============================================================
+        window.handleCredentialResponse = async function (response) {
+            try {
+                const payload = JSON.parse(atob(response.credential.split(".")[1]));
+                const { email, name, picture, sub } = payload;
+
+                const res = await fetch(`${BACKEND_URL}/google-login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: email, name: name, googleId: sub, picture: picture,
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    completeLogin(data);
+                } else {
+                    showError(data.error || "Google login failed");
+                }
+            } catch (err) {
+                console.error("Google login error:", err);
+                showError("Google login failed. Please try email sign-in instead.");
+            }
+        };
+
+        window.addEventListener("load", () => {
+            if (typeof google === "undefined" || !google.accounts) {
+                console.warn("Google SDK not loaded");
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse,
+                auto_select: false,
+                cancel_on_tap_outside: true,
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInBtn"),
+                { theme: "outline", size: "large", text: "continue_with", shape: "rectangular", logo_alignment: "left" }
+            );
+
+            const customBtn = document.getElementById("customGoogleBtn");
+            if (customBtn) {
+                customBtn.addEventListener("click", () => {
+                    const hiddenBtn = document.querySelector("#googleSignInBtn div[role='button']");
+                    if (hiddenBtn) hiddenBtn.click();
+                    else google.accounts.id.prompt();
+                });
+            }
+        });
+
+        // ============================================================
+        // FORGOT PASSWORD MODAL
+        // ============================================================
+        const fpModal = document.getElementById("fpModal");
+        const fpClose = document.getElementById("fpClose");
+        const fpEmail = document.getElementById("fpEmail");
+        const fpSend = document.getElementById("fpSend");
+        const fpError = document.getElementById("fpError");
+        const fpSuccess = document.getElementById("fpSuccess");
+
+        document.getElementById("forgotLink").addEventListener("click", (e) => {
+            e.preventDefault();
+            fpError.classList.remove("show");
+            fpSuccess.classList.remove("show");
+            fpEmail.value = document.getElementById("email").value.trim();
+            fpSend.disabled = false;
+            fpSend.textContent = "Send Reset Link";
+            fpModal.classList.add("active");
+        });
+
+        fpClose.addEventListener("click", () => {
+            fpModal.classList.remove("active");
+        });
+
+        fpModal.addEventListener("click", (e) => {
+            if (e.target === fpModal) fpModal.classList.remove("active");
+        });
+
+        fpEmail.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                fpSend.click();
+            }
+        });
+
+        fpSend.addEventListener("click", async () => {
+            fpError.classList.remove("show");
+            fpSuccess.classList.remove("show");
+
+            const email = fpEmail.value.trim();
+            if (!email) {
+                fpError.textContent = "Please enter your email.";
+                fpError.classList.add("show");
+                return;
+            }
+
+            fpSend.disabled = true;
+            fpSend.textContent = "Sending...";
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/forgot-password`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    fpSuccess.textContent = "Reset link sent! Check your email inbox (and spam).";
+                    fpSuccess.classList.add("show");
+                    fpSend.textContent = "Sent ✓";
+                } else {
+                    fpError.textContent = data.error || "Could not send reset link.";
+                    fpError.classList.add("show");
+                    fpSend.disabled = false;
+                    fpSend.textContent = "Send Reset Link";
+                }
+            } catch (err) {
+                fpError.textContent = "Server error. Please try again.";
+                fpError.classList.add("show");
+                fpSend.disabled = false;
+                fpSend.textContent = "Send Reset Link";
             }
         });
     </script>

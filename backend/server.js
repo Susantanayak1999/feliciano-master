@@ -41,6 +41,8 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String, default: null },
     phone: { type: String, default: null },
     picture: { type: String, default: null },
+    resetToken: { type: String, default: null },
+    resetTokenExpiry: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
 });
 const User = mongoose.model("User", userSchema);
@@ -102,6 +104,33 @@ const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
+
+// ============================================================
+// Brevo Email Helper (HTTP API)
+// ============================================================
+async function brevoSend({ to, subject, html }) {
+    if (!process.env.BREVO_API_KEY) {
+        console.warn("⚠️ BREVO_API_KEY not set — email skipped");
+        return null;
+    }
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+            "accept": "application/json",
+            "api-key": process.env.BREVO_API_KEY,
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            sender: { name: "Mixtape Kitchen", email: "susantanayak01592@gmail.com" },
+            to: [{ email: to }],
+            subject,
+            htmlContent: html,
+        }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || JSON.stringify(data));
+    return data;
+}
 
 // ============================================================
 // Health Check
@@ -172,6 +201,98 @@ app.post("/login", async (req, res) => {
 });
 
 // ============================================================
+// FORGOT PASSWORD — Send reset link via Brevo API
+// ============================================================
+app.post("/forgot-password", async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ success: false, error: "Email required" });
+        }
+
+        const user = await User.findOne({ email: email.toLowerCase() });
+
+        // Always return success (prevents email enumeration)
+        if (!user) {
+            console.log("📧 Forgot-password for unknown email:", email);
+            return res.json({ success: true, message: "If that email exists, a reset link has been sent." });
+        }
+
+        // Generate reset token
+        const token = crypto.randomBytes(32).toString("hex");
+        user.resetToken = token;
+        user.resetTokenExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes
+        await user.save();
+
+        console.log("🔑 Reset token for", email, ":", token);
+
+        const resetUrl = `https://mixtape-kitchen.netlify.app/reset-password.html?token=${token}`;
+
+        try {
+            await brevoSend({
+                to: user.email,
+                subject: "Reset Your Password — Mixtape Kitchen",
+                html: `
+                <div style="font-family:'Poppins',Arial,sans-serif;background:#f6f2ea;padding:40px 20px;">
+                  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;">
+                    <div style="height:5px;background:linear-gradient(90deg,#c8a97e,#e8d4b8,#c8a97e);"></div>
+                    <div style="padding:40px;text-align:center;">
+                      <h1 style="font-family:Georgia,serif;color:#c8a97e;margin:0;font-size:30px;">Reset Password</h1>
+                      <p style="color:#666;font-size:14px;margin-top:12px;">Hi ${user.name}, we received a request to reset your password.</p>
+                      <a href="${resetUrl}" style="display:inline-block;margin-top:26px;padding:14px 32px;background:#c8a97e;color:#fff;text-decoration:none;border-radius:30px;font-weight:600;">Reset My Password</a>
+                      <p style="color:#999;font-size:12px;margin-top:26px;">This link expires in 30 minutes. If you didn't request this, ignore this email.</p>
+                    </div>
+                  </div>
+                </div>`,
+            });
+            console.log("✅ Reset email sent to", email);
+        } catch (e) {
+            console.error("❌ Reset email failed:", e.message);
+        }
+
+        res.json({ success: true, message: "If that email exists, a reset link has been sent." });
+
+    } catch (err) {
+        console.error("❌ Forgot password error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// RESET PASSWORD — Verify token and set new password
+// ============================================================
+app.post("/reset-password", async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        if (!token || !newPassword || newPassword.length < 6) {
+            return res.status(400).json({ success: false, error: "Invalid input" });
+        }
+
+        const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiry: { $gt: Date.now() },
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, error: "Reset link is invalid or has expired." });
+        }
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        user.password = hashed;
+        user.resetToken = null;
+        user.resetTokenExpiry = null;
+        await user.save();
+
+        console.log("✅ Password reset for", user.email);
+        res.json({ success: true, message: "Password updated. Please sign in." });
+
+    } catch (err) {
+        console.error("❌ Reset password error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
 // GOOGLE LOGIN
 // ============================================================
 app.post("/google-login", async (req, res) => {
@@ -229,10 +350,8 @@ app.post("/phone-send-otp", async (req, res) => {
             return res.status(400).json({ success: false, error: "Invalid phone number" });
         }
 
-        // Generate a random 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Store OTP for 5 minutes
         global._otpStore[phone] = {
             otp: otp,
             expiresAt: Date.now() + 5 * 60 * 1000,
@@ -240,8 +359,6 @@ app.post("/phone-send-otp", async (req, res) => {
 
         console.log(`📱 OTP for ${phone}: ${otp}`);
 
-        // ⚠️ DEMO MODE — returns OTP in response
-        // In production, integrate Twilio / MSG91 here and remove `demoOtp`
         res.json({
             success: true,
             message: "OTP sent (demo mode)",
@@ -256,9 +373,6 @@ app.post("/phone-send-otp", async (req, res) => {
 
 // ============================================================
 // PHONE: VERIFY OTP
-// ------------------------------------------------------------
-// If user exists with a real name → log them in
-// If user is new OR has "Guest XXXX" name → return needsName: true
 // ============================================================
 app.post("/phone-verify-otp", async (req, res) => {
     try {
@@ -283,14 +397,10 @@ app.post("/phone-verify-otp", async (req, res) => {
             return res.status(400).json({ success: false, error: "Invalid OTP" });
         }
 
-        // ✅ OTP verified — clear it
         delete global._otpStore[phone];
 
-        // Look for existing user
         let user = await User.findOne({ phone: phone });
 
-        // 🧠 Truecaller-style logic:
-        // If user has a REAL name (not "Guest XXXX"), log them in directly
         if (user && user.name && !user.name.startsWith("Guest ")) {
             console.log("✅ Phone login (returning user):", phone);
 
@@ -304,7 +414,6 @@ app.post("/phone-verify-otp", async (req, res) => {
             });
         }
 
-        // 📝 First-time user OR user still has "Guest" name → ask for name
         console.log("📝 Phone needs name:", phone);
 
         res.json({
@@ -320,7 +429,7 @@ app.post("/phone-verify-otp", async (req, res) => {
 });
 
 // ============================================================
-// PHONE: SAVE NAME (after verify when needsName: true)
+// PHONE: SAVE NAME
 // ============================================================
 app.post("/phone-save-name", async (req, res) => {
     try {
@@ -332,11 +441,9 @@ app.post("/phone-save-name", async (req, res) => {
 
         const cleanName = name.trim().slice(0, 60);
 
-        // Find or create user with the given name
         let user = await User.findOne({ phone: phone });
 
         if (!user) {
-            // Brand new user
             const randomPass = crypto.randomBytes(20).toString("hex");
             const hashed = await bcrypt.hash(randomPass, 10);
 
@@ -348,7 +455,6 @@ app.post("/phone-save-name", async (req, res) => {
             });
             console.log("✅ Phone signup with name:", phone, "→", cleanName);
         } else {
-            // Update the name for existing user
             user.name = cleanName;
             await user.save();
             console.log("✅ Phone name updated:", phone, "→", cleanName);
@@ -428,27 +534,6 @@ app.post("/verify-payment", async (req, res) => {
             .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
             .update(body.toString())
             .digest("hex");
-        // if (expectedSignature === razorpay_signature) {
-        //     console.log("✅ Payment verified:", razorpay_payment_id);
-        //     try {
-        //         const token = req.headers.authorization?.replace("Bearer ", "");
-        //         if (token) {
-        //             const decoded = jwt.verify(token, JWT_SECRET);
-        //             await Order.create({
-        //                 userId: decoded.userId,
-        //                 items,
-        //                 amount,
-        //                 paymentId: razorpay_payment_id,
-        //                 orderId: razorpay_order_id,
-        //             });
-        //             console.log("✅ Order saved to DB");
-        //         }
-        //     } catch (e) {
-        //         console.warn("⚠️ Could not save order:", e.message);
-        //     }
-        //     return res.json({ success: true, payment_id: razorpay_payment_id });
-        // }
-
 
         if (expectedSignature === razorpay_signature) {
             console.log("✅ Payment verified:", razorpay_payment_id);
@@ -474,7 +559,6 @@ app.post("/verify-payment", async (req, res) => {
                 console.warn("⚠️ Could not save order:", e.message);
             }
 
-            // 📧 Send order confirmation email — only if we have a user email
             if (savedUser && savedUser.email) {
                 sendOrderEmail({
                     to: savedUser.email,
@@ -528,30 +612,6 @@ app.post("/reserve", async (req, res) => {
             }
         } catch (e) { /* guest booking is fine */ }
 
-        // const reservation = await Reservation.create({
-        //     userId,
-        //     name: name.trim(),
-        //     email: email.trim(),
-        //     phone: phone.trim(),
-        //     date,
-        //     time,
-        //     persons,
-        // });
-
-        // console.log("✅ Reservation created:", reservation._id, name, date, time);
-
-        // res.json({
-        //     success: true,
-        //     message: "Reservation confirmed!",
-        //     reservation: {
-        //         id: reservation._id,
-        //         name: reservation.name,
-        //         date: reservation.date,
-        //         time: reservation.time,
-        //         persons: reservation.persons,
-        //     },
-        // });
-
         const reservation = await Reservation.create({
             userId,
             name: name.trim(),
@@ -564,7 +624,6 @@ app.post("/reserve", async (req, res) => {
 
         console.log("✅ Reservation created:", reservation._id, name, date, time);
 
-        // 📧 Send confirmation email (fire-and-forget — doesn't block response)
         sendReservationEmail({
             to: reservation.email,
             name: reservation.name,
