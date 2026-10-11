@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <title>Menu | Mixtape Kitchen</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -24,7 +25,7 @@
 
     <style>
         /* ============================================================
-           FILTER BAR — search + veg toggle + price
+           FILTER BAR
            ============================================================ */
         .menu-filters {
             background: #fff;
@@ -70,7 +71,6 @@
             pointer-events: none;
         }
 
-        /* Veg / Non-Veg toggle */
         .veg-toggle {
             display: inline-flex;
             align-items: center;
@@ -123,7 +123,6 @@
         .veg-toggle button.active .dot { border-color: #fff; }
         .veg-toggle button.active .dot::after { background: #fff; }
 
-        /* Price filter */
         .price-filter {
             display: inline-flex;
             align-items: center;
@@ -150,9 +149,39 @@
             text-align: right;
         }
 
-        /* ============================================================
-           MENU CARD (dynamic)
-           ============================================================ */
+        /* Category tabs — reuse .nav-pills look but ensure consistency */
+        .cat-tabs-wrap {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+        .cat-tabs-wrap .cat-tab {
+            padding: 10px 22px;
+            background: #fff;
+            border: 1.5px solid #eee;
+            border-radius: 30px;
+            font-family: "Poppins", sans-serif;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .25s ease;
+        }
+        .cat-tabs-wrap .cat-tab:hover {
+            border-color: #c8a97e;
+            color: #c8a97e;
+        }
+        .cat-tabs-wrap .cat-tab.active {
+            background: #c8a97e;
+            border-color: #c8a97e;
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(200,169,126,0.35);
+        }
+
+        /* Dynamic grid */
         .dyn-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -190,7 +219,6 @@
         }
         .dyn-card:hover .img-wrap img { transform: scale(1.07); }
 
-        /* Veg / Non-veg indicator */
         .veg-badge {
             position: absolute;
             top: 12px;
@@ -227,7 +255,6 @@
         .veg-badge .lbl { color: #2e7d32; }
         .veg-badge.nonveg .lbl { color: #b71c1c; }
 
-        /* Category tag */
         .cat-tag {
             position: absolute;
             top: 12px;
@@ -301,7 +328,6 @@
             box-shadow: 0 10px 26px rgba(200,169,126,0.5);
         }
 
-        /* Empty / loading */
         .menu-msg {
             text-align: center;
             padding: 60px 20px;
@@ -318,7 +344,7 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .menu-filters { padding: 16px; gap: 12px; }
             .menu-filters .search-box { flex: 1 1 100%; }
             .veg-toggle { flex: 1 1 100%; justify-content: space-between; }
@@ -346,7 +372,9 @@
                             <span class="text">hello@feliciano.in</span>
                         </div>
                         <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
-                            <p class="mb-0 register-link"><span>Open hours:</span> <span>Monday - Sunday</span> <span>8:00AM - 9:00PM</span></p>
+                            <p class="mb-0 register-link">
+                                <span>Open hours:</span> <span>Monday - Sunday</span> <span>8:00AM - 9:00PM</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -402,7 +430,7 @@
     <section class="ftco-section">
         <div class="container">
 
-            <!-- FILTERS -->
+            <!-- FILTER BAR -->
             <div class="menu-filters">
                 <div class="search-box">
                     <span class="icon ion-ios-search"></span>
@@ -411,12 +439,8 @@
 
                 <div class="veg-toggle" id="vegToggle">
                     <button data-filter="all" class="active">All</button>
-                    <button data-filter="veg">
-                        <span class="dot"></span> Veg
-                    </button>
-                    <button data-filter="non-veg">
-                        <span class="dot nonveg"></span> Non-Veg
-                    </button>
+                    <button data-filter="veg"><span class="dot"></span> Veg</button>
+                    <button data-filter="non-veg"><span class="dot nonveg"></span> Non-Veg</button>
                 </div>
 
                 <div class="price-filter">
@@ -427,14 +451,14 @@
             </div>
 
             <!-- CATEGORY TABS -->
-            <div class="nav nav-pills d-flex text-center mb-4" id="catTabs" role="tablist" style="justify-content:center; gap:8px; flex-wrap:wrap;">
-                <a class="nav-link ftco-animate active" data-category="All">All</a>
-                <a class="nav-link ftco-animate" data-category="Breakfast">Breakfast</a>
-                <a class="nav-link ftco-animate" data-category="Lunch">Lunch</a>
-                <a class="nav-link ftco-animate" data-category="Dinner">Dinner</a>
-                <a class="nav-link ftco-animate" data-category="Drinks">Drinks</a>
-                <a class="nav-link ftco-animate" data-category="Desserts">Desserts</a>
-                <a class="nav-link ftco-animate" data-category="Wine">Wine</a>
+            <div class="cat-tabs-wrap" id="catTabs">
+                <a class="cat-tab active" data-category="All">All</a>
+                <a class="cat-tab" data-category="Breakfast">Breakfast</a>
+                <a class="cat-tab" data-category="Lunch">Lunch</a>
+                <a class="cat-tab" data-category="Dinner">Dinner</a>
+                <a class="cat-tab" data-category="Drinks">Drinks</a>
+                <a class="cat-tab" data-category="Desserts">Desserts</a>
+                <a class="cat-tab" data-category="Wine">Wine</a>
             </div>
 
             <!-- MENU GRID -->
@@ -453,7 +477,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <p>© <script>document.write(new Date().getFullYear());</script> Mixtape Kitchen. All rights reserved.</p>
+                    <p>&copy; <script>document.write(new Date().getFullYear());</script> Mixtape Kitchen. All rights reserved.</p>
                 </div>
             </div>
         </div>
@@ -486,46 +510,40 @@
 
     <script>
         // ============================================
-        // CONFIG
+        // BACKEND URL — auto-detect local vs production
         // ============================================
-        const BACKEND_URL = "https://feliciano-master.onrender.com";
-        // 🔧 Local testing: comment above and uncomment below:
-        // const BACKEND_URL = "http://localhost:5000";
+        const BACKEND_URL = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+            ? "http://localhost:5000"
+            : "https://feliciano-master.onrender.com";
+
+        console.log("🔗 Backend:", BACKEND_URL);
 
         // ============================================
         // STATE
         // ============================================
         let allItems = [];
-        let filters = {
+        const filters = {
             search: "",
-            vegType: "all",       // all | veg | non-veg
-            category: "All",      // All | Breakfast | Lunch ...
+            vegType: "all",
+            category: "All",
             maxPrice: 1000,
         };
 
         const menuArea = document.getElementById("menuArea");
 
         // ============================================
-        // CART STORAGE FUNCTIONS
+        // CART HELPERS
         // ============================================
-        function getCart() {
-            return JSON.parse(localStorage.getItem("cart")) || [];
-        }
-        function saveCart(cart) {
-            localStorage.setItem("cart", JSON.stringify(cart));
-            updateCartCount();
-        }
+        function getCart() { return JSON.parse(localStorage.getItem("cart")) || []; }
+        function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); updateCartCount(); }
         function updateCartCount() {
             const cart = getCart();
             let count = 0;
-            cart.forEach(item => { count += Number(item.quantity) || 0; });
+            cart.forEach(i => { count += Number(i.quantity) || 0; });
             const el = document.getElementById("nav-cart-count");
             if (el) el.textContent = count;
         }
 
-        // ============================================
-        // TOAST
-        // ============================================
         function showToast(msg) {
             let toast = document.getElementById("cart-toast");
             if (!toast) {
@@ -544,9 +562,6 @@
             }, 2200);
         }
 
-        // ============================================
-        // ADD TO CART
-        // ============================================
         document.addEventListener("click", function (e) {
             const btn = e.target.closest(".order-now-btn");
             if (!btn) return;
@@ -554,16 +569,16 @@
 
             if (window.LoginGate && !window.LoginGate.requireLogin("/menu")) return;
 
-            const id       = btn.dataset.id;
-            const name     = btn.dataset.name;
-            const price    = Number(btn.dataset.price);
-            const image    = btn.dataset.image;
+            const id    = btn.dataset.id;
+            const name  = btn.dataset.name;
+            const price = Number(btn.dataset.price);
+            const image = btn.dataset.image;
 
             const cart = getCart();
-            const existingIndex = cart.findIndex(i => String(i.id) === String(id));
+            const idx = cart.findIndex(i => String(i.id) === String(id));
 
-            if (existingIndex !== -1) {
-                cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 0) + 1;
+            if (idx !== -1) {
+                cart[idx].quantity = (Number(cart[idx].quantity) || 0) + 1;
             } else {
                 cart.push({ id, name, price, image, quantity: 1 });
             }
@@ -572,25 +587,52 @@
         });
 
         // ============================================
-        // FETCH MENU FROM BACKEND
+        // FETCH MENU
         // ============================================
         async function loadMenu() {
+            menuArea.innerHTML = `
+                <div class="menu-msg">
+                    <div class="spinner"></div>
+                    Loading menu...
+                </div>`;
+
             try {
                 const res = await fetch(`${BACKEND_URL}/menu`);
-                const data = await res.json();
+                const text = await res.text();   // read raw first, in case it's HTML
 
-                if (!res.ok || !data.success) throw new Error(data.error || "Failed to load");
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error("Server returned non-JSON:", text.slice(0, 200));
+                    menuArea.innerHTML = `
+                        <div class="menu-msg">
+                            ⚠️ Backend at <b>${BACKEND_URL}</b> did not return JSON.<br>
+                            <small style="color:#bbb;">${text.slice(0, 120)}…</small>
+                        </div>`;
+                    return;
+                }
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.error || "Failed to load menu");
+                }
 
                 allItems = data.items || [];
+                console.log("📦 Loaded", allItems.length, "items");
                 applyFilters();
+
             } catch (err) {
                 console.error("Menu load error:", err);
-                menuArea.innerHTML = `<div class="menu-msg">⚠️ Could not load menu. ${err.message}</div>`;
+                menuArea.innerHTML = `
+                    <div class="menu-msg">
+                        ⚠️ Could not load menu.<br>
+                        <small style="color:#bbb;">${err.message}</small>
+                    </div>`;
             }
         }
 
         // ============================================
-        // RENDER MENU
+        // RENDER
         // ============================================
         function renderMenu(items) {
             if (!items.length) {
@@ -600,9 +642,9 @@
 
             menuArea.innerHTML = `
                 <div class="dyn-grid">
-                    ${items.map((item, idx) => {
-                        const type = item.type === "non-veg" ? "nonveg" : "veg";
-                        const typeLabel = item.type === "non-veg" ? "Non-Veg" : "Veg";
+                    ${items.map((item, i) => {
+                        const isNonVeg = item.type === "non-veg";
+                        const typeLabel = isNonVeg ? "Non-Veg" : "Veg";
                         const desc = (item.description && item.description.trim())
                             || (item.ingredients && item.ingredients.length
                                 ? item.ingredients.join(" · ")
@@ -610,11 +652,11 @@
                         const img = item.image || "images/default-food.jpg";
 
                         return `
-                            <div class="dyn-card" style="animation-delay:${idx * 0.03}s;">
+                            <div class="dyn-card" style="animation-delay:${i * 0.03}s;">
                                 <div class="img-wrap">
                                     <img src="${img}" alt="${item.name}"
-                                         onerror="this.src='https://via.placeholder.com/400x200/c8a97e/ffffff?text=F'">
-                                    <span class="veg-badge ${type === "nonveg" ? "nonveg" : ""}">
+                                        onerror="this.src='https://via.placeholder.com/400x200/c8a97e/ffffff?text=F'">
+                                    <span class="veg-badge ${isNonVeg ? "nonveg" : ""}">
                                         <span class="dot"></span><span class="lbl">${typeLabel}</span>
                                     </span>
                                     <span class="cat-tag">${item.category}</span>
@@ -628,30 +670,23 @@
                                             data-id="${item._id}"
                                             data-name="${item.name}"
                                             data-price="${item.price}"
-                                            data-image="${item.image || ''}">
+                                            data-image="${item.image || ""}">
                                             <span class="ion-ios-cart"></span> Order Now
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                     }).join("")}
-                </div>
-            `;
+                </div>`;
         }
 
         // ============================================
-        // APPLY FILTERS
+        // FILTERS
         // ============================================
         function applyFilters() {
             let list = allItems.slice();
-
-            if (filters.category !== "All") {
-                list = list.filter(i => i.category === filters.category);
-            }
-            if (filters.vegType !== "all") {
-                list = list.filter(i => i.type === filters.vegType);
-            }
+            if (filters.category !== "All") list = list.filter(i => i.category === filters.category);
+            if (filters.vegType !== "all") list = list.filter(i => i.type === filters.vegType);
             if (filters.search) {
                 const q = filters.search.toLowerCase();
                 list = list.filter(i =>
@@ -660,15 +695,10 @@
                     (i.ingredients || []).join(" ").toLowerCase().includes(q)
                 );
             }
-            if (filters.maxPrice < 1000) {
-                list = list.filter(i => Number(i.price) <= filters.maxPrice);
-            }
+            if (filters.maxPrice < 1000) list = list.filter(i => Number(i.price) <= filters.maxPrice);
             renderMenu(list);
         }
 
-        // ============================================
-        // WIRE UP FILTERS
-        // ============================================
         document.getElementById("searchInput").addEventListener("input", (e) => {
             filters.search = e.target.value.trim();
             applyFilters();
@@ -683,14 +713,14 @@
             applyFilters();
         });
 
-        document.querySelectorAll("#catTabs .nav-link").forEach(tab => {
-            tab.addEventListener("click", (e) => {
-                e.preventDefault();
-                document.querySelectorAll("#catTabs .nav-link").forEach(t => t.classList.remove("active"));
-                tab.classList.add("active");
-                filters.category = tab.dataset.category;
-                applyFilters();
-            });
+        document.getElementById("catTabs").addEventListener("click", (e) => {
+            const tab = e.target.closest(".cat-tab");
+            if (!tab) return;
+            e.preventDefault();
+            document.querySelectorAll("#catTabs .cat-tab").forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            filters.category = tab.dataset.category;
+            applyFilters();
         });
 
         document.getElementById("priceRange").addEventListener("input", (e) => {
@@ -707,8 +737,8 @@
             loadMenu();
         });
 
-        window.addEventListener("storage", (event) => {
-            if (event.key === "cart") updateCartCount();
+        window.addEventListener("storage", (e) => {
+            if (e.key === "cart") updateCartCount();
         });
     </script>
 
