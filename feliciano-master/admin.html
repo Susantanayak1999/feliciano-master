@@ -181,7 +181,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
         .status-box {
             background: #fff;
@@ -203,6 +203,36 @@
         .preparing-box { border-color: var(--orange); }
         .delivered-box { border-color: var(--green); }
         .cancelled-box { border-color: var(--red); }
+
+        /* ===== SEARCH BAR (NEW) ===== */
+        .search-container {
+            margin-bottom: 24px;
+            position: relative;
+            max-width: 500px;
+        }
+        .search-container i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold);
+            font-size: 18px;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .search-container input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 4px 20px rgba(200, 169, 126, 0.15);
+        }
 
         /* ===== TABS ===== */
         .tab-content { display: none; }
@@ -323,116 +353,28 @@
             transform: translateY(-4px);
             box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15);
         }
-
-        /* Left Side */
-        .res-left {
-            flex: 1;
-            padding: 28px 32px;
-            position: relative;
-        }
-        .res-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .res-header h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-            color: #1a1a1a;
-            font-weight: 700;
-            margin: 0;
-        }
-        .res-guests {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #fdfaf5;
-            color: var(--gold-dark);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            border: 1px solid rgba(200, 169, 126, 0.3);
-            margin-bottom: 20px;
-        }
+        .res-left { flex: 1; padding: 28px 32px; position: relative; }
+        .res-header { display: flex; align-items: center; gap: 15px; margin-bottom: 16px; flex-wrap: wrap; }
+        .res-header h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #1a1a1a; font-weight: 700; margin: 0; }
+        .res-guests { display: inline-flex; align-items: center; gap: 8px; background: #fdfaf5; color: var(--gold-dark); padding: 6px 14px; border-radius: 20px; font-size: 14px; border: 1px solid rgba(200, 169, 126, 0.3); margin-bottom: 20px; }
         .res-guests i { color: var(--gold); }
-
-        .res-contact {
-            display: flex;
-            gap: 24px;
-            font-size: 14px;
-            color: #555;
-            flex-wrap: wrap;
-        }
-        .res-contact span {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f8f9fa;
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
+        .res-contact { display: flex; gap: 24px; font-size: 14px; color: #555; flex-wrap: wrap; }
+        .res-contact span { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px 16px; border-radius: 10px; border: 1px solid #eee; }
         .res-contact i { color: #888; }
-
-        /* Right Side (Ticket) */
         .res-right {
             background: linear-gradient(135deg, rgba(200, 169, 126, 0.08), rgba(200, 169, 126, 0.03));
-            padding: 28px 32px;
-            border-left: 2px dashed rgba(200, 169, 126, 0.4);
-            min-width: 240px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
+            padding: 28px 32px; border-left: 2px dashed rgba(200, 169, 126, 0.4); min-width: 240px;
+            display: flex; flex-direction: column; justify-content: center; gap: 20px; position: relative;
         }
-        /* The ticket punch holes */
         .res-right::before, .res-right::after {
-            content: '';
-            position: absolute;
-            left: -10px;
-            width: 20px;
-            height: 20px;
-            background: var(--bg);
-            border-radius: 50%;
-            border: 1px solid rgba(200, 169, 126, 0.2);
+            content: ''; position: absolute; left: -10px; width: 20px; height: 20px; background: var(--bg); border-radius: 50%; border: 1px solid rgba(200, 169, 126, 0.2);
         }
         .res-right::before { top: -10px; }
         .res-right::after { bottom: -10px; }
-
-        .ticket-date, .ticket-time {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .ticket-date i, .ticket-time i {
-            font-size: 24px;
-            color: var(--gold);
-            background: #fff;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(200, 169, 126, 0.2);
-        }
-        .ticket-date small, .ticket-time small {
-            display: block;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--muted);
-            margin-bottom: 2px;
-        }
-        .ticket-date span, .ticket-time span {
-            display: block;
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
+        .ticket-date, .ticket-time { display: flex; align-items: center; gap: 14px; }
+        .ticket-date i, .ticket-time i { font-size: 24px; color: var(--gold); background: #fff; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 10px rgba(200, 169, 126, 0.2); }
+        .ticket-date small, .ticket-time small { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
+        .ticket-date span, .ticket-time span { display: block; font-size: 16px; font-weight: 700; color: #1a1a1a; }
 
         .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px dashed #ddd;}
         .empty-state i { font-size: 40px; color: #ccc; margin-bottom: 15px; }
@@ -460,11 +402,7 @@
             .card-header { flex-direction: column; gap: 10px; }
             .res-card { flex-direction: column; }
             .res-right { 
-                border-left: none; 
-                border-top: 2px dashed rgba(200, 169, 126, 0.4); 
-                flex-direction: row; 
-                justify-content: flex-start;
-                padding: 20px 32px;
+                border-left: none; border-top: 2px dashed rgba(200, 169, 126, 0.4); flex-direction: row; justify-content: flex-start; padding: 20px 32px;
             }
             .res-right::before { left: -10px; top: -10px; }
             .res-right::after { left: auto; right: -10px; top: -10px; bottom: auto; }
@@ -567,6 +505,13 @@
 
         <!-- ORDERS TAB -->
         <div id="tab-orders" class="tab-content active">
+            
+            <!-- SEARCH BAR -->
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by Order ID, Name, Email, or Payment ID..." oninput="renderOrderList()">
+            </div>
+
             <div id="orders-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading orders...</div>
             <div id="orders-list"></div>
         </div>
@@ -646,7 +591,7 @@
             return { text: Math.floor(diffHours / 24) + " days ago", urgent: true };
         }
 
-        // FILTER LOGIC
+        // FILTER LOGIC (Status)
         function filterStatus(status) {
             currentFilter = (currentFilter === status) ? "All" : status; 
 
@@ -658,21 +603,40 @@
             renderOrderList();
         }
 
-        // RENDER ORDER LIST
+        // RENDER ORDER LIST (Handles Status + Search)
         function renderOrderList() {
             const listEl = document.getElementById("orders-list");
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
             
             let filteredData = allOrdersData;
+
+            // 1. Filter by Status
             if (currentFilter !== "All") {
-                filteredData = allOrdersData.filter(o => (o.status || 'Confirmed') === currentFilter);
+                filteredData = filteredData.filter(o => (o.status || 'Confirmed') === currentFilter);
             }
 
+            // 2. Filter by Search
+            if (searchTerm) {
+                filteredData = filteredData.filter(order => {
+                    const orderId = order._id ? order._id.toLowerCase() : "";
+                    const paymentId = order.paymentId ? order.paymentId.toLowerCase() : "";
+                    const customerName = order.userId && order.userId.name ? order.userId.name.toLowerCase() : "";
+                    const customerEmail = order.userId && order.userId.email ? order.userId.email.toLowerCase() : "";
+                    
+                    return orderId.includes(searchTerm) || 
+                           paymentId.includes(searchTerm) || 
+                           customerName.includes(searchTerm) || 
+                           customerEmail.includes(searchTerm);
+                });
+            }
+
+            // Render Results
             if (!filteredData.length) {
                 listEl.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-receipt"></i>
-                        <h3>No ${currentFilter === "All" ? "" : currentFilter} Orders Found</h3>
-                        <p>There are currently no orders matching this status.</p>
+                        <i class="fas fa-search"></i>
+                        <h3>No Orders Found</h3>
+                        <p>No orders match your current filter or search query.</p>
                     </div>
                 `;
                 return;
