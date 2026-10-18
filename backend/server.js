@@ -57,6 +57,7 @@ const orderSchema = new mongoose.Schema({
     amount: Number,
     paymentId: String,
     orderId: String,
+    deliveryAddress: Object, // 👈 ADD THIS LINE
     status: { type: String, default: "Confirmed" }, // 👈 ORDER STATUS
     createdAt: { type: Date, default: Date.now },
 });
@@ -82,15 +83,15 @@ const Reservation = mongoose.model("Reservation", reservationSchema);
 // MenuItem Schema
 // ============================================================
 const menuItemSchema = new mongoose.Schema({
-    name:        { type: String, required: true },
+    name: { type: String, required: true },
     description: { type: String, default: "" },
-    price:       { type: Number, required: true },
-    image:       { type: String, default: "" },
-    category:    { type: String, required: true },
-    type:        { type: String, enum: ["veg", "non-veg"], default: "veg" },
+    price: { type: Number, required: true },
+    image: { type: String, default: "" },
+    category: { type: String, required: true },
+    type: { type: String, enum: ["veg", "non-veg"], default: "veg" },
     ingredients: { type: [String], default: [] },
-    available:   { type: Boolean, default: true },
-    createdAt:   { type: Date, default: Date.now },
+    available: { type: Boolean, default: true },
+    createdAt: { type: Date, default: Date.now },
 });
 const MenuItem = mongoose.model("MenuItem", menuItemSchema);
 
@@ -177,7 +178,7 @@ app.get("/", (req, res) => {
 app.get("/admin/setup-susanta", async (req, res) => {
     try {
         let user = await User.findOne({ email: "adminsusanta@gmail.com" });
-        
+
         if (!user) {
             // Create the admin user from scratch
             const hashed = await bcrypt.hash("admin123", 10);
@@ -399,12 +400,12 @@ app.post("/forgot-password", async (req, res) => {
         if (!email) return res.status(400).json({ success: false, error: "Email required" });
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) return res.json({ success: true, message: "If that email exists, a reset link has been sent." });
-        
+
         const token = crypto.randomBytes(32).toString("hex");
         user.resetToken = token;
         user.resetTokenExpiry = Date.now() + 30 * 60 * 1000;
         await user.save();
-        
+
         const resetUrl = `https://mixtape-kitchen.netlify.app/reset-password.html?token=${token}`;
         try {
             await brevoSend({
@@ -526,8 +527,7 @@ app.post("/create-order", async (req, res) => {
 
 app.post("/verify-payment", async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount } = req.body;
-        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) return res.status(400).json({ success: false, error: "Missing fields" });
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount, deliveryAddress } = req.body; if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) return res.status(400).json({ success: false, error: "Missing fields" });
         const body = razorpay_order_id + "|" + razorpay_payment_id;
         const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
 
@@ -544,6 +544,7 @@ app.post("/verify-payment", async (req, res) => {
                         amount,
                         paymentId: razorpay_payment_id,
                         orderId: razorpay_order_id,
+                        deliveryAddress: deliveryAddress, // 👈 ADD THIS LINE
                     });
                     savedUser = await User.findById(decoded.userId);
                 }
@@ -583,7 +584,7 @@ app.post("/reserve", async (req, res) => {
     try {
         const { name, email, phone, date, time, persons } = req.body;
         if (!name || !email || !phone || !date || !time || !persons) return res.status(400).json({ success: false, error: "All fields required" });
-        
+
         let userId = null;
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
