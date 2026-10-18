@@ -206,53 +206,18 @@
            RESERVATIONS PAGE TOGGLE
            ============================================================ */
         .res-toggle-wrap {
-            display: flex;
-            background: #fff;
-            border-radius: 16px;
-            padding: 6px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            border: 1px solid #eee;
-            width: fit-content;
+            display: flex; background: #fff; border-radius: 16px; padding: 6px; margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); border: 1px solid #eee; width: fit-content;
         }
-        
         .res-toggle-btn {
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: #777;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding: 12px 30px; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 14px;
+            font-weight: 600; color: #777; background: transparent; border: none; cursor: pointer;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
         }
-        
-        .res-toggle-btn:hover {
-            color: var(--gold);
-        }
-        
-        .res-toggle-btn.active {
-            background: var(--gold);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(200, 169, 126, 0.3);
-        }
-
-        .res-toggle-btn .count-badge {
-            background: rgba(0,0,0,0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-        }
-        
-        .res-toggle-btn.active .count-badge {
-            background: rgba(255,255,255,0.3);
-            color: #fff;
-        }
+        .res-toggle-btn:hover { color: var(--gold); }
+        .res-toggle-btn.active { background: var(--gold); color: #fff; box-shadow: 0 4px 15px rgba(200, 169, 126, 0.3); }
+        .res-toggle-btn .count-badge { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+        .res-toggle-btn.active .count-badge { background: rgba(255,255,255,0.3); color: #fff; }
 
         /* ============================================================
            RESERVATIONS CARDS
@@ -322,6 +287,43 @@
         .loading i { font-size: 30px; color: var(--gold); animation: spin 1s linear infinite; margin-bottom: 15px; display: block; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
+        /* ============================================================
+           CUSTOM CONFIRMATION MODAL
+           ============================================================ */
+        .custom-modal-overlay {
+            position: fixed; inset: 0; background: rgba(17, 17, 17, 0.6); backdrop-filter: blur(4px);
+            z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .custom-modal-overlay.show { display: flex; opacity: 1; }
+        
+        .custom-modal {
+            background: #fff; border-radius: 24px; padding: 35px; max-width: 420px; width: 100%;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2); text-align: center;
+            transform: scale(0.9) translateY(20px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-modal-overlay.show .custom-modal { transform: scale(1) translateY(0); }
+        
+        .custom-modal-icon {
+            width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center; font-size: 30px;
+        }
+        
+        .custom-modal h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: #1a1a1a; margin-bottom: 10px; }
+        .custom-modal p { color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+        
+        .custom-modal-actions { display: flex; gap: 12px; justify-content: center; }
+        
+        .modal-btn {
+            padding: 12px 24px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-size: 14px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; flex: 1; border: none;
+        }
+        .modal-btn-cancel { background: #f4f6f9; color: #555; }
+        .modal-btn-cancel:hover { background: #e0e0e0; color: #333; }
+        
+        .modal-btn-confirm { background: var(--gold); color: #fff; box-shadow: 0 6px 15px rgba(200, 169, 126, 0.3); }
+        .modal-btn-confirm:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(200, 169, 126, 0.4); }
+
         /* Mobile Responsive */
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -353,6 +355,7 @@
             .status-row { justify-content: space-between; width: 100%; }
             .custom-dropdown { width: 100%; margin-top: 10px; }
             .dropdown-btn { justify-content: space-between; }
+            .custom-modal-actions { flex-direction: column; }
         }
     </style>
 </head>
@@ -486,6 +489,19 @@
 
     </main>
 
+    <!-- 🚀 CUSTOM CONFIRMATION MODAL -->
+    <div class="custom-modal-overlay" id="confirmModal">
+        <div class="custom-modal">
+            <div class="custom-modal-icon" id="modalIcon"></div>
+            <h3 id="modalTitle">Are you sure?</h3>
+            <p id="modalMessage">This action cannot be undone.</p>
+            <div class="custom-modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeConfirmModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const BACKEND_URL = "https://feliciano-master.onrender.com";
         const token = localStorage.getItem("token");
@@ -546,7 +562,7 @@
         }
 
         // ============================================================
-        // ORDERS LOGIC (UNCHANGED)
+        // ORDERS LOGIC
         // ============================================================
         function renderOrderList() {
             const listEl = document.getElementById("orders-list");
@@ -730,7 +746,7 @@
         }
 
         // ============================================================
-        // RESERVATIONS LOGIC (TOGGLE VIEW)
+        // RESERVATIONS LOGIC
         // ============================================================
         function switchResTab(view) {
             document.querySelectorAll('.res-toggle-btn').forEach(el => el.classList.remove('active'));
@@ -802,10 +818,10 @@
                                 </div>
                             </div>
                             <div class="res-actions">
-                                <button class="btn-action btn-cancel" onclick="updateReservationStatus('${rsv._id}', 'cancelled', this)">
+                                <button class="btn-action btn-cancel" onclick="promptReservationStatus('${rsv._id}', 'cancelled', this)">
                                     <i class="fas fa-times"></i> Cancel
                                 </button>
-                                <button class="btn-action btn-approve" onclick="updateReservationStatus('${rsv._id}', 'approved', this)">
+                                <button class="btn-action btn-approve" onclick="promptReservationStatus('${rsv._id}', 'approved', this)">
                                     <i class="fas fa-check"></i> Approve
                                 </button>
                             </div>
@@ -868,11 +884,60 @@
         }
 
         // ============================================================
-        // UPDATE STATUS (APPROVE/CANCEL)
+        // CUSTOM MODAL LOGIC
         // ============================================================
-        async function updateReservationStatus(id, status, btnElement) {
-            const actionText = status === 'approved' ? 'Approve' : 'Cancel';
-            if (!confirm(`Are you sure you want to ${actionText.toLowerCase()} this reservation? An email will be sent to the customer.`)) return;
+        let pendingActionId = null;
+        let pendingActionStatus = null;
+        let pendingActionBtn = null;
+
+        function promptReservationStatus(id, status, btnElement) {
+            pendingActionId = id;
+            pendingActionStatus = status;
+            pendingActionBtn = btnElement;
+
+            const isApprove = status === 'approved';
+            const iconBox = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const msg = document.getElementById('modalMessage');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+
+            if (isApprove) {
+                iconBox.style.background = '#e8f5e9';
+                iconBox.style.color = '#2e7d32';
+                iconBox.innerHTML = '<i class="fas fa-check-circle"></i>';
+                title.innerText = 'Approve Reservation?';
+                msg.innerText = 'This will confirm the table and send a confirmation email to the customer.';
+                confirmBtn.style.background = '#2e7d32';
+            } else {
+                iconBox.style.background = '#ffebee';
+                iconBox.style.color = '#c62828';
+                iconBox.innerHTML = '<i class="fas fa-times-circle"></i>';
+                title.innerText = 'Cancel Reservation?';
+                msg.innerText = 'This will cancel the booking and send a cancellation email to the customer.';
+                confirmBtn.style.background = '#c62828';
+            }
+
+            document.getElementById('confirmModal').classList.add('show');
+            
+            // Attach the click event to the confirm button
+            confirmBtn.onclick = executeReservationStatus;
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+            pendingActionId = null;
+            pendingActionStatus = null;
+            pendingActionBtn = null;
+        }
+
+        async function executeReservationStatus() {
+            if (!pendingActionId) return;
+
+            const id = pendingActionId;
+            const status = pendingActionStatus;
+            const btnElement = pendingActionBtn;
+
+            closeConfirmModal();
 
             const originalText = btnElement.innerHTML;
             btnElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
@@ -891,7 +956,6 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    // Reload data. The item will disappear from Pending and go to History.
                     loadReservations(); 
                 } else {
                     alert("Failed to update: " + (data.error || "Unknown error"));
