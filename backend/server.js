@@ -13,38 +13,26 @@ const app = express();
 app.use(cors());
 
 // ============================================================
-// 🚀 1. CAPTURE RAW BODY (MUST BE BEFORE ALL ROUTES)
-// This fixes the 500 error by ensuring the webhook gets the raw buffer
+// 🚀 1. RAZORPAY WEBHOOK ROUTE (MUST BE BEFORE express.json)
 // ============================================================
-app.use(express.json({
-    verify: (req, res, buf) => {
-        if (req.originalUrl.startsWith('/razorpay-webhook')) {
-            req.rawBody = buf;
-        }
-    }
-}));
-
-// ============================================================
-// 🚀 2. RAZORPAY WEBHOOK ROUTE (MUST BE AFTER MIDDLEWARE)
-// ============================================================
-app.post("/razorpay-webhook", async (req, res) => {
+app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (req, res) => {
     try {
         const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-
+        
         if (!webhookSecret) {
             console.error("❌ RAZORPAY_WEBHOOK_SECRET is not set in .env");
-            return res.status(500).send("Webhook secret not configured");
+            return res.status(200).json({ status: "ok" }); 
         }
 
         const signature = req.headers["x-razorpay-signature"];
-        const body = req.rawBody; // Now this will be populated correctly
+        const body = req.body; 
 
         if (!body) {
-            console.error("❌ Webhook Error: Body is null. Middleware failed.");
-            return res.status(400).json({ status: "error", message: "No body" });
+            console.error("❌ Webhook Body is null.");
+            return res.status(200).json({ status: "ok" });
         }
 
-        // 1. Verify the signature to ensure it's actually from Razorpay
+        // 1. Verify Signature
         const expectedSignature = crypto
             .createHmac("sha256", webhookSecret)
             .update(body)
@@ -52,70 +40,60 @@ app.post("/razorpay-webhook", async (req, res) => {
 
         if (expectedSignature !== signature) {
             console.error("❌ Invalid Webhook Signature");
-            return res.status(400).json({ status: "invalid signature" });
+            return res.status(200).json({ status: "ok" });
         }
 
-        // 2. Parse the payload
+        // 2. Parse Payload
         const payload = JSON.parse(body.toString());
         const event = payload.event;
 
         console.log(`🔔 Webhook Received: ${event}`);
 
-        // 3. Handle the payment success event
+        // 3. Handle ONLY the correct events
         if (event === "payment.captured" || event === "order.paid") {
             const paymentEntity = payload.payload.payment.entity;
             const orderId = paymentEntity.order_id;
             const paymentId = paymentEntity.id;
             const amount = (paymentEntity.amount / 100).toFixed(2);
 
-            console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Payment ID: ${paymentId}`);
+            console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Amount: ₹${amount}`);
 
-            // 🚀 EMAIL ALERT TO ADMIN
+            // Email Alert
             try {
                 await brevoSend({
                     to: "adminsusanta@gmail.com",
                     subject: `💰 New Payment Received: ₹${amount}`,
-                    html: `
-                    <div style="font-family: Arial, sans-serif; padding: 20px; background: #f4f6f9;">
-                        <div style="background: #fff; padding: 20px; border-radius: 10px; border-left: 5px solid #2e7d32;">
-                            <h2 style="color: #2e7d32; margin-top: 0;">Payment Successful!</h2>
-                            <p><strong>Order ID:</strong> ${orderId}</p>
-                            <p><strong>Payment ID:</strong> ${paymentId}</p>
-                            <p><strong>Amount:</strong> ₹${amount}</p>
-                            <p><strong>Customer Email:</strong> ${paymentEntity.email || "N/A"}</p>
-                            <p><strong>Customer Phone:</strong> ${paymentEntity.contact || "N/A"}</p>
-                            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                            <p style="font-size: 12px; color: #888;">This is an automated notification from your Razorpay Webhook.</p>
-                        </div>
-                    </div>`
+                    html: `<div style="padding:20px;"><h2 style="color:green;">Payment Successful!</h2><p><strong>Order ID:</strong> ${orderId}</p><p><strong>Amount:</strong> ₹${amount}</p></div>`
                 });
-                console.log("✅ Admin notification email sent.");
+                console.log("✅ Admin email sent.");
             } catch (emailErr) {
-                console.error("❌ Failed to send admin email:", emailErr.message);
+                console.error("❌ Email failed:", emailErr.message);
             }
 
-            // Check if order already exists in our DB
+            // Check DB
             const existingOrder = await Order.findOne({ orderId: orderId });
-
             if (existingOrder) {
-                console.log(`✅ Webhook confirmed: Order ${orderId} is safely in the database.`);
-                if (existingOrder.status !== "Confirmed") {
-                    existingOrder.status = "Confirmed";
-                    await existingOrder.save();
-                }
+                console.log(`✅ Webhook confirmed: Order ${orderId} is in DB.`);
             } else {
-                console.warn(`⚠️ Webhook: Order ${orderId} not found in DB. The user's browser might have crashed before saving.`);
+                console.warn(`⚠️ Webhook: Order ${orderId} not found in DB.`);
             }
+        } else {
+            console.log(`ℹ️ Ignoring event: ${event}`);
         }
 
-        // 4. Always return 200 OK so Razorpay knows we received it
+        // 4. ALWAYS return 200 OK
         res.status(200).json({ status: "ok" });
 
     } catch (err) {
-        console.error("❌ Webhook Error:", err);
-        res.status(500).json({ status: "error", message: err.message });
+        console.error("❌ Webhook processing error:", err);
+        res.status(200).json({ status: "ok" });
     }
 });
+
+// ============================================================
+// 🚀 2. NORMAL JSON PARSING (FOR ALL OTHER ROUTES)
+// ============================================================
+app.use(express.json());
 
 // ============================================================
 // MongoDB Connection
