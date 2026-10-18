@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String, default: null },
     phone: { type: String, default: null },
     picture: { type: String, default: null },
+    role: { type: String, default: "user" }, // 👈 ADMIN ROLE
     resetToken: { type: String, default: null },
     resetTokenExpiry: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
@@ -56,6 +57,7 @@ const orderSchema = new mongoose.Schema({
     amount: Number,
     paymentId: String,
     orderId: String,
+    status: { type: String, default: "Confirmed" }, // 👈 ORDER STATUS
     createdAt: { type: Date, default: Date.now },
 });
 const Order = mongoose.model("Order", orderSchema);
@@ -77,14 +79,14 @@ const reservationSchema = new mongoose.Schema({
 const Reservation = mongoose.model("Reservation", reservationSchema);
 
 // ============================================================
-// MenuItem Schema (NEW)
+// MenuItem Schema
 // ============================================================
 const menuItemSchema = new mongoose.Schema({
     name:        { type: String, required: true },
     description: { type: String, default: "" },
     price:       { type: Number, required: true },
     image:       { type: String, default: "" },
-    category:    { type: String, required: true }, // Breakfast / Lunch / Dinner / Drinks / Desserts / Wine
+    category:    { type: String, required: true },
     type:        { type: String, enum: ["veg", "non-veg"], default: "veg" },
     ingredients: { type: [String], default: [] },
     available:   { type: Boolean, default: true },
@@ -113,6 +115,22 @@ function authMiddleware(req, res, next) {
     }
 }
 
+async function adminMiddleware(req, res, next) {
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    if (!token) return res.status(401).json({ success: false, error: "No token" });
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const user = await User.findById(decoded.userId);
+        if (!user || user.role !== "admin") {
+            return res.status(403).json({ success: false, error: "Access denied. Admin only." });
+        }
+        req.userId = user._id;
+        next();
+    } catch (err) {
+        return res.status(401).json({ success: false, error: "Invalid token" });
+    }
+}
+
 // ============================================================
 // Razorpay
 // ============================================================
@@ -122,7 +140,7 @@ const razorpay = new Razorpay({
 });
 
 // ============================================================
-// Brevo Email Helper (HTTP API)
+// Brevo Email Helper
 // ============================================================
 async function brevoSend({ to, subject, html }) {
     if (!process.env.BREVO_API_KEY) {
@@ -149,10 +167,36 @@ async function brevoSend({ to, subject, html }) {
 }
 
 // ============================================================
-// Health Check
+// Health Check & Admin Setup
 // ============================================================
 app.get("/", (req, res) => {
     res.json({ status: "Mixtape Kitchen backend running 🎵" });
+});
+
+// ONE-TIME SETUP ROUTE FOR NEW ADMIN
+app.get("/admin/setup-susanta", async (req, res) => {
+    try {
+        let user = await User.findOne({ email: "adminsusanta@gmail.com" });
+        
+        if (!user) {
+            // Create the admin user from scratch
+            const hashed = await bcrypt.hash("admin123", 10);
+            user = await User.create({
+                name: "Admin Susanta",
+                email: "adminsusanta@gmail.com",
+                password: hashed,
+                role: "admin"
+            });
+            return res.send("✅ Success! Admin account created. Email: adminsusanta@gmail.com | Password: admin123");
+        } else {
+            // Upgrade existing user to admin
+            user.role = "admin";
+            await user.save();
+            return res.send("✅ Success! Existing user adminsusanta@gmail.com is now an Admin.");
+        }
+    } catch (err) {
+        res.send("❌ Error: " + err.message);
+    }
 });
 
 // ============================================================
@@ -182,7 +226,7 @@ app.post("/signup", async (req, res) => {
         res.json({
             success: true,
             token,
-            user: { id: user._id, name: user.name, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email, role: user.role },
         });
     } catch (err) {
         console.error("❌ Signup error:", err);
@@ -208,102 +252,10 @@ app.post("/login", async (req, res) => {
         res.json({
             success: true,
             token,
-            user: { id: user._id, name: user.name, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email, role: user.role },
         });
     } catch (err) {
         console.error("❌ Login error:", err);
-        res.status(500).json({ success: false, error: err.message });
-    }
-});
-
-// ============================================================
-// FORGOT PASSWORD — Send reset link via Brevo API
-// ============================================================
-app.post("/forgot-password", async (req, res) => {
-    try {
-        const { email } = req.body;
-        if (!email) {
-            return res.status(400).json({ success: false, error: "Email required" });
-        }
-
-        const user = await User.findOne({ email: email.toLowerCase() });
-
-        // Always return success (prevents email enumeration)
-        if (!user) {
-            console.log("📧 Forgot-password for unknown email:", email);
-            return res.json({ success: true, message: "If that email exists, a reset link has been sent." });
-        }
-
-        // Generate reset token
-        const token = crypto.randomBytes(32).toString("hex");
-        user.resetToken = token;
-        user.resetTokenExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes
-        await user.save();
-
-        console.log("🔑 Reset token for", email, ":", token);
-
-        const resetUrl = `https://mixtape-kitchen.netlify.app/reset-password.html?token=${token}`;
-
-        try {
-            await brevoSend({
-                to: user.email,
-                subject: "Reset Your Password — Mixtape Kitchen",
-                html: `
-                <div style="font-family:'Poppins',Arial,sans-serif;background:#f6f2ea;padding:40px 20px;">
-                  <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;">
-                    <div style="height:5px;background:linear-gradient(90deg,#c8a97e,#e8d4b8,#c8a97e);"></div>
-                    <div style="padding:40px;text-align:center;">
-                      <h1 style="font-family:Georgia,serif;color:#c8a97e;margin:0;font-size:30px;">Reset Password</h1>
-                      <p style="color:#666;font-size:14px;margin-top:12px;">Hi ${user.name}, we received a request to reset your password.</p>
-                      <a href="${resetUrl}" style="display:inline-block;margin-top:26px;padding:14px 32px;background:#c8a97e;color:#fff;text-decoration:none;border-radius:30px;font-weight:600;">Reset My Password</a>
-                      <p style="color:#999;font-size:12px;margin-top:26px;">This link expires in 30 minutes. If you didn't request this, ignore this email.</p>
-                    </div>
-                  </div>
-                </div>`,
-            });
-            console.log("✅ Reset email sent to", email);
-        } catch (e) {
-            console.error("❌ Reset email failed:", e.message);
-        }
-
-        res.json({ success: true, message: "If that email exists, a reset link has been sent." });
-
-    } catch (err) {
-        console.error("❌ Forgot password error:", err);
-        res.status(500).json({ success: false, error: err.message });
-    }
-});
-
-// ============================================================
-// RESET PASSWORD — Verify token and set new password
-// ============================================================
-app.post("/reset-password", async (req, res) => {
-    try {
-        const { token, newPassword } = req.body;
-        if (!token || !newPassword || newPassword.length < 6) {
-            return res.status(400).json({ success: false, error: "Invalid input" });
-        }
-
-        const user = await User.findOne({
-            resetToken: token,
-            resetTokenExpiry: { $gt: Date.now() },
-        });
-
-        if (!user) {
-            return res.status(400).json({ success: false, error: "Reset link is invalid or has expired." });
-        }
-
-        const hashed = await bcrypt.hash(newPassword, 10);
-        user.password = hashed;
-        user.resetToken = null;
-        user.resetTokenExpiry = null;
-        await user.save();
-
-        console.log("✅ Password reset for", user.email);
-        res.json({ success: true, message: "Password updated. Please sign in." });
-
-    } catch (err) {
-        console.error("❌ Reset password error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
@@ -346,7 +298,7 @@ app.post("/google-login", async (req, res) => {
         res.json({
             success: true,
             token,
-            user: { id: user._id, name: user.name, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email, role: user.role },
         });
 
     } catch (err) {
@@ -356,136 +308,129 @@ app.post("/google-login", async (req, res) => {
 });
 
 // ============================================================
-// PHONE: SEND OTP
+// PHONE: SEND OTP / VERIFY OTP / SAVE NAME
 // ============================================================
 app.post("/phone-send-otp", async (req, res) => {
     try {
         const { phone } = req.body;
-
         if (!phone || phone.length < 8) {
             return res.status(400).json({ success: false, error: "Invalid phone number" });
         }
-
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
         global._otpStore[phone] = {
             otp: otp,
             expiresAt: Date.now() + 5 * 60 * 1000,
         };
-
         console.log(`📱 OTP for ${phone}: ${otp}`);
-
-        res.json({
-            success: true,
-            message: "OTP sent (demo mode)",
-            demoOtp: otp,
-        });
-
+        res.json({ success: true, message: "OTP sent (demo mode)", demoOtp: otp });
     } catch (err) {
         console.error("❌ OTP send error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// PHONE: VERIFY OTP
-// ============================================================
 app.post("/phone-verify-otp", async (req, res) => {
     try {
         const { phone, otp } = req.body;
-
-        if (!phone || !otp) {
-            return res.status(400).json({ success: false, error: "Phone and OTP required" });
-        }
-
+        if (!phone || !otp) return res.status(400).json({ success: false, error: "Phone and OTP required" });
         const record = global._otpStore[phone];
-
-        if (!record) {
-            return res.status(400).json({ success: false, error: "No OTP requested for this number" });
-        }
-
+        if (!record) return res.status(400).json({ success: false, error: "No OTP requested" });
         if (Date.now() > record.expiresAt) {
             delete global._otpStore[phone];
-            return res.status(400).json({ success: false, error: "OTP expired. Please request a new one." });
+            return res.status(400).json({ success: false, error: "OTP expired" });
         }
-
-        if (record.otp !== otp) {
-            return res.status(400).json({ success: false, error: "Invalid OTP" });
-        }
-
+        if (record.otp !== otp) return res.status(400).json({ success: false, error: "Invalid OTP" });
         delete global._otpStore[phone];
 
         let user = await User.findOne({ phone: phone });
-
         if (user && user.name && !user.name.startsWith("Guest ")) {
-            console.log("✅ Phone login (returning user):", phone);
-
             const token = generateToken(user._id);
-
             return res.json({
                 success: true,
                 needsName: false,
                 token,
-                user: { id: user._id, name: user.name, email: user.email },
+                user: { id: user._id, name: user.name, email: user.email, role: user.role },
             });
         }
-
-        console.log("📝 Phone needs name:", phone);
-
-        res.json({
-            success: true,
-            needsName: true,
-            phone: phone,
-        });
-
+        res.json({ success: true, needsName: true, phone: phone });
     } catch (err) {
         console.error("❌ Phone verify error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// PHONE: SAVE NAME
-// ============================================================
 app.post("/phone-save-name", async (req, res) => {
     try {
         const { phone, name } = req.body;
-
-        if (!phone || !name || name.trim().length < 2) {
-            return res.status(400).json({ success: false, error: "Please enter a valid name" });
-        }
-
+        if (!phone || !name || name.trim().length < 2) return res.status(400).json({ success: false, error: "Valid name required" });
         const cleanName = name.trim().slice(0, 60);
-
         let user = await User.findOne({ phone: phone });
-
         if (!user) {
             const randomPass = crypto.randomBytes(20).toString("hex");
             const hashed = await bcrypt.hash(randomPass, 10);
-
             user = await User.create({
                 name: cleanName,
                 email: `phone_${phone}@mixtape.local`,
                 password: hashed,
                 phone: phone,
             });
-            console.log("✅ Phone signup with name:", phone, "→", cleanName);
         } else {
             user.name = cleanName;
             await user.save();
-            console.log("✅ Phone name updated:", phone, "→", cleanName);
         }
-
         const token = generateToken(user._id);
-
         res.json({
             success: true,
             token,
-            user: { id: user._id, name: user.name, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email, role: user.role },
         });
-
     } catch (err) {
         console.error("❌ Save name error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// FORGOT / RESET PASSWORD
+// ============================================================
+app.post("/forgot-password", async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ success: false, error: "Email required" });
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (!user) return res.json({ success: true, message: "If that email exists, a reset link has been sent." });
+        
+        const token = crypto.randomBytes(32).toString("hex");
+        user.resetToken = token;
+        user.resetTokenExpiry = Date.now() + 30 * 60 * 1000;
+        await user.save();
+        
+        const resetUrl = `https://mixtape-kitchen.netlify.app/reset-password.html?token=${token}`;
+        try {
+            await brevoSend({
+                to: user.email,
+                subject: "Reset Your Password — Mixtape Kitchen",
+                html: `<div style="font-family:'Poppins',Arial,sans-serif;background:#f6f2ea;padding:40px 20px;"><div style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;"><div style="height:5px;background:linear-gradient(90deg,#c8a97e,#e8d4b8,#c8a97e);"></div><div style="padding:40px;text-align:center;"><h1 style="font-family:Georgia,serif;color:#c8a97e;margin:0;font-size:30px;">Reset Password</h1><p style="color:#666;font-size:14px;margin-top:12px;">Hi ${user.name}, we received a request to reset your password.</p><a href="${resetUrl}" style="display:inline-block;margin-top:26px;padding:14px 32px;background:#c8a97e;color:#fff;text-decoration:none;border-radius:30px;font-weight:600;">Reset My Password</a><p style="color:#999;font-size:12px;margin-top:26px;">This link expires in 30 minutes.</p></div></div></div>`,
+            });
+        } catch (e) { console.error("❌ Reset email failed:", e.message); }
+        res.json({ success: true, message: "If that email exists, a reset link has been sent." });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.post("/reset-password", async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        if (!token || !newPassword || newPassword.length < 6) return res.status(400).json({ success: false, error: "Invalid input" });
+        const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
+        if (!user) return res.status(400).json({ success: false, error: "Reset link is invalid or has expired." });
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetToken = null;
+        user.resetTokenExpiry = null;
+        await user.save();
+        res.json({ success: true, message: "Password updated. Please sign in." });
+    } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
 });
@@ -504,29 +449,21 @@ app.get("/me", authMiddleware, async (req, res) => {
 });
 
 // ============================================================
-// MENU: GET ALL ITEMS  (NEW)
+// MENU ROUTES
 // ============================================================
 app.get("/menu", async (req, res) => {
     try {
         const items = await MenuItem.find({ available: true }).sort({ category: 1, name: 1 });
         res.json({ success: true, items });
     } catch (err) {
-        console.error("❌ Menu fetch error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// MENU: ADD ITEM  (NEW)
-// ============================================================
 app.post("/menu/add", async (req, res) => {
     try {
         const { name, description, price, image, category, type, ingredients } = req.body;
-
-        if (!name || !price || !category) {
-            return res.status(400).json({ success: false, error: "Name, price, category required" });
-        }
-
+        if (!name || !price || !category) return res.status(400).json({ success: false, error: "Name, price, category required" });
         const item = await MenuItem.create({
             name: name.trim(),
             description: (description || "").trim(),
@@ -536,32 +473,21 @@ app.post("/menu/add", async (req, res) => {
             type: type === "non-veg" ? "non-veg" : "veg",
             ingredients: Array.isArray(ingredients) ? ingredients : [],
         });
-
-        console.log("✅ Menu item added:", item.name);
         res.json({ success: true, item });
-
     } catch (err) {
-        console.error("❌ Menu add error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// MENU: UPDATE ITEM  (NEW)
-// ============================================================
 app.put("/menu/:id", async (req, res) => {
     try {
         const item = await MenuItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!item) return res.status(404).json({ success: false, error: "Item not found" });
         res.json({ success: true, item });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// MENU: DELETE ITEM  (NEW)
-// ============================================================
 app.delete("/menu/:id", async (req, res) => {
     try {
         await MenuItem.findByIdAndDelete(req.params.id);
@@ -572,25 +498,20 @@ app.delete("/menu/:id", async (req, res) => {
 });
 
 // ============================================================
-// CREATE ORDER
+// ORDER ROUTES
 // ============================================================
 app.post("/create-order", async (req, res) => {
     try {
         const { amount, currency = "INR", items = [] } = req.body;
-        if (!amount || amount <= 0) {
-            return res.status(400).json({ success: false, error: "Invalid amount" });
-        }
+        if (!amount || amount <= 0) return res.status(400).json({ success: false, error: "Invalid amount" });
         const amountInPaise = Math.round(Number(amount) * 100);
-        if (amountInPaise < 100) {
-            return res.status(400).json({ success: false, error: "Amount must be at least ₹1" });
-        }
+        if (amountInPaise < 100) return res.status(400).json({ success: false, error: "Amount must be at least ₹1" });
         const order = await razorpay.orders.create({
             amount: amountInPaise,
             currency,
             receipt: "rcpt_" + Date.now(),
             notes: { itemCount: items.length, source: "Mixtape Kitchen" },
         });
-        console.log("✅ Order created:", order.id, "₹" + (order.amount / 100));
         res.json({
             success: true,
             order_id: order.id,
@@ -599,32 +520,20 @@ app.post("/create-order", async (req, res) => {
             key_id: process.env.RAZORPAY_KEY_ID,
         });
     } catch (err) {
-        console.error("❌ Create order error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// VERIFY PAYMENT
-// ============================================================
 app.post("/verify-payment", async (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount } = req.body;
-        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-            return res.status(400).json({ success: false, error: "Missing fields" });
-        }
+        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) return res.status(400).json({ success: false, error: "Missing fields" });
         const body = razorpay_order_id + "|" + razorpay_payment_id;
-        const expectedSignature = crypto
-            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-            .update(body.toString())
-            .digest("hex");
+        const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
 
         if (expectedSignature === razorpay_signature) {
-            console.log("✅ Payment verified:", razorpay_payment_id);
-
             let savedUser = null;
             let savedOrder = null;
-
             try {
                 const token = req.headers.authorization?.replace("Bearer ", "");
                 if (token) {
@@ -637,11 +546,8 @@ app.post("/verify-payment", async (req, res) => {
                         orderId: razorpay_order_id,
                     });
                     savedUser = await User.findById(decoded.userId);
-                    console.log("✅ Order saved to DB");
                 }
-            } catch (e) {
-                console.warn("⚠️ Could not save order:", e.message);
-            }
+            } catch (e) { console.warn("⚠️ Could not save order:", e.message); }
 
             if (savedUser && savedUser.email) {
                 sendOrderEmail({
@@ -653,20 +559,14 @@ app.post("/verify-payment", async (req, res) => {
                     orderId: razorpay_order_id,
                 }).catch((err) => console.error("Order email error:", err.message));
             }
-
             return res.json({ success: true, payment_id: razorpay_payment_id });
         }
-
         return res.status(400).json({ success: false, error: "Invalid signature" });
     } catch (err) {
-        console.error("❌ Verify error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// MY ORDERS
-// ============================================================
 app.get("/my-orders", authMiddleware, async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.userId }).sort({ createdAt: -1 });
@@ -677,16 +577,13 @@ app.get("/my-orders", authMiddleware, async (req, res) => {
 });
 
 // ============================================================
-// RESERVATION: CREATE
+// RESERVATION ROUTES
 // ============================================================
 app.post("/reserve", async (req, res) => {
     try {
         const { name, email, phone, date, time, persons } = req.body;
-
-        if (!name || !email || !phone || !date || !time || !persons) {
-            return res.status(400).json({ success: false, error: "All fields required" });
-        }
-
+        if (!name || !email || !phone || !date || !time || !persons) return res.status(400).json({ success: false, error: "All fields required" });
+        
         let userId = null;
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
@@ -694,19 +591,11 @@ app.post("/reserve", async (req, res) => {
                 const decoded = jwt.verify(token, JWT_SECRET);
                 userId = decoded.userId;
             }
-        } catch (e) { /* guest booking is fine */ }
+        } catch (e) { /* guest booking */ }
 
         const reservation = await Reservation.create({
-            userId,
-            name: name.trim(),
-            email: email.trim(),
-            phone: phone.trim(),
-            date,
-            time,
-            persons,
+            userId, name: name.trim(), email: email.trim(), phone: phone.trim(), date, time, persons,
         });
-
-        console.log("✅ Reservation created:", reservation._id, name, date, time);
 
         sendReservationEmail({
             to: reservation.email,
@@ -721,27 +610,48 @@ app.post("/reserve", async (req, res) => {
             success: true,
             message: "Reservation confirmed!",
             reservation: {
-                id: reservation._id,
-                name: reservation.name,
-                date: reservation.date,
-                time: reservation.time,
-                persons: reservation.persons,
+                id: reservation._id, name: reservation.name, date: reservation.date, time: reservation.time, persons: reservation.persons,
             },
         });
     } catch (err) {
-        console.error("❌ Reservation error:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.get("/my-reservations", authMiddleware, async (req, res) => {
+    try {
+        const reservations = await Reservation.find({ userId: req.userId }).sort({ createdAt: -1 });
+        res.json({ success: true, reservations });
+    } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
 // ============================================================
-// RESERVATION: MY RESERVATIONS
+// ADMIN ROUTES
 // ============================================================
-app.get("/my-reservations", authMiddleware, async (req, res) => {
+app.get("/admin/orders", adminMiddleware, async (req, res) => {
     try {
-        const reservations = await Reservation
-            .find({ userId: req.userId })
-            .sort({ createdAt: -1 });
+        const orders = await Order.find().populate("userId", "name email").sort({ createdAt: -1 });
+        res.json({ success: true, orders });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.put("/admin/orders/:id/status", adminMiddleware, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+        res.json({ success: true, order });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.get("/admin/reservations", adminMiddleware, async (req, res) => {
+    try {
+        const reservations = await Reservation.find().sort({ createdAt: -1 });
         res.json({ success: true, reservations });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });

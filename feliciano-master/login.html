@@ -373,7 +373,7 @@
             setTimeout(() => { window.location.href = backTo; }, 100);
         }
 
-        function completeLogin(data) {
+              function completeLogin(data) {
             navigating = true;
             localStorage.removeItem("cart");
             localStorage.setItem("token", data.token);
@@ -384,6 +384,13 @@
                 badge.textContent = "0";
                 badge.setAttribute("data-count", "0");
             }
+
+            // 🚀 ADMIN REDIRECT
+            if (data.user.role === "admin") {
+                window.location.href = "admin.html";
+                return;
+            }
+
             redirectAfterAuth();
         }
 

@@ -206,6 +206,10 @@
             color: #c8a97e;
             line-height: 1;
         }
+        
+        /* ============================================================
+           DYNAMIC STATUS BADGE COLORS
+           ============================================================ */
         .order-header .status {
             display: inline-block;
             margin-top: 6px;
@@ -215,9 +219,11 @@
             font-weight: 600;
             letter-spacing: 0.3px;
             text-transform: uppercase;
-            background: #e8f5e9;
-            color: #2e7d32;
         }
+        .status[data-status="Confirmed"] { background: #e3f2fd; color: #1976d2; }
+        .status[data-status="Preparing"] { background: #fff3e0; color: #f57c00; }
+        .status[data-status="Delivered"] { background: #e8f5e9; color: #2e7d32; }
+        .status[data-status="Cancelled"] { background: #ffebee; color: #c62828; }
 
         .order-items {
             display: flex;
@@ -521,6 +527,9 @@
                     `;
                 }).join("");
 
+                // 👇 GET STATUS FROM DATABASE (FALLBACK TO "CONFIRMED")
+                const currentStatus = order.status || "Confirmed";
+
                 return `
                     <div class="order-card" style="animation-delay:${i * 0.06}s;">
                         <div class="order-header">
@@ -530,7 +539,7 @@
                             </div>
                             <div class="right">
                                 <div class="total">₹${Number(order.amount || 0).toFixed(2)}</div>
-                                <span class="status">Confirmed</span>
+                                <span class="status" data-status="${currentStatus}">${currentStatus}</span>
                             </div>
                         </div>
 
