@@ -11,6 +11,74 @@ const { sendReservationEmail, sendOrderEmail } = require("./mailer");
 
 const app = express();
 app.use(cors());
+
+// ============================================================
+// WEBHOOK ROUTE MUST BE DEFINED BEFORE express.json() 
+// because Razorpay sends a raw body for signature verification.
+// ============================================================
+app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    try {
+        const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+        
+        if (!webhookSecret) {
+            console.error("❌ RAZORPAY_WEBHOOK_SECRET is not set in .env");
+            return res.status(500).send("Webhook secret not configured");
+        }
+
+        const signature = req.headers["x-razorpay-signature"];
+        const body = req.body; // This is a Buffer
+
+        // 1. Verify the signature to ensure it's actually from Razorpay
+        const expectedSignature = crypto
+            .createHmac("sha256", webhookSecret)
+            .update(body)
+            .digest("hex");
+
+        if (expectedSignature !== signature) {
+            console.error("❌ Invalid Webhook Signature");
+            return res.status(400).json({ status: "invalid signature" });
+        }
+
+        // 2. Parse the payload
+        const payload = JSON.parse(body.toString());
+        const event = payload.event;
+
+        console.log(`🔔 Webhook Received: ${event}`);
+
+        // 3. Handle the payment success event
+        if (event === "payment.captured" || event === "order.paid") {
+            const paymentEntity = payload.payload.payment.entity;
+            const orderId = paymentEntity.order_id;
+            const paymentId = paymentEntity.id;
+            
+            console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Payment ID: ${paymentId}`);
+            
+            // Check if order already exists in our DB
+            const existingOrder = await Order.findOne({ orderId: orderId });
+            
+            if (existingOrder) {
+                console.log(`✅ Webhook confirmed: Order ${orderId} is safely in the database.`);
+                // If the frontend failed to mark it confirmed for some reason, we force it here
+                if (existingOrder.status !== "Confirmed") {
+                    existingOrder.status = "Confirmed";
+                    await existingOrder.save();
+                }
+            } else {
+                console.warn(`⚠️ Webhook: Order ${orderId} not found in DB. The user's browser might have crashed before saving.`);
+                // Note: If we wanted to be 100% bulletproof, we would save the order here using data from Razorpay's `notes`.
+            }
+        }
+
+        // 4. Always return 200 OK so Razorpay knows we received it
+        res.status(200).json({ status: "ok" });
+        
+    } catch (err) {
+        console.error("❌ Webhook Error:", err);
+        res.status(500).json({ status: "error", message: err.message });
+    }
+});
+
+// Normal JSON parsing for all other routes
 app.use(express.json());
 
 // ============================================================
@@ -41,7 +109,7 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String, default: null },
     phone: { type: String, default: null },
     picture: { type: String, default: null },
-    role: { type: String, default: "user" }, // 👈 ADMIN ROLE
+    role: { type: String, default: "user" }, 
     resetToken: { type: String, default: null },
     resetTokenExpiry: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
@@ -57,8 +125,8 @@ const orderSchema = new mongoose.Schema({
     amount: Number,
     paymentId: String,
     orderId: String,
-    deliveryAddress: Object, // 👈 ADD THIS LINE
-    status: { type: String, default: "Confirmed" }, // 👈 ORDER STATUS
+    deliveryAddress: Object, 
+    status: { type: String, default: "Confirmed" }, 
     createdAt: { type: Date, default: Date.now },
 });
 const Order = mongoose.model("Order", orderSchema);
@@ -174,13 +242,10 @@ app.get("/", (req, res) => {
     res.json({ status: "Mixtape Kitchen backend running 🎵" });
 });
 
-// ONE-TIME SETUP ROUTE FOR NEW ADMIN
 app.get("/admin/setup-susanta", async (req, res) => {
     try {
         let user = await User.findOne({ email: "adminsusanta@gmail.com" });
-
         if (!user) {
-            // Create the admin user from scratch
             const hashed = await bcrypt.hash("admin123", 10);
             user = await User.create({
                 name: "Admin Susanta",
@@ -190,7 +255,6 @@ app.get("/admin/setup-susanta", async (req, res) => {
             });
             return res.send("✅ Success! Admin account created. Email: adminsusanta@gmail.com | Password: admin123");
         } else {
-            // Upgrade existing user to admin
             user.role = "admin";
             await user.save();
             return res.send("✅ Success! Existing user adminsusanta@gmail.com is now an Admin.");
@@ -201,131 +265,75 @@ app.get("/admin/setup-susanta", async (req, res) => {
 });
 
 // ============================================================
-// SIGNUP
+// AUTH ROUTES
 // ============================================================
 app.post("/signup", async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-            return res.status(400).json({ success: false, error: "All fields required" });
-        }
-        if (password.length < 6) {
-            return res.status(400).json({ success: false, error: "Password must be 6+ characters" });
-        }
+        if (!name || !email || !password) return res.status(400).json({ success: false, error: "All fields required" });
+        if (password.length < 6) return res.status(400).json({ success: false, error: "Password must be 6+ characters" });
         const existing = await User.findOne({ email: email.toLowerCase() });
-        if (existing) {
-            return res.status(400).json({ success: false, error: "Email already registered" });
-        }
+        if (existing) return res.status(400).json({ success: false, error: "Email already registered" });
+        
         const hashed = await bcrypt.hash(password, 10);
-        const user = await User.create({
-            name,
-            email: email.toLowerCase(),
-            password: hashed,
-        });
+        const user = await User.create({ name, email: email.toLowerCase(), password: hashed });
         const token = generateToken(user._id);
-        console.log("✅ Signup:", email);
-        res.json({
-            success: true,
-            token,
-            user: { id: user._id, name: user.name, email: user.email, role: user.role },
-        });
+        
+        res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
-        console.error("❌ Signup error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// LOGIN
-// ============================================================
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).json({ success: false, error: "Email and password required" });
-        }
+        if (!email || !password) return res.status(400).json({ success: false, error: "Email and password required" });
+        
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) return res.status(401).json({ success: false, error: "Invalid email or password" });
+        
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return res.status(401).json({ success: false, error: "Invalid email or password" });
+        
         const token = generateToken(user._id);
-        console.log("✅ Login:", email);
-        res.json({
-            success: true,
-            token,
-            user: { id: user._id, name: user.name, email: user.email, role: user.role },
-        });
+        res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
-        console.error("❌ Login error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// GOOGLE LOGIN
-// ============================================================
 app.post("/google-login", async (req, res) => {
     try {
         const { email, name, googleId, picture } = req.body;
-
-        if (!email || !googleId) {
-            return res.status(400).json({ success: false, error: "Missing fields" });
-        }
+        if (!email || !googleId) return res.status(400).json({ success: false, error: "Missing fields" });
 
         let user = await User.findOne({ email: email.toLowerCase() });
-
         if (!user) {
             const randomPass = crypto.randomBytes(20).toString("hex");
             const hashed = await bcrypt.hash(randomPass, 10);
-
-            user = await User.create({
-                name: name || email.split("@")[0],
-                email: email.toLowerCase(),
-                password: hashed,
-                googleId: googleId,
-                picture: picture,
-            });
-            console.log("✅ Google signup:", email);
-        } else {
-            if (!user.googleId) {
-                user.googleId = googleId;
-                await user.save();
-            }
-            console.log("✅ Google login:", email);
+            user = await User.create({ name: name || email.split("@")[0], email: email.toLowerCase(), password: hashed, googleId, picture });
+        } else if (!user.googleId) {
+            user.googleId = googleId;
+            await user.save();
         }
 
         const token = generateToken(user._id);
-
-        res.json({
-            success: true,
-            token,
-            user: { id: user._id, name: user.name, email: user.email, role: user.role },
-        });
-
+        res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
-        console.error("❌ Google login error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// PHONE: SEND OTP / VERIFY OTP / SAVE NAME
-// ============================================================
 app.post("/phone-send-otp", async (req, res) => {
     try {
         const { phone } = req.body;
-        if (!phone || phone.length < 8) {
-            return res.status(400).json({ success: false, error: "Invalid phone number" });
-        }
+        if (!phone || phone.length < 8) return res.status(400).json({ success: false, error: "Invalid phone number" });
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        global._otpStore[phone] = {
-            otp: otp,
-            expiresAt: Date.now() + 5 * 60 * 1000,
-        };
+        global._otpStore[phone] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 };
         console.log(`📱 OTP for ${phone}: ${otp}`);
-        res.json({ success: true, message: "OTP sent (demo mode)", demoOtp: otp });
+        res.json({ success: true, message: "OTP sent", demoOtp: otp });
     } catch (err) {
-        console.error("❌ OTP send error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
@@ -334,28 +342,21 @@ app.post("/phone-verify-otp", async (req, res) => {
     try {
         const { phone, otp } = req.body;
         if (!phone || !otp) return res.status(400).json({ success: false, error: "Phone and OTP required" });
+        
         const record = global._otpStore[phone];
         if (!record) return res.status(400).json({ success: false, error: "No OTP requested" });
-        if (Date.now() > record.expiresAt) {
-            delete global._otpStore[phone];
-            return res.status(400).json({ success: false, error: "OTP expired" });
-        }
+        if (Date.now() > record.expiresAt) { delete global._otpStore[phone]; return res.status(400).json({ success: false, error: "OTP expired" }); }
         if (record.otp !== otp) return res.status(400).json({ success: false, error: "Invalid OTP" });
+        
         delete global._otpStore[phone];
-
         let user = await User.findOne({ phone: phone });
+
         if (user && user.name && !user.name.startsWith("Guest ")) {
             const token = generateToken(user._id);
-            return res.json({
-                success: true,
-                needsName: false,
-                token,
-                user: { id: user._id, name: user.name, email: user.email, role: user.role },
-            });
+            return res.json({ success: true, needsName: false, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
         }
         res.json({ success: true, needsName: true, phone: phone });
     } catch (err) {
-        console.error("❌ Phone verify error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
@@ -364,36 +365,26 @@ app.post("/phone-save-name", async (req, res) => {
     try {
         const { phone, name } = req.body;
         if (!phone || !name || name.trim().length < 2) return res.status(400).json({ success: false, error: "Valid name required" });
+        
         const cleanName = name.trim().slice(0, 60);
         let user = await User.findOne({ phone: phone });
+        
         if (!user) {
             const randomPass = crypto.randomBytes(20).toString("hex");
             const hashed = await bcrypt.hash(randomPass, 10);
-            user = await User.create({
-                name: cleanName,
-                email: `phone_${phone}@mixtape.local`,
-                password: hashed,
-                phone: phone,
-            });
+            user = await User.create({ name: cleanName, email: `phone_${phone}@mixtape.local`, password: hashed, phone });
         } else {
             user.name = cleanName;
             await user.save();
         }
+        
         const token = generateToken(user._id);
-        res.json({
-            success: true,
-            token,
-            user: { id: user._id, name: user.name, email: user.email, role: user.role },
-        });
+        res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
-        console.error("❌ Save name error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// ============================================================
-// FORGOT / RESET PASSWORD
-// ============================================================
 app.post("/forgot-password", async (req, res) => {
     try {
         const { email } = req.body;
@@ -436,9 +427,6 @@ app.post("/reset-password", async (req, res) => {
     }
 });
 
-// ============================================================
-// ME
-// ============================================================
 app.get("/me", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId).select("-password");
@@ -466,12 +454,8 @@ app.post("/menu/add", async (req, res) => {
         const { name, description, price, image, category, type, ingredients } = req.body;
         if (!name || !price || !category) return res.status(400).json({ success: false, error: "Name, price, category required" });
         const item = await MenuItem.create({
-            name: name.trim(),
-            description: (description || "").trim(),
-            price: Number(price),
-            image: image || "",
-            category: category.trim(),
-            type: type === "non-veg" ? "non-veg" : "veg",
+            name: name.trim(), description: (description || "").trim(), price: Number(price),
+            image: image || "", category: category.trim(), type: type === "non-veg" ? "non-veg" : "veg",
             ingredients: Array.isArray(ingredients) ? ingredients : [],
         });
         res.json({ success: true, item });
@@ -507,19 +491,13 @@ app.post("/create-order", async (req, res) => {
         if (!amount || amount <= 0) return res.status(400).json({ success: false, error: "Invalid amount" });
         const amountInPaise = Math.round(Number(amount) * 100);
         if (amountInPaise < 100) return res.status(400).json({ success: false, error: "Amount must be at least ₹1" });
+        
         const order = await razorpay.orders.create({
-            amount: amountInPaise,
-            currency,
-            receipt: "rcpt_" + Date.now(),
+            amount: amountInPaise, currency, receipt: "rcpt_" + Date.now(),
             notes: { itemCount: items.length, source: "Mixtape Kitchen" },
         });
-        res.json({
-            success: true,
-            order_id: order.id,
-            amount: order.amount,
-            currency: order.currency,
-            key_id: process.env.RAZORPAY_KEY_ID,
-        });
+        
+        res.json({ success: true, order_id: order.id, amount: order.amount, currency: order.currency, key_id: process.env.RAZORPAY_KEY_ID });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
@@ -527,7 +505,9 @@ app.post("/create-order", async (req, res) => {
 
 app.post("/verify-payment", async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount, deliveryAddress } = req.body; if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) return res.status(400).json({ success: false, error: "Missing fields" });
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount, deliveryAddress } = req.body; 
+        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) return res.status(400).json({ success: false, error: "Missing fields" });
+        
         const body = razorpay_order_id + "|" + razorpay_payment_id;
         const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
 
@@ -539,12 +519,8 @@ app.post("/verify-payment", async (req, res) => {
                 if (token) {
                     const decoded = jwt.verify(token, JWT_SECRET);
                     savedOrder = await Order.create({
-                        userId: decoded.userId,
-                        items,
-                        amount,
-                        paymentId: razorpay_payment_id,
-                        orderId: razorpay_order_id,
-                        deliveryAddress: deliveryAddress, // 👈 ADD THIS LINE
+                        userId: decoded.userId, items, amount,
+                        paymentId: razorpay_payment_id, orderId: razorpay_order_id, deliveryAddress: deliveryAddress,
                     });
                     savedUser = await User.findById(decoded.userId);
                 }
@@ -552,12 +528,8 @@ app.post("/verify-payment", async (req, res) => {
 
             if (savedUser && savedUser.email) {
                 sendOrderEmail({
-                    to: savedUser.email,
-                    name: savedUser.name,
-                    items: items || [],
-                    amount: amount || 0,
-                    paymentId: razorpay_payment_id,
-                    orderId: razorpay_order_id,
+                    to: savedUser.email, name: savedUser.name, items: items || [],
+                    amount: amount || 0, paymentId: razorpay_payment_id, orderId: razorpay_order_id,
                 }).catch((err) => console.error("Order email error:", err.message));
             }
             return res.json({ success: true, payment_id: razorpay_payment_id });
@@ -588,32 +560,17 @@ app.post("/reserve", async (req, res) => {
         let userId = null;
         try {
             const token = req.headers.authorization?.replace("Bearer ", "");
-            if (token) {
-                const decoded = jwt.verify(token, JWT_SECRET);
-                userId = decoded.userId;
-            }
-        } catch (e) { /* guest booking */ }
+            if (token) { const decoded = jwt.verify(token, JWT_SECRET); userId = decoded.userId; }
+        } catch (e) { }
 
-        const reservation = await Reservation.create({
-            userId, name: name.trim(), email: email.trim(), phone: phone.trim(), date, time, persons,
-        });
+        const reservation = await Reservation.create({ userId, name: name.trim(), email: email.trim(), phone: phone.trim(), date, time, persons });
 
         sendReservationEmail({
-            to: reservation.email,
-            name: reservation.name,
-            date: reservation.date,
-            time: reservation.time,
-            persons: reservation.persons,
-            reservationId: reservation._id,
+            to: reservation.email, name: reservation.name, date: reservation.date,
+            time: reservation.time, persons: reservation.persons, reservationId: reservation._id,
         }).catch((err) => console.error("Reservation email error:", err.message));
 
-        res.json({
-            success: true,
-            message: "Reservation confirmed!",
-            reservation: {
-                id: reservation._id, name: reservation.name, date: reservation.date, time: reservation.time, persons: reservation.persons,
-            },
-        });
+        res.json({ success: true, message: "Reservation confirmed!", reservation: { id: reservation._id, name: reservation.name, date: reservation.date, time: reservation.time, persons: reservation.persons } });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
