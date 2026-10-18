@@ -223,10 +223,7 @@
             transition: all 0.3s ease;
         }
         
-        /* Base default style */
         .status { background: #f5f5f5; color: #333; }
-        
-        /* Force colors by checking the data attribute */
         .status[data-status="Confirmed"], .status[data-status="confirmed"] { background: #e3f2fd; color: #1976d2; }
         .status[data-status="Preparing"], .status[data-status="preparing"] { background: #fff3e0; color: #f57c00; }
         .status[data-status="Delivered"], .status[data-status="delivered"] { background: #e8f5e9; color: #2e7d32; }
@@ -301,7 +298,6 @@
             font-size: 12px;
         }
 
-        /* Veg / Non-veg inline badge */
         .type-badge {
             display: inline-flex;
             align-items: center;
@@ -371,9 +367,6 @@
             text-align: center;
         }
 
-        /* ============================================================
-           TOAST NOTIFICATION
-           ============================================================ */
         .toast-container {
             position: fixed;
             bottom: 30px;
@@ -503,9 +496,6 @@
     <script src="js/login-gate.js"></script>
 
     <script>
-        // ============================================
-        // CONFIG
-        // ============================================
         const BACKEND_URL = "https://feliciano-master.onrender.com";
 
         const loadingEl = document.getElementById("ordersLoading");
@@ -513,8 +503,8 @@
         const emptyEl   = document.getElementById("ordersEmpty");
         const errorEl   = document.getElementById("ordersError");
 
-        let previousStatuses = {}; // Keeps track of past statuses to detect changes
-        let isFirstLoad = true;    // Prevents notifying on initial page load
+        let previousStatuses = {}; 
+        let isFirstLoad = true;    
 
         function showError(msg) {
             loadingEl.style.display = "none";
@@ -543,20 +533,17 @@
             } catch { return iso; }
         }
 
-        // ============================================
-        // POPUP NOTIFICATION FUNCTION
-        // ============================================
         function showNotification(title, message, status) {
             const container = document.getElementById("toastContainer");
             const toast = document.createElement("div");
             toast.className = "custom-toast";
             
             let icon = "fa-info-circle";
-            let color = "#1976d2"; // Blue (Confirmed)
+            let color = "#1976d2"; 
             
-            if (status === "Preparing") { icon = "fa-fire"; color = "#f57c00"; } // Orange
-            if (status === "Delivered") { icon = "fa-check-circle"; color = "#2e7d32"; } // Green
-            if (status === "Cancelled") { icon = "fa-times-circle"; color = "#c62828"; } // Red
+            if (status === "Preparing") { icon = "fa-fire"; color = "#f57c00"; } 
+            if (status === "Delivered") { icon = "fa-check-circle"; color = "#2e7d32"; } 
+            if (status === "Cancelled") { icon = "fa-times-circle"; color = "#c62828"; } 
 
             toast.style.borderLeftColor = color;
             
@@ -571,25 +558,17 @@
             `;
             
             container.appendChild(toast);
-
-            // Animate in
             setTimeout(() => toast.classList.add("show"), 100);
-
-            // Remove after 6 seconds
             setTimeout(() => {
                 toast.classList.remove("show");
                 setTimeout(() => toast.remove(), 400);
             }, 6000);
 
-            // Browser system notification (if allowed)
             if ("Notification" in window && Notification.permission === "granted") {
                 new Notification(title, { body: message, icon: "images/default-food.jpg" });
             }
         }
 
-        // ============================================
-        // RENDER ORDERS
-        // ============================================
         function renderOrders(orders) {
             loadingEl.style.display = "none";
 
@@ -640,8 +619,8 @@
                             </div>
                             <div class="right">
                                 <div class="total">₹${Number(order.amount || 0).toFixed(2)}</div>
-                                <!-- We will target this data attribute for updates -->
-                                <span class="status" data-status="${currentStatus}" data-order-id="${order._id}" id="status-badge-${order._id}">${currentStatus}</span>
+                                <!-- Added data-order-id attribute -->
+                                <span class="status" data-status="${currentStatus}" data-order-id="${order._id}">${currentStatus}</span>
                             </div>
                         </div>
 
@@ -656,9 +635,6 @@
             }).join("");
         }
 
-        // ============================================
-        // LOAD ORDERS & POLLING LOGIC
-        // ============================================
         async function loadOrders(isPolling = false) {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -692,9 +668,8 @@
                 }
 
                 const orders = data.orders || [];
-                let hasStatusChanged = false; // Flag to re-render if needed
+                let hasStatusChanged = false; 
 
-                // 🔔 CHECK FOR STATUS CHANGES
                 if (!isFirstLoad) {
                     orders.forEach(order => {
                         const oldStatus = previousStatuses[order._id];
@@ -702,7 +677,6 @@
 
                         if (oldStatus && oldStatus !== newStatus) {
                             
-                            // Trigger the popup
                             if (newStatus === "Preparing") {
                                 showNotification("Order is Preparing! 👨‍🍳", `Your order #${order._id.slice(-6).toUpperCase()} is now in the kitchen.`, newStatus);
                             }
@@ -713,10 +687,9 @@
                                 showNotification("Order Cancelled ❌", `Order #${order._id.slice(-6).toUpperCase()} was cancelled.`, newStatus);
                             }
                             
-                            hasStatusChanged = true; // A change was detected
+                            hasStatusChanged = true; 
 
-                            // 🚀 DIRECT BADGE UPDATE
-                            // We use querySelector with the data attribute which is 100% reliable
+                            // 🚀 RELIABLE UPDATE using data-order-id
                             const badge = document.querySelector(`.status[data-order-id="${order._id}"]`);
                             if (badge) {
                                 const cleanStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).toLowerCase();
@@ -727,14 +700,11 @@
                         previousStatuses[order._id] = newStatus;
                     });
                     
-                    // As an absolute fallback, if anything changed, re-render the whole list
-                    // This guarantees the UI is always in sync with the data.
                     if (hasStatusChanged) {
                         renderOrders(orders);
                     }
 
                 } else {
-                    // First load: Save statuses silently
                     orders.forEach(order => {
                         previousStatuses[order._id] = order.status || "Confirmed";
                     });
@@ -750,22 +720,17 @@
             }
         }
 
-        // ============================================
-        // INIT
-        // ============================================
         document.addEventListener("DOMContentLoaded", () => {
-            // Ask for browser notification permission
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
                 Notification.requestPermission();
             }
 
-            // Load initially
             loadOrders(false);
 
-            // 🔄 POLLING: Check for updates every 10 seconds
+            // 🔄 POLLING: Check for updates every 5 seconds
             setInterval(() => {
                 loadOrders(true);
-            }, 10000); // 10,000 ms = 10 seconds
+            }, 5000); 
         });
     </script>
 

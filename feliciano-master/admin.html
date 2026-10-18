@@ -25,7 +25,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        /* ===== CUSTOM SCROLLBAR ===== */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
@@ -357,13 +356,11 @@
         let allOrdersData = []; 
         let currentFilter = "All"; 
 
-        // 🔒 SECURITY CHECK
         if (!token || !user || user.role !== "admin") {
             alert("Access Denied. You are not an admin.");
             window.location.href = "login.html";
         }
 
-        // UI SWITCHING
         function switchTab(tab) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${tab}`).classList.add('active');
@@ -375,7 +372,7 @@
                 document.getElementById('page-title').innerText = "Manage Orders";
                 document.getElementById('stats-container').style.display = "grid";
                 document.getElementById('status-breakdown-container').style.display = "grid";
-                loadOrders(false); // Silent load when switching tab
+                loadOrders(false); 
             } else {
                 document.getElementById('page-title').innerText = "Table Reservations";
                 document.getElementById('stats-container').style.display = "none";
@@ -384,23 +381,19 @@
             }
         }
 
-        // REFRESH LOGIC (Manual or Auto)
         async function refreshData(isManual = false) {
             const btn = document.getElementById('refreshBtn');
-            
             if (isManual) {
                 btn.classList.add('spinning');
                 setTimeout(() => btn.classList.remove('spinning'), 600); 
             }
-
             if (document.getElementById('tab-orders').classList.contains('active')) {
-                await loadOrders(!isManual); // Show loader if manual
+                await loadOrders(!isManual); 
             } else {
                 if (isManual) await loadReservations();
             }
         }
 
-        // FORMAT TIME AGO
         function timeAgo(dateString) {
             const date = new Date(dateString);
             const now = new Date();
@@ -416,7 +409,6 @@
             return { text: Math.floor(diffHours / 24) + " days ago", urgent: true };
         }
 
-        // FILTER LOGIC (Status)
         function filterStatus(status) {
             currentFilter = (currentFilter === status) ? "All" : status; 
             document.querySelectorAll('.status-box').forEach(el => el.classList.remove('active-filter'));
@@ -426,19 +418,16 @@
             renderOrderList();
         }
 
-        // RENDER ORDER LIST (Handles Status + Search)
         function renderOrderList() {
             const listEl = document.getElementById("orders-list");
             const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
             
             let filteredData = allOrdersData;
 
-            // 1. Filter by Status
             if (currentFilter !== "All") {
                 filteredData = filteredData.filter(o => (o.status || 'Confirmed') === currentFilter);
             }
 
-            // 2. Filter by Search
             if (searchTerm) {
                 filteredData = filteredData.filter(order => {
                     const orderId = order._id ? order._id.toLowerCase() : "";
@@ -453,7 +442,6 @@
                 });
             }
 
-            // Render Results
             if (!filteredData.length) {
                 listEl.innerHTML = `
                     <div class="empty-state">
@@ -512,11 +500,9 @@
             }).join("");
         }
 
-        // FETCH ORDERS (Real-time Polling)
         async function loadOrders(isBackground = true) {
             const loader = document.getElementById("orders-loading");
             
-            // Only show loading spinner if it's NOT a background refresh
             if (!isBackground) {
                 loader.style.display = "block";
                 document.getElementById("orders-list").innerHTML = "";
@@ -532,11 +518,10 @@
 
                 const newOrdersData = data.orders || [];
 
-                // Check if data actually changed to avoid unnecessary DOM updates
-                if (JSON.stringify(allOrdersData) !== JSON.stringify(newOrdersData)) {
+                // Smart DOM update check
+                if (JSON.stringify(allOrdersData) !== JSON.stringify(newOrdersData) || !isBackground) {
                     allOrdersData = newOrdersData;
 
-                    // Calculate Stats
                     let totalRevenue = 0;
                     let countConfirmed = 0;
                     let countPreparing = 0;
@@ -553,19 +538,16 @@
                         else if (status === 'Cancelled') countCancelled++;
                     });
 
-                    // Update Top Stats
                     document.getElementById("stat-total-orders").innerText = allOrdersData.length;
                     document.getElementById("stat-revenue").innerText = "₹" + totalRevenue.toFixed(2);
                     document.getElementById("stat-pending").innerText = countConfirmed;
                     document.getElementById("stat-preparing").innerText = countPreparing;
 
-                    // Update Breakdown Cards
                     document.getElementById("count-confirmed").innerText = countConfirmed;
                     document.getElementById("count-preparing").innerText = countPreparing;
                     document.getElementById("count-delivered").innerText = countDelivered;
                     document.getElementById("count-cancelled").innerText = countCancelled;
 
-                    // Render List (Preserves your filter/search)
                     renderOrderList();
                 }
 
@@ -577,8 +559,15 @@
             }
         }
 
-        // UPDATE STATUS
+        // 🚀 FIXED: Update UI instantly, then sync with database
         async function updateStatus(orderId, newStatus) {
+            // 1. Instantly update the badge UI
+            const badge = document.getElementById(`badge-${orderId}`);
+            if (badge) {
+                badge.className = `badge ${newStatus}`;
+                badge.innerText = newStatus;
+            }
+
             try {
                 const res = await fetch(`${BACKEND_URL}/admin/orders/${orderId}/status`, {
                     method: "PUT",
@@ -588,19 +577,24 @@
                     },
                     body: JSON.stringify({ status: newStatus })
                 });
+                
                 if (res.ok) {
+                    // 2. Update the local data array to keep stats correct
                     const orderIndex = allOrdersData.findIndex(o => o._id === orderId);
                     if (orderIndex > -1) allOrdersData[orderIndex].status = newStatus;
-                    loadOrders(true); // Silent refresh
+                    
+                    // 3. Silently refresh the whole list to update counts & sorting
+                    loadOrders(true); 
                 } else {
-                    alert("Failed to update status");
+                    alert("Failed to update status on server.");
+                    loadOrders(true); // Revert UI on failure
                 }
             } catch (err) {
                 alert("Error: " + err.message);
+                loadOrders(true); // Revert UI on failure
             }
         }
 
-        // FETCH RESERVATIONS
         async function loadReservations() {
             const loader = document.getElementById("reservations-loading");
             loader.style.display = "block";
@@ -670,17 +664,16 @@
             }
         }
 
-        // INIT & REAL-TIME POLLING
         if (token && user && user.role === "admin") {
-            loadOrders(false); // Initial load with spinner
+            loadOrders(false); 
             loadReservations();
 
-            // 🔄 POLLING: Check for new orders every 10 seconds silently
+            // Background polling every 10 seconds
             setInterval(() => {
                 if (document.getElementById('tab-orders').classList.contains('active')) {
                     loadOrders(true); 
                 }
-            }, 10000); // 10,000 ms = 10 seconds
+            }, 10000); 
         }
     </script>
 </body>
