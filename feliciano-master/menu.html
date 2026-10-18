@@ -8,6 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:600,700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
@@ -25,158 +26,211 @@
 
 	<style>
 		/* ============================================================
-           EXISTING MENU STYLES
+           UPGRADED MENU STYLES
            ============================================================ */
+		:root {
+			--gold: #c8a97e;
+			--gold-dark: #b18f64;
+			--veg: #2e7d32;
+			--nonveg: #b71c1c;
+			--text-dark: #1a1a1a;
+		}
+
+		/* Filter Bar */
 		.menu-filters {
-			background: #fff; padding: 22px 30px; border-radius: 16px; margin: 0 auto 36px;
+			background: #fff; padding: 20px 25px; border-radius: 20px; margin: 0 auto 36px;
 			max-width: 1200px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
-			box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05); border: 1px solid rgba(200, 169, 126, 0.15);
+			box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04); border: 1px solid rgba(200, 169, 126, 0.2);
 		}
 		.menu-filters .search-box { flex: 1 1 260px; position: relative; }
 		.menu-filters .search-box input {
-			width: 100%; height: 48px; border: 1.5px solid #eee; background: #faf8f4;
-			border-radius: 30px; padding: 0 18px 0 44px; font-family: "Poppins", sans-serif;
-			font-size: 14px; outline: none; transition: all .25s ease;
+			width: 100%; height: 52px; border: 1.5px solid #eee; background: #faf8f4;
+			border-radius: 30px; padding: 0 20px 0 48px; font-family: "Poppins", sans-serif;
+			font-size: 14px; font-weight: 500; outline: none; transition: all .3s ease;
 		}
-		.menu-filters .search-box input:focus { border-color: #c8a97e; background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12); }
-		.menu-filters .search-box .icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #c8a97e; font-size: 18px; pointer-events: none; }
+		.menu-filters .search-box input:focus { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12); }
+		.menu-filters .search-box .icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 20px; pointer-events: none; }
 
 		.veg-toggle {
 			display: inline-flex; align-items: center; background: #faf8f4; border: 1.5px solid #eee;
-			border-radius: 30px; padding: 4px; gap: 2px; height: 48px;
+			border-radius: 30px; padding: 5px; gap: 4px; height: 52px;
 		}
 		.veg-toggle button {
-			border: none; background: transparent; padding: 0 16px; height: 38px; border-radius: 30px;
-			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 500; color: #666;
-			cursor: pointer; transition: all .25s ease; display: inline-flex; align-items: center; gap: 7px;
+			border: none; background: transparent; padding: 0 18px; height: 40px; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600; color: #666;
+			cursor: pointer; transition: all .3s ease; display: inline-flex; align-items: center; gap: 8px;
 		}
-		.veg-toggle button .dot { width: 10px; height: 10px; border: 1.5px solid #2e7d32; display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; }
-		.veg-toggle button .dot::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #2e7d32; }
-		.veg-toggle button .dot.nonveg { border-color: #b71c1c; }
-		.veg-toggle button .dot.nonveg::after { background: #b71c1c; }
-		.veg-toggle button.active { background: #c8a97e; color: #fff; }
+		.veg-toggle button .dot { width: 12px; height: 12px; border: 1.5px solid var(--veg); display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; }
+		.veg-toggle button .dot::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--veg); }
+		.veg-toggle button .dot.nonveg { border-color: var(--nonveg); }
+		.veg-toggle button .dot.nonveg::after { background: var(--nonveg); }
+		.veg-toggle button.active { background: var(--gold); color: #fff; box-shadow: 0 4px 12px rgba(200,169,126,0.3); }
 		.veg-toggle button.active .dot { border-color: #fff; }
 		.veg-toggle button.active .dot::after { background: #fff; }
 
 		.price-filter {
-			display: inline-flex; align-items: center; gap: 10px; background: #faf8f4;
-			border: 1.5px solid #eee; border-radius: 30px; height: 48px; padding: 0 18px;
-			font-family: "Poppins", sans-serif; font-size: 13px; color: #666;
+			display: inline-flex; align-items: center; gap: 12px; background: #faf8f4;
+			border: 1.5px solid #eee; border-radius: 30px; height: 52px; padding: 0 20px;
+			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600; color: #666;
 		}
-		.price-filter input[type="range"] { width: 130px; accent-color: #c8a97e; cursor: pointer; }
-		.price-filter .price-label { color: #c8a97e; font-weight: 700; font-size: 13px; min-width: 55px; text-align: right; }
+		.price-filter input[type="range"] { width: 130px; accent-color: var(--gold); cursor: pointer; }
+		.price-filter .price-label { color: var(--gold-dark); font-weight: 700; font-size: 14px; min-width: 55px; text-align: right; }
 
-		.cat-tabs-wrap { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+		.cat-tabs-wrap { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 45px; }
 		.cat-tabs-wrap .cat-tab {
-			padding: 10px 22px; background: #fff; border: 1.5px solid #eee; border-radius: 30px;
-			font-family: "Poppins", sans-serif; font-size: 13.5px; font-weight: 500; color: #555;
-			cursor: pointer; text-decoration: none; transition: all .25s ease;
+			padding: 12px 26px; background: #fff; border: 1.5px solid #eee; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 14px; font-weight: 600; color: #555;
+			cursor: pointer; text-decoration: none; transition: all .3s ease;
 		}
-		.cat-tabs-wrap .cat-tab:hover { border-color: #c8a97e; color: #c8a97e; }
-		.cat-tabs-wrap .cat-tab.active { background: #c8a97e; border-color: #c8a97e; color: #fff; box-shadow: 0 6px 18px rgba(200, 169, 126, 0.35); }
+		.cat-tabs-wrap .cat-tab:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+		.cat-tabs-wrap .cat-tab.active { background: var(--gold); border-color: var(--gold); color: #fff; box-shadow: 0 8px 20px rgba(200, 169, 126, 0.3); }
 
+		/* Menu Grid & Cards */
 		.dyn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 35px; max-width: 1200px; margin: 0 auto; }
 		.dyn-card {
-			background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
-			border: 1px solid rgba(200, 169, 126, 0.12); transition: transform .3s ease, box-shadow .3s ease;
+			background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+			border: 1px solid rgba(200, 169, 126, 0.15); transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 			display: flex; flex-direction: column; position: relative;
 		}
-		.dyn-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(200, 169, 126, 0.2); }
-		.dyn-card .img-wrap { width: 100%; height: 220px; position: relative; overflow: hidden; background: #f4efe6; }
-		.dyn-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-		.dyn-card:hover .img-wrap img { transform: scale(1.08); }
+		.dyn-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(200, 169, 126, 0.15); border-color: rgba(200, 169, 126, 0.4); }
+		.dyn-card .img-wrap { width: 100%; height: 230px; position: relative; overflow: hidden; background: #f4efe6; }
+		.dyn-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
+		.dyn-card:hover .img-wrap img { transform: scale(1.1); }
 
 		.veg-badge {
-			position: absolute; top: 15px; left: 15px; background: #fff; padding: 5px 12px; border-radius: 20px;
+			position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); padding: 6px 14px; border-radius: 20px;
 			display: inline-flex; align-items: center; gap: 6px; font-family: "Poppins", sans-serif; font-size: 11px;
-			font-weight: 600; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			font-weight: 700; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); z-index: 2;
 		}
-		.veg-badge .dot { width: 10px; height: 10px; border: 1.5px solid #2e7d32; display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; }
-		.veg-badge .dot::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #2e7d32; }
-		.veg-badge.nonveg .dot { border-color: #b71c1c; }
-		.veg-badge.nonveg .dot::after { background: #b71c1c; }
-		.veg-badge .lbl { color: #2e7d32; }
-		.veg-badge.nonveg .lbl { color: #b71c1c; }
+		.veg-badge .dot { width: 10px; height: 10px; border: 1.5px solid var(--veg); display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; }
+		.veg-badge .dot::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--veg); }
+		.veg-badge.nonveg .dot { border-color: var(--nonveg); }
+		.veg-badge.nonveg .dot::after { background: var(--nonveg); }
+		.veg-badge .lbl { color: var(--veg); }
+		.veg-badge.nonveg .lbl { color: var(--nonveg); }
 
 		.cat-tag {
-			position: absolute; top: 15px; right: 15px; background: rgba(200, 169, 126, 0.95); color: #fff;
-			padding: 5px 14px; border-radius: 20px; font-family: "Poppins", sans-serif; font-size: 11px;
-			font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+			position: absolute; top: 15px; right: 15px; background: var(--gold); color: #fff;
+			padding: 6px 16px; border-radius: 20px; font-family: "Poppins", sans-serif; font-size: 11px;
+			font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(200, 169, 126, 0.4); z-index: 2;
 		}
 
-		.dyn-card .card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-		.dyn-card h3 { font-family: "Playfair Display", serif; font-size: 20px; color: #1a1a1a; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
-		.dyn-card .desc { font-size: 13px; color: #777; margin-bottom: 20px; line-height: 1.6; min-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+		.dyn-card .card-body { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+		.dyn-card h3 { font-family: "Playfair Display", serif; font-size: 22px; color: var(--text-dark); font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+		.dyn-card .desc { font-size: 13.5px; color: #777; margin-bottom: 20px; line-height: 1.6; min-height: 45px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 		.dyn-card .card-bottom {
 			display: flex; justify-content: space-between; align-items: center;
-			margin-top: auto; gap: 12px; padding-top: 15px; border-top: 1px dashed #eee; flex-wrap: wrap;
+			margin-top: auto; gap: 12px; padding-top: 20px; border-top: 1.5px dashed #eee; flex-wrap: wrap;
 		}
-		.dyn-card .price-tag { font-family: "Poppins", sans-serif; font-size: 22px; font-weight: 800; color: #c8a97e; }
+		.dyn-card .price-tag { font-family: "Poppins", sans-serif; font-size: 24px; font-weight: 800; color: var(--gold); }
 
 		.action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 		
 		.dyn-card .order-btn {
-			background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 30px;
+			background: var(--text-dark); color: #fff; padding: 12px 20px; border-radius: 30px;
 			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
 			border: none; cursor: pointer; transition: all .3s ease;
-			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); display: inline-flex; align-items: center; gap: 6px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); display: inline-flex; align-items: center; gap: 8px;
 		}
-		.dyn-card .order-btn:hover { background: #c8a97e; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(200, 169, 126, 0.4); }
+		.dyn-card .order-btn:hover { background: var(--gold); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(200, 169, 126, 0.4); }
 
-		/* 🚀 ADMIN EDIT BUTTON */
-		.dyn-card .edit-btn {
-			background: #fff; color: #c8a97e; padding: 10px 14px; border-radius: 30px;
+		/* Admin Buttons */
+		.dyn-card .edit-btn, .dyn-card .delete-btn {
+			background: #fff; padding: 10px 14px; border-radius: 30px;
 			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
-			border: 1.5px solid #c8a97e; cursor: pointer; transition: all .3s ease;
-			display: inline-flex; align-items: center; gap: 6px;
+			cursor: pointer; transition: all .3s ease; display: inline-flex; align-items: center; gap: 6px;
 		}
-		.dyn-card .edit-btn:hover { background: #c8a97e; color: #fff; transform: translateY(-2px); }
-
-		/* 🚀 ADMIN DELETE BUTTON */
-		.dyn-card .delete-btn {
-			background: #fff; color: #c62828; padding: 10px 14px; border-radius: 30px;
-			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
-			border: 1.5px solid #c62828; cursor: pointer; transition: all .3s ease;
-			display: inline-flex; align-items: center; gap: 6px;
-		}
-		.dyn-card .delete-btn:hover { background: #c62828; color: #fff; transform: translateY(-2px); }
+		.dyn-card .edit-btn { color: var(--gold); border: 1.5px solid var(--gold); }
+		.dyn-card .edit-btn:hover { background: var(--gold); color: #fff; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(200, 169, 126, 0.3); }
+		
+		.dyn-card .delete-btn { color: #c62828; border: 1.5px solid #c62828; }
+		.dyn-card .delete-btn:hover { background: #c62828; color: #fff; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3); }
 
 		.menu-msg { text-align: center; padding: 60px 20px; color: #888; font-family: "Poppins", sans-serif; }
-		.menu-msg .spinner { width: 50px; height: 50px; border: 3px solid rgba(200, 169, 126, 0.2); border-top-color: #c8a97e; border-radius: 50%; margin: 0 auto 18px; animation: spin 0.8s linear infinite; }
+		.menu-msg .spinner { width: 50px; height: 50px; border: 3px solid rgba(200, 169, 126, 0.2); border-top-color: var(--gold); border-radius: 50%; margin: 0 auto 18px; animation: spin 0.8s linear infinite; }
 		@keyframes spin { to { transform: rotate(360deg); } }
 
-		/* 🚀 ADMIN ADD BUTTON WRAPPER */
-		.admin-add-wrap {
-			max-width: 1200px; margin: 0 auto 20px; display: flex; justify-content: flex-end;
-		}
+		/* Floating Add Button */
+		.admin-add-wrap { max-width: 1200px; margin: 0 auto 25px; display: flex; justify-content: flex-end; }
 		.admin-add-wrap .add-item-btn {
-			background: linear-gradient(135deg, #c8a97e, #b18f64); color: #fff;
-			border: none; padding: 14px 28px; border-radius: 30px;
-			font-family: "Poppins", sans-serif; font-size: 14px; font-weight: 600;
+			background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #fff;
+			border: none; padding: 15px 32px; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 15px; font-weight: 600;
 			cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-			box-shadow: 0 8px 25px rgba(200, 169, 126, 0.4); transition: all .3s ease;
+			box-shadow: 0 10px 25px rgba(200, 169, 126, 0.4); transition: all .3s ease;
 		}
-		.admin-add-wrap .add-item-btn:hover {
-			transform: translateY(-3px);
-			box-shadow: 0 12px 30px rgba(200, 169, 126, 0.55);
-		}
-		.admin-add-wrap .add-item-btn i { font-size: 18px; }
+		.admin-add-wrap .add-item-btn:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(200, 169, 126, 0.6); }
+		.admin-add-wrap .add-item-btn i { font-size: 20px; }
 
-		/* 🚀 EDIT / ADD MODAL */
-		.edit-modal { position: fixed; inset: 0; background: rgba(17, 17, 17, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+		/* ============================================================
+           GLASSMORPHISM MODALS & FLOATING INPUTS
+           ============================================================ */
+		.edit-modal { 
+			position: fixed; inset: 0; background: rgba(17, 17, 17, 0.7); 
+			backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+			z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; 
+		}
 		.edit-modal.active { display: flex; }
-		.edit-card { background: #fff; border-radius: 20px; padding: 35px; max-width: 500px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.4); position: relative; max-height: 90vh; overflow-y: auto; animation: popIn 0.3s ease; }
-		@keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-		.edit-card h3 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 20px; color: #1a1a1a; }
-		.edit-card .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
-		.edit-card .form-group { margin-bottom: 15px; }
-		.edit-card label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; text-transform: uppercase; }
-		.edit-card input, .edit-card textarea, .edit-card select { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 14px; outline: none; transition: 0.3s; }
-		.edit-card input:focus, .edit-card textarea:focus, .edit-card select:focus { border-color: #c8a97e; }
-		.save-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #c8a97e, #b18f64); color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+		
+		.edit-card { 
+			background: #fff; border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; 
+			box-shadow: 0 30px 80px rgba(0,0,0,0.3); position: relative; max-height: 90vh; overflow-y: auto; 
+			animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+		}
+		@keyframes popIn { from { opacity: 0; transform: scale(0.9) translateY(30px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+		
+		.edit-card h3 { font-family: 'Playfair Display', serif; font-size: 30px; margin-bottom: 25px; color: var(--text-dark); text-align: center; }
+		.edit-card .close-btn { position: absolute; top: 20px; right: 20px; background: #fdfaf5; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; color: #999; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+		.edit-card .close-btn:hover { background: #ffebee; color: #c62828; transform: rotate(90deg); }
+
+		/* Floating Inputs */
+		.form-group { position: relative; margin-bottom: 22px; }
+		.form-group label { 
+			position: absolute; top: 14px; left: 16px; font-size: 14px; color: #888; 
+			font-family: 'Poppins', sans-serif; font-weight: 500; pointer-events: none; transition: 0.3s ease; 
+		}
+		.form-group input, .form-group textarea { 
+			width: 100%; padding: 22px 16px 8px; border: 1.5px solid #e0e0e0; border-radius: 12px; 
+			font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--text-dark); outline: none; 
+			background: #fafafa; transition: 0.3s; 
+		}
+		.form-group textarea { resize: vertical; min-height: 80px; }
+		.form-group input:focus, .form-group textarea:focus { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.1); }
+		.form-group input:focus ~ label, .form-group input:not(:placeholder-shown) ~ label,
+		.form-group textarea:focus ~ label, .form-group textarea:not(:placeholder-shown) ~ label {
+			top: 6px; font-size: 11px; color: var(--gold); font-weight: 700;
+		}
+
+		/* Custom Select Dropdowns */
+		.custom-select-wrap { position: relative; width: 100%; }
+		.custom-select-trigger {
+			width: 100%; padding: 16px; border: 1.5px solid #e0e0e0; border-radius: 12px;
+			font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--text-dark); background: #fafafa;
+			display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+		}
+		.custom-select-trigger:hover, .custom-select-wrap.open .custom-select-trigger { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.1); }
+		.custom-select-trigger i { font-size: 14px; color: #999; transition: transform 0.3s; }
+		.custom-select-wrap.open .custom-select-trigger i { transform: rotate(180deg); color: var(--gold); }
+		
+		.custom-select-options {
+			position: absolute; top: calc(100% + 8px); left: 0; width: 100%; background: #fff;
+			border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); border: 1px solid #eee;
+			padding: 8px 0; margin: 0; list-style: none; opacity: 0; visibility: hidden;
+			transform: translateY(-10px); transition: all 0.25s ease; z-index: 10000;
+		}
+		.custom-select-wrap.open .custom-select-options { opacity: 1; visibility: visible; transform: translateY(0); }
+		.custom-select-options li { padding: 12px 18px; font-size: 14px; font-family: 'Poppins', sans-serif; color: #444; cursor: pointer; transition: 0.2s; }
+		.custom-select-options li:hover { background: #faf8f4; color: var(--gold); }
+		.custom-select-options li.active { background: var(--gold); color: #fff; font-weight: 600; }
+
+		.save-btn { 
+			width: 100%; padding: 16px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
+			color: #fff; border: none; border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 600; 
+			font-size: 16px; cursor: pointer; margin-top: 15px; transition: 0.3s; 
+		}
 		.save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-		.save-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(200,169,126,0.4); }
+		.save-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(200,169,126,0.4); }
 
 		@media (max-width: 700px) {
 			.menu-filters { padding: 16px; gap: 12px; }
@@ -186,7 +240,7 @@
 			.price-filter input[type="range"] { flex: 1; width: auto; }
 			.dyn-grid { grid-template-columns: 1fr; gap: 25px; }
 			.dyn-card .img-wrap { height: 240px; }
-			.edit-card { padding: 25px 20px; }
+			.edit-card { padding: 30px 20px; }
 			.admin-add-wrap { justify-content: stretch; }
 			.admin-add-wrap .add-item-btn { width: 100%; justify-content: center; }
 		}
@@ -246,7 +300,7 @@
 	<section class="ftco-section">
 		<div class="container">
 
-			<!-- 🚀 ADMIN ADD NEW ITEM BUTTON -->
+			<!-- ADMIN ADD BUTTON -->
 			<div class="admin-add-wrap" id="adminAddWrap" style="display:none;">
 				<button class="add-item-btn" id="addItemBtn">
 					<i class="ion-ios-add-circle-outline"></i> Add New Item
@@ -288,26 +342,71 @@
 			<h3>Edit Dish</h3>
 			<input type="hidden" id="editItemId">
 			
-			<div class="form-group"><label>Dish Name</label><input type="text" id="editName"></div>
-			<div class="form-group"><label>Price (₹)</label><input type="number" id="editPrice"></div>
-			<div class="form-group"><label>Description</label><textarea id="editDesc" rows="3"></textarea></div>
-			<div class="form-group"><label>Image URL</label><input type="text" id="editImage"></div>
 			<div class="form-group">
-				<label>Category</label>
-				<select id="editCategory">
+				<input type="text" id="editName" placeholder=" ">
+				<label>Dish Name</label>
+			</div>
+			<div class="form-group">
+				<input type="number" id="editPrice" placeholder=" ">
+				<label>Price (₹)</label>
+			</div>
+			<div class="form-group">
+				<textarea id="editDesc" rows="2" placeholder=" "></textarea>
+				<label>Description</label>
+			</div>
+			<div class="form-group">
+				<input type="text" id="editImage" placeholder=" ">
+				<label>Image URL</label>
+			</div>
+			
+			<div class="form-group" style="margin-top: 30px;">
+				<!-- Hidden Native Select -->
+				<select id="editCategory" style="display:none;">
 					<option value="Breakfast">Breakfast</option>
 					<option value="Lunch">Lunch</option>
 					<option value="Dinner">Dinner</option>
 					<option value="Drinks">Drinks</option>
 					<option value="Desserts">Desserts</option>
 				</select>
+				<!-- Custom Dropdown UI -->
+				<div class="custom-select-wrap" id="editCategoryWrap">
+					<div class="custom-select-trigger" onclick="toggleCustomSelect('editCategoryWrap')">
+						<span class="custom-select-label" style="color:#888; font-size:12px; margin-bottom:2px; display:block; text-transform:uppercase; font-weight:700;">Category</span>
+						<div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+							<span class="val-text">Lunch</span>
+							<i class="ion-ios-arrow-down"></i>
+						</div>
+					</div>
+					<ul class="custom-select-options">
+						<li data-value="Breakfast" onclick="selectCustomOption('editCategory', 'editCategoryWrap', this)">Breakfast</li>
+						<li data-value="Lunch" class="active" onclick="selectCustomOption('editCategory', 'editCategoryWrap', this)">Lunch</li>
+						<li data-value="Dinner" onclick="selectCustomOption('editCategory', 'editCategoryWrap', this)">Dinner</li>
+						<li data-value="Drinks" onclick="selectCustomOption('editCategory', 'editCategoryWrap', this)">Drinks</li>
+						<li data-value="Desserts" onclick="selectCustomOption('editCategory', 'editCategoryWrap', this)">Desserts</li>
+					</ul>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>Type</label>
-				<select id="editType">
+
+			<div class="form-group" style="margin-top: 25px;">
+				<!-- Hidden Native Select -->
+				<select id="editType" style="display:none;">
 					<option value="veg">Veg</option>
 					<option value="non-veg">Non-Veg</option>
 				</select>
+				<!-- Custom Dropdown UI -->
+				<div class="custom-select-wrap" id="editTypeWrap">
+					<div class="custom-select-trigger" onclick="toggleCustomSelect('editTypeWrap')">
+						<span class="custom-select-label" style="color:#888; font-size:12px; margin-bottom:2px; display:block; text-transform:uppercase; font-weight:700;">Type</span>
+						<div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+							<span class="val-text">Veg</span>
+							<i class="ion-ios-arrow-down"></i>
+						</div>
+					</div>
+					<ul class="custom-select-options">
+						<li data-value="veg" class="active" onclick="selectCustomOption('editType', 'editTypeWrap', this)">Veg</li>
+						<li data-value="non-veg" onclick="selectCustomOption('editType', 'editTypeWrap', this)">Non-Veg</li>
+					</ul>
+				</div>
 			</div>
 			
 			<button class="save-btn" onclick="saveItemChanges()">Save Changes</button>
@@ -320,26 +419,67 @@
 			<button class="close-btn" onclick="closeAddModal()">&times;</button>
 			<h3>Add New Dish</h3>
 
-			<div class="form-group"><label>Dish Name *</label><input type="text" id="addName" placeholder="e.g. Paneer Butter Masala"></div>
-			<div class="form-group"><label>Price (₹) *</label><input type="number" id="addPrice" placeholder="299"></div>
-			<div class="form-group"><label>Description</label><textarea id="addDesc" rows="3" placeholder="Short description..."></textarea></div>
-			<div class="form-group"><label>Image URL</label><input type="text" id="addImage" placeholder="https://..."></div>
 			<div class="form-group">
-				<label>Category *</label>
-				<select id="addCategory">
+				<input type="text" id="addName" placeholder=" ">
+				<label>Dish Name *</label>
+			</div>
+			<div class="form-group">
+				<input type="number" id="addPrice" placeholder=" ">
+				<label>Price (₹) *</label>
+			</div>
+			<div class="form-group">
+				<textarea id="addDesc" rows="2" placeholder=" "></textarea>
+				<label>Description</label>
+			</div>
+			<div class="form-group">
+				<input type="text" id="addImage" placeholder=" ">
+				<label>Image URL</label>
+			</div>
+
+			<div class="form-group" style="margin-top: 30px;">
+				<select id="addCategory" style="display:none;">
 					<option value="Breakfast">Breakfast</option>
 					<option value="Lunch" selected>Lunch</option>
 					<option value="Dinner">Dinner</option>
 					<option value="Drinks">Drinks</option>
 					<option value="Desserts">Desserts</option>
 				</select>
+				<div class="custom-select-wrap" id="addCategoryWrap">
+					<div class="custom-select-trigger" onclick="toggleCustomSelect('addCategoryWrap')">
+						<span class="custom-select-label" style="color:#888; font-size:12px; margin-bottom:2px; display:block; text-transform:uppercase; font-weight:700;">Category</span>
+						<div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+							<span class="val-text">Lunch</span>
+							<i class="ion-ios-arrow-down"></i>
+						</div>
+					</div>
+					<ul class="custom-select-options">
+						<li data-value="Breakfast" onclick="selectCustomOption('addCategory', 'addCategoryWrap', this)">Breakfast</li>
+						<li data-value="Lunch" class="active" onclick="selectCustomOption('addCategory', 'addCategoryWrap', this)">Lunch</li>
+						<li data-value="Dinner" onclick="selectCustomOption('addCategory', 'addCategoryWrap', this)">Dinner</li>
+						<li data-value="Drinks" onclick="selectCustomOption('addCategory', 'addCategoryWrap', this)">Drinks</li>
+						<li data-value="Desserts" onclick="selectCustomOption('addCategory', 'addCategoryWrap', this)">Desserts</li>
+					</ul>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>Type</label>
-				<select id="addType">
+
+			<div class="form-group" style="margin-top: 25px;">
+				<select id="addType" style="display:none;">
 					<option value="veg">Veg</option>
 					<option value="non-veg">Non-Veg</option>
 				</select>
+				<div class="custom-select-wrap" id="addTypeWrap">
+					<div class="custom-select-trigger" onclick="toggleCustomSelect('addTypeWrap')">
+						<span class="custom-select-label" style="color:#888; font-size:12px; margin-bottom:2px; display:block; text-transform:uppercase; font-weight:700;">Type</span>
+						<div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+							<span class="val-text">Veg</span>
+							<i class="ion-ios-arrow-down"></i>
+						</div>
+					</div>
+					<ul class="custom-select-options">
+						<li data-value="veg" class="active" onclick="selectCustomOption('addType', 'addTypeWrap', this)">Veg</li>
+						<li data-value="non-veg" onclick="selectCustomOption('addType', 'addTypeWrap', this)">Non-Veg</li>
+					</ul>
+				</div>
 			</div>
 
 			<button class="save-btn" id="addSaveBtn" onclick="saveNewItem()">Add Dish</button>
@@ -401,7 +541,7 @@
 			if (!toast) {
 				toast = document.createElement("div");
 				toast.id = "cart-toast";
-				toast.style.cssText = "position:fixed;bottom:30px;right:30px;background:#2e7d32;color:#fff;padding:14px 24px;border-radius:8px;font-family:Poppins,sans-serif;font-size:14px;box-shadow:0 5px 20px rgba(0,0,0,0.2);opacity:0;transform:translateY(20px);transition:0.3s;z-index:9999;";
+				toast.style.cssText = "position:fixed;bottom:30px;right:30px;background:#2e7d32;color:#fff;padding:14px 24px;border-radius:12px;font-family:Poppins,sans-serif;font-size:14px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,0.2);opacity:0;transform:translateY(20px);transition:0.3s;z-index:9999;";
 				document.body.appendChild(toast);
 			}
 			toast.textContent = msg;
@@ -489,8 +629,8 @@
                                         <span class="price-tag">₹${Number(item.price).toFixed(0)}</span>
                                         <div class="action-buttons">
                                             ${isAdmin ? `
-                                                <button class="edit-btn" onclick="openEditModal('${item._id}')"><i class="ion-ios-create"></i> Edit</button>
-                                                <button class="delete-btn" onclick="deleteItem('${item._id}', '${item.name.replace(/'/g, "\\'")}')"><i class="ion-ios-trash"></i> Delete</button>
+                                                <button class="edit-btn" onclick="openEditModal('${item._id}')"><i class="ion-ios-create"></i></button>
+                                                <button class="delete-btn" onclick="deleteItem('${item._id}', '${item.name.replace(/'/g, "\\'")}')"><i class="ion-ios-trash"></i></button>
                                             ` : ''}
                                             <button class="order-btn order-now-btn"
                                                 data-id="${item._id}"
@@ -508,7 +648,49 @@
                 </div>`;
 		}
 
-		// 🚀 EDIT MODAL LOGIC (ADMIN ONLY)
+		// 🚀 CUSTOM DROPDOWN LOGIC
+		function toggleCustomSelect(wrapId) {
+			const wrap = document.getElementById(wrapId);
+			const isOpen = wrap.classList.contains('open');
+			document.querySelectorAll('.custom-select-wrap').forEach(el => el.classList.remove('open'));
+			if (!isOpen) wrap.classList.add('open');
+		}
+
+		function selectCustomOption(selectId, wrapId, liElement) {
+			const value = liElement.getAttribute('data-value');
+			const text = liElement.innerText;
+			
+			document.getElementById(selectId).value = value;
+			
+			const wrap = document.getElementById(wrapId);
+			wrap.querySelector('.val-text').innerText = text;
+			wrap.classList.remove('open');
+			
+			wrap.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+			liElement.classList.add('active');
+		}
+
+		function syncCustomDropdown(wrapId, value) {
+			const wrap = document.getElementById(wrapId);
+			if (!wrap) return;
+			const options = wrap.querySelectorAll('li');
+			options.forEach(li => {
+				if (li.getAttribute('data-value') === value) {
+					li.classList.add('active');
+					wrap.querySelector('.val-text').innerText = li.innerText;
+				} else {
+					li.classList.remove('active');
+				}
+			});
+		}
+
+		document.addEventListener('click', function(e) {
+			if (!e.target.closest('.custom-select-wrap')) {
+				document.querySelectorAll('.custom-select-wrap').forEach(el => el.classList.remove('open'));
+			}
+		});
+
+		// 🚀 EDIT MODAL LOGIC
 		function openEditModal(id) {
 			const item = allItems.find(i => i._id === id);
 			if (!item) return;
@@ -518,8 +700,14 @@
 			document.getElementById("editPrice").value = item.price;
 			document.getElementById("editDesc").value = item.description || "";
 			document.getElementById("editImage").value = item.image || "";
-			document.getElementById("editCategory").value = item.category;
-			document.getElementById("editType").value = item.type || "veg";
+			
+			const catVal = item.category || "Lunch";
+			document.getElementById("editCategory").value = catVal;
+			syncCustomDropdown('editCategoryWrap', catVal);
+
+			const typeVal = item.type || "veg";
+			document.getElementById("editType").value = typeVal;
+			syncCustomDropdown('editTypeWrap', typeVal);
 
 			document.getElementById("editModal").classList.add("active");
 		}
@@ -556,7 +744,6 @@
 				if (res.ok && data.success) {
 					const index = allItems.findIndex(i => i._id === id);
 					if (index > -1) allItems[index] = { ...allItems[index], ...payload };
-					
 					applyFilters();
 					closeEditModal();
 					showToast("Dish updated successfully!");
@@ -568,14 +755,19 @@
 			}
 		}
 
-		// 🚀 ADD NEW ITEM LOGIC (ADMIN ONLY)
+		// 🚀 ADD NEW ITEM LOGIC
 		function openAddModal() {
 			document.getElementById("addName").value = "";
 			document.getElementById("addPrice").value = "";
 			document.getElementById("addDesc").value = "";
 			document.getElementById("addImage").value = "";
+			
 			document.getElementById("addCategory").value = "Lunch";
+			syncCustomDropdown('addCategoryWrap', 'Lunch');
+			
 			document.getElementById("addType").value = "veg";
+			syncCustomDropdown('addTypeWrap', 'veg');
+			
 			document.getElementById("addModal").classList.add("active");
 		}
 
@@ -632,7 +824,7 @@
 			}
 		}
 
-		// 🚀 DELETE ITEM (ADMIN ONLY)
+		// 🚀 DELETE ITEM
 		async function deleteItem(id, name) {
 			if (!confirm(`Delete "${name}" from the menu? This cannot be undone.`)) return;
 
@@ -707,17 +899,14 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			updateCartCount();
 
-			// Show "Add New Item" button for admins
 			if (isAdmin) {
 				const wrap = document.getElementById("adminAddWrap");
 				if (wrap) wrap.style.display = "flex";
 			}
 
-			// Wire up add button
 			const addBtn = document.getElementById("addItemBtn");
 			if (addBtn) addBtn.addEventListener("click", openAddModal);
 
-			// Close add modal when clicking backdrop
 			const addModal = document.getElementById("addModal");
 			if (addModal) {
 				addModal.addEventListener("click", (e) => {
@@ -725,7 +914,6 @@
 				});
 			}
 
-			// Close edit modal when clicking backdrop
 			const editModal = document.getElementById("editModal");
 			if (editModal) {
 				editModal.addEventListener("click", (e) => {
