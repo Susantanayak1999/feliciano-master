@@ -33,6 +33,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
         }
         .sidebar h1 {
             font-family: 'Playfair Display', serif;
@@ -135,9 +136,17 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            flex-shrink: 0;
         }
-        .stat-info h3 { font-size: 14px; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
-        .stat-info p { font-size: 24px; color: #1a1a1a; font-weight: 700; }
+        .stat-info h3 { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .stat-info p { font-size: 24px; color: #1a1a1a; font-weight: 700; line-height: 1.2; }
+        
+        /* Live tracking split */
+        .live-split { display: flex; gap: 15px; margin-top: 4px; }
+        .live-split div { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .live-split .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .live-split .blue { background: #1976d2; }
+        .live-split .orange { background: #f57c00; }
 
         /* ===== TABS ===== */
         .tab-content { display: none; }
@@ -166,6 +175,8 @@
         }
         .card-header h3 { font-size: 18px; color: #1a1a1a; font-weight: 600; display: flex; align-items: center; gap: 10px;}
         .card-header small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
+        .time-ago { color: #f57c00; font-weight: 600; font-size: 12px; background: #fff3e0; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+        
         .card-header .amount { font-size: 22px; font-weight: 800; color: var(--gold); }
         
         .customer-info {
@@ -276,7 +287,7 @@
             </button>
         </div>
 
-        <!-- STATS (Only visible on Orders tab) -->
+        <!-- STATS -->
         <div class="stats-grid" id="stats-container">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-receipt"></i></div>
@@ -290,6 +301,17 @@
                 <div class="stat-info">
                     <h3>Total Revenue</h3>
                     <p id="stat-revenue">₹0.00</p>
+                </div>
+            </div>
+            <!-- NEW: LIVE TRACKING CARD -->
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(25, 118, 210, 0.1); color: #1976d2;"><i class="fas fa-fire"></i></div>
+                <div class="stat-info">
+                    <h3>Live Queue</h3>
+                    <div class="live-split">
+                        <div style="color:#1976d2;"><span class="dot blue"></span> <span id="stat-pending">0</span> Pending</div>
+                        <div style="color:#f57c00;"><span class="dot orange"></span> <span id="stat-preparing">0</span> Preparing</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -321,15 +343,12 @@
 
         // UI SWITCHING
         function switchTab(tab) {
-            // Update active nav
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${tab}`).classList.add('active');
             
-            // Update content
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
 
-            // Update title & stats
             if (tab === 'orders') {
                 document.getElementById('page-title').innerText = "Manage Orders";
                 document.getElementById('stats-container').style.display = "grid";
@@ -345,6 +364,22 @@
             } else {
                 loadReservations();
             }
+        }
+
+        // Helper to format "Time Ago"
+        function timeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            if (diffMins < 1) return "Just now";
+            if (diffMins < 60) return `${diffMins} mins ago`;
+            
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours} hrs ago`;
+            
+            return Math.floor(diffHours / 24) + " days ago";
         }
 
         // FETCH ORDERS
@@ -367,9 +402,19 @@
 
                 // Calculate Stats
                 let totalRevenue = 0;
-                data.orders.forEach(o => totalRevenue += o.amount);
+                let pendingCount = 0;
+                let preparingCount = 0;
+
+                data.orders.forEach(o => {
+                    totalRevenue += o.amount;
+                    if (o.status === 'Preparing') preparingCount++;
+                    else if (o.status === 'Confirmed' || !o.status) pendingCount++;
+                });
+
                 document.getElementById("stat-total-orders").innerText = data.orders.length;
                 document.getElementById("stat-revenue").innerText = "₹" + totalRevenue.toFixed(2);
+                document.getElementById("stat-pending").innerText = pendingCount;
+                document.getElementById("stat-preparing").innerText = preparingCount;
 
                 // Render Orders
                 document.getElementById("orders-list").innerHTML = data.orders.map(order => {
@@ -381,12 +426,18 @@
                         </li>
                     `).join("");
 
+                    // Only show "time ago" if the order is not delivered or cancelled
+                    const showTimeAgo = order.status !== 'Delivered' && order.status !== 'Cancelled';
+
                     return `
                         <div class="card">
                             <div class="card-header">
                                 <div>
-                                    <h3>Order #${order._id.slice(-6).toUpperCase()}</h3>
-                                    <small><i class="far fa-clock"></i> ${new Date(order.createdAt).toLocaleString()}</small>
+                                    <h3>
+                                        Order #${order._id.slice(-6).toUpperCase()}
+                                        ${showTimeAgo ? `<span class="time-ago"><i class="far fa-clock"></i> ${timeAgo(order.createdAt)}</span>` : ''}
+                                    </h3>
+                                    <small><i class="far fa-calendar-alt"></i> ${new Date(order.createdAt).toLocaleString()}</small>
                                 </div>
                                 <div class="amount">₹${order.amount.toFixed(2)}</div>
                             </div>
@@ -432,6 +483,9 @@
                     const badge = document.getElementById(`badge-${orderId}`);
                     badge.className = `badge ${newStatus}`;
                     badge.innerText = newStatus;
+                    
+                    // Refresh data silently to update the Live Queue stats
+                    loadOrders(); 
                 } else {
                     alert("Failed to update status");
                 }
