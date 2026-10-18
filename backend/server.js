@@ -13,11 +13,11 @@ const app = express();
 app.use(cors());
 
 // ============================================================
-// 1. CAPTURE RAW BODY (MUST BE BEFORE WEBHOOK ROUTE)
+// 🚀 1. CAPTURE RAW BODY (MUST BE BEFORE ALL ROUTES)
+// This fixes the 500 error by ensuring the webhook gets the raw buffer
 // ============================================================
 app.use(express.json({
     verify: (req, res, buf) => {
-        // Save the raw body ONLY for the webhook route so we can verify the signature
         if (req.originalUrl.startsWith('/razorpay-webhook')) {
             req.rawBody = buf;
         }
@@ -25,7 +25,7 @@ app.use(express.json({
 }));
 
 // ============================================================
-// 2. WEBHOOK ROUTE (MUST BE AFTER MIDDLEWARE)
+// 🚀 2. RAZORPAY WEBHOOK ROUTE (MUST BE AFTER MIDDLEWARE)
 // ============================================================
 app.post("/razorpay-webhook", async (req, res) => {
     try {
@@ -66,8 +66,8 @@ app.post("/razorpay-webhook", async (req, res) => {
             const paymentEntity = payload.payload.payment.entity;
             const orderId = paymentEntity.order_id;
             const paymentId = paymentEntity.id;
-            const amount = (paymentEntity.amount / 100).toFixed(2); // convert paise to INR
-            
+            const amount = (paymentEntity.amount / 100).toFixed(2);
+
             console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Payment ID: ${paymentId}`);
 
             // 🚀 EMAIL ALERT TO ADMIN
@@ -99,7 +99,6 @@ app.post("/razorpay-webhook", async (req, res) => {
 
             if (existingOrder) {
                 console.log(`✅ Webhook confirmed: Order ${orderId} is safely in the database.`);
-                // If the frontend failed to mark it confirmed for some reason, we force it here
                 if (existingOrder.status !== "Confirmed") {
                     existingOrder.status = "Confirmed";
                     await existingOrder.save();
