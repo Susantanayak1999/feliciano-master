@@ -13,8 +13,19 @@ const app = express();
 app.use(cors());
 
 // ============================================================
-// WEBHOOK ROUTE MUST BE DEFINED BEFORE express.json() 
-// because Razorpay sends a raw body for signature verification.
+// 1. CAPTURE RAW BODY (MUST BE BEFORE WEBHOOK ROUTE)
+// ============================================================
+app.use(express.json({
+    verify: (req, res, buf) => {
+        // Save the raw body ONLY for the webhook route so we can verify the signature
+        if (req.originalUrl.startsWith('/razorpay-webhook')) {
+            req.rawBody = buf;
+        }
+    }
+}));
+
+// ============================================================
+// 2. WEBHOOK ROUTE (MUST BE AFTER MIDDLEWARE)
 // ============================================================
 app.post("/razorpay-webhook", async (req, res) => {
     try {
@@ -26,11 +37,13 @@ app.post("/razorpay-webhook", async (req, res) => {
         }
 
         const signature = req.headers["x-razorpay-signature"];
-        const body = req.rawBody; // 👈 Use the raw buffer we captured
+        const body = req.rawBody; // Now this will be populated correctly
+
         if (!body) {
-            console.error("❌ Webhook Error: Body is null");
+            console.error("❌ Webhook Error: Body is null. Middleware failed.");
             return res.status(400).json({ status: "error", message: "No body" });
         }
+
         // 1. Verify the signature to ensure it's actually from Razorpay
         const expectedSignature = crypto
             .createHmac("sha256", webhookSecret)
@@ -53,8 +66,33 @@ app.post("/razorpay-webhook", async (req, res) => {
             const paymentEntity = payload.payload.payment.entity;
             const orderId = paymentEntity.order_id;
             const paymentId = paymentEntity.id;
-
+            const amount = (paymentEntity.amount / 100).toFixed(2); // convert paise to INR
+            
             console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Payment ID: ${paymentId}`);
+
+            // 🚀 EMAIL ALERT TO ADMIN
+            try {
+                await brevoSend({
+                    to: "adminsusanta@gmail.com",
+                    subject: `💰 New Payment Received: ₹${amount}`,
+                    html: `
+                    <div style="font-family: Arial, sans-serif; padding: 20px; background: #f4f6f9;">
+                        <div style="background: #fff; padding: 20px; border-radius: 10px; border-left: 5px solid #2e7d32;">
+                            <h2 style="color: #2e7d32; margin-top: 0;">Payment Successful!</h2>
+                            <p><strong>Order ID:</strong> ${orderId}</p>
+                            <p><strong>Payment ID:</strong> ${paymentId}</p>
+                            <p><strong>Amount:</strong> ₹${amount}</p>
+                            <p><strong>Customer Email:</strong> ${paymentEntity.email || "N/A"}</p>
+                            <p><strong>Customer Phone:</strong> ${paymentEntity.contact || "N/A"}</p>
+                            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                            <p style="font-size: 12px; color: #888;">This is an automated notification from your Razorpay Webhook.</p>
+                        </div>
+                    </div>`
+                });
+                console.log("✅ Admin notification email sent.");
+            } catch (emailErr) {
+                console.error("❌ Failed to send admin email:", emailErr.message);
+            }
 
             // Check if order already exists in our DB
             const existingOrder = await Order.findOne({ orderId: orderId });
@@ -68,7 +106,6 @@ app.post("/razorpay-webhook", async (req, res) => {
                 }
             } else {
                 console.warn(`⚠️ Webhook: Order ${orderId} not found in DB. The user's browser might have crashed before saving.`);
-                // Note: If we wanted to be 100% bulletproof, we would save the order here using data from Razorpay's `notes`.
             }
         }
 
@@ -81,15 +118,6 @@ app.post("/razorpay-webhook", async (req, res) => {
     }
 });
 
-// Normal JSON parsing for all other routes
-// 🚀 CAPTURE RAW BODY FOR WEBHOOKS
-app.use(express.json({
-    verify: (req, res, buf) => {
-        if (req.originalUrl.startsWith('/razorpay-webhook')) {
-            req.rawBody = buf;
-        }
-    }
-}));
 // ============================================================
 // MongoDB Connection
 // ============================================================
