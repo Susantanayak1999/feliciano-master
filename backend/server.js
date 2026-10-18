@@ -7,7 +7,7 @@ const Razorpay = require("razorpay");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { sendReservationEmail, sendOrderEmail } = require("./mailer");
+const { sendReservationEmail, sendOrderEmail, sendReservationStatusEmail } = require("./mailer");
 
 const app = express();
 app.use(cors());
@@ -493,7 +493,6 @@ app.get("/menu", async (req, res) => {
     }
 });
 
-// 🚀 ADMIN: UPDATE MENU ITEM (Protected)
 app.put("/admin/menu/:id", adminMiddleware, async (req, res) => {
     try {
         const { name, price, description, image, category, type } = req.body;
@@ -513,7 +512,6 @@ app.put("/admin/menu/:id", adminMiddleware, async (req, res) => {
     }
 });
 
-// 🚀 ADMIN: ADD NEW MENU ITEM (Protected)
 app.post("/admin/menu/add", adminMiddleware, async (req, res) => {
     try {
         const { name, description, price, image, category, type, ingredients } = req.body;
@@ -536,7 +534,6 @@ app.post("/admin/menu/add", adminMiddleware, async (req, res) => {
     }
 });
 
-// 🚀 ADMIN: DELETE MENU ITEM (Protected)
 app.delete("/admin/menu/:id", adminMiddleware, async (req, res) => {
     try {
         const deleted = await MenuItem.findByIdAndDelete(req.params.id);
@@ -679,6 +676,41 @@ app.get("/admin/reservations", adminMiddleware, async (req, res) => {
     try {
         const reservations = await Reservation.find().sort({ createdAt: -1 });
         res.json({ success: true, reservations });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 🚀 NEW: APPROVE OR CANCEL RESERVATION
+app.put("/admin/reservations/:id/status", adminMiddleware, async (req, res) => {
+    try {
+        const { status } = req.body; // 'approved' or 'cancelled'
+        
+        if (!['approved', 'cancelled'].includes(status)) {
+            return res.status(400).json({ success: false, error: "Invalid status" });
+        }
+
+        const reservation = await Reservation.findByIdAndUpdate(
+            req.params.id, 
+            { status }, 
+            { new: true }
+        );
+
+        if (!reservation) {
+            return res.status(404).json({ success: false, error: "Reservation not found" });
+        }
+
+        // 🚀 Send Email using the new function in mailer.js
+        sendReservationStatusEmail({
+            to: reservation.email,
+            name: reservation.name,
+            date: reservation.date,
+            time: reservation.time,
+            persons: reservation.persons,
+            status: status
+        }).catch(err => console.error("❌ Status email failed:", err.message));
+
+        res.json({ success: true, reservation });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }

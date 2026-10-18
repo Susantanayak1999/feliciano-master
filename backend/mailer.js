@@ -36,7 +36,7 @@ async function brevoSend({ to, subject, html }) {
 }
 
 // ------------------------------------------------------------
-// 1. RESERVATION CONFIRMATION
+// 1. RESERVATION CONFIRMATION (Initial Request)
 // ------------------------------------------------------------
 async function sendReservationEmail({ to, name, date, time, persons, reservationId }) {
     if (!BREVO_API_KEY) return { sent: false };
@@ -130,4 +130,45 @@ async function sendOrderEmail({ to, name, items, amount, paymentId, orderId }) {
     }
 }
 
-module.exports = { sendReservationEmail, sendOrderEmail };
+// ------------------------------------------------------------
+// 3. RESERVATION STATUS UPDATE (Approved / Cancelled)
+// ------------------------------------------------------------
+async function sendReservationStatusEmail({ to, name, date, time, persons, status }) {
+    if (!BREVO_API_KEY) return { sent: false };
+
+    const isApproved = status === "approved";
+    const color = isApproved ? "#2e7d32" : "#c62828";
+    const title = isApproved ? "Reservation Approved!" : "Reservation Cancelled";
+    const msg = isApproved 
+        ? `Great news, ${name}! Your table for <strong>${persons} guests</strong> on <strong>${date}</strong> at <strong>${time}</strong> is confirmed. We look forward to serving you!`
+        : `Hi ${name}, unfortunately, we had to cancel your reservation for <strong>${persons} guests</strong> on <strong>${date}</strong>. Please contact us if you have any questions.`;
+
+    const html = `
+    <div style="font-family:'Poppins',Arial,sans-serif;background:#f6f2ea;padding:40px 20px;">
+      <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.08);">
+        <div style="height:5px;background:${color};"></div>
+        <div style="padding:40px;text-align:center;">
+          <h1 style="font-family:Georgia,serif;color:${color};margin:0;font-size:32px;">${title}</h1>
+          <p style="color:#555;font-size:15px;margin-top:20px;line-height:1.6;">${msg}</p>
+        </div>
+        <div style="background:#1a1a1a;color:#999;padding:20px;font-size:12px;text-align:center;">
+          Need help? Call +91 98765 43210
+        </div>
+      </div>
+    </div>`;
+
+    try {
+        const data = await brevoSend({
+            to,
+            subject: `Reservation Update — ${title}`,
+            html,
+        });
+        console.log("✅ Reservation Status email sent to", to, "→", data.messageId);
+        return { sent: true, id: data.messageId };
+    } catch (err) {
+        console.error("❌ Reservation Status email failed:", err.message);
+        return { sent: false, error: err.message };
+    }
+}
+
+module.exports = { sendReservationEmail, sendOrderEmail, sendReservationStatusEmail };
