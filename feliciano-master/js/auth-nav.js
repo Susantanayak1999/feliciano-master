@@ -6,7 +6,7 @@
 (function () {
     "use strict";
 
-    const LOGIN_PAGE = "/login"; // 🚀 Clean URL
+    const LOGIN_PAGE = "/login"; // 🚀 Changed from "login.html"
 
     /* ============================================================
        1. INIT
@@ -34,8 +34,8 @@
             // 🚀 NEW: Check if the user is an admin
             const isAdmin = user.role === "admin";
             const dashboardLink = isAdmin 
-                ? `<li><a href="/admin" style="font-weight:600; color:#c8a97e !important;">Admin Dashboard</a></li>` 
-                : `<li><a href="/my-orders">My Orders</a></li>`; // 🚀 Clean URLs
+                ? `<li><a href="/admin" style="font-weight:600; color:#c8a97e !important;">Admin Dashboard</a></li>` // 🚀 Changed from "admin.html"
+                : `<li><a href="/my-orders">My Orders</a></li>`; // 🚀 Changed from "my-orders.html"
 
             li.innerHTML = `
                 <a href="#" class="nav-link" id="authNavLink">
@@ -79,7 +79,7 @@
                         badge.setAttribute("data-count", "0");
                         badge.style.display = "none";
                     }
-                    location.href = "/"; // 🚀 Clean URL for home
+                    location.href = "/"; // 🚀 Changed from "index.html"
                 }
             });
 
