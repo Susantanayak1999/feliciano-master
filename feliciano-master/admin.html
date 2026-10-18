@@ -23,6 +23,8 @@
             --orange: #f57c00;
             --green: #2e7d32;
             --red: #c62828;
+            --veg: #2e7d32;
+            --nonveg: #b71c1c;
         }
 
         * {
@@ -187,14 +189,6 @@
 
         .clock-box i {
             color: var(--gold);
-        }
-
-        .clock-box small {
-            font-size: 10px;
-            color: var(--green);
-            font-weight: 700;
-            margin-left: 5px;
-            animation: pulse 2s infinite;
         }
 
         .refresh-btn {
@@ -425,7 +419,7 @@
             }
         }
 
-        /* ===== ORDER CARDS ===== */
+        /* ===== ORDER CARDS (REDESIGNED) ===== */
         .card {
             background: #fff;
             border-radius: 16px;
@@ -504,6 +498,7 @@
             color: var(--gold);
         }
 
+        /* Fixed Customer Info Overflow */
         .customer-info {
             display: flex;
             gap: 24px;
@@ -515,7 +510,6 @@
             border-radius: 10px;
             border: 1px solid rgba(200, 169, 126, 0.2);
             flex-wrap: wrap;
-            /* 🚀 FIX: Ensure long emails wrap and don't overflow */
             word-break: break-word;
             overflow-wrap: break-word;
         }
@@ -525,7 +519,6 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
-            /* 🚀 FIX: Allow the span to shrink and wrap */
             word-break: break-word;
             overflow-wrap: break-word;
         }
@@ -544,6 +537,7 @@
         .items-list li {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 10px 0;
             font-size: 14.5px;
             color: #444;
@@ -554,12 +548,38 @@
             border-bottom: none;
         }
 
-        .items-list li span:first-child {
-            font-weight: 500;
-            color: #1a1a1a;
+        .item-info {
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .item-type-dot {
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid var(--veg);
+            border-radius: 3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-type-dot::after {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--veg);
+        }
+
+        .item-type-dot.nonveg {
+            border-color: var(--nonveg);
+        }
+
+        .item-type-dot.nonveg::after {
+            background: var(--nonveg);
         }
 
         .status-row {
@@ -577,24 +597,6 @@
             font-size: 14px;
             font-weight: 600;
             color: #555;
-        }
-
-        select {
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: 1.5px solid #ddd;
-            font-size: 14px;
-            font-weight: 600;
-            outline: none;
-            background: #fff;
-            cursor: pointer;
-            transition: 0.3s;
-            color: #333;
-        }
-
-        select:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2);
         }
 
         .badge {
@@ -624,6 +626,117 @@
         .badge.Cancelled {
             background: #ffebee;
             color: var(--red);
+        }
+
+        /* ===== CUSTOM DROPDOWN ===== */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            width: 140px;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background: #fff;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.3s;
+        }
+
+        .dropdown-btn:hover,
+        .dropdown-btn:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2);
+            outline: none;
+        }
+
+        .dropdown-btn i {
+            font-size: 12px;
+            color: var(--muted);
+            transition: transform 0.3s;
+        }
+
+        .custom-dropdown.open .dropdown-btn i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #eee;
+            padding: 6px 0;
+            margin: 0;
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .custom-dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 10px 16px;
+            font-size: 13.5px;
+            font-family: "Poppins", sans-serif;
+            color: #444;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-menu li:hover {
+            background: #f8f6f3;
+            color: var(--gold-dark);
+        }
+
+        .dropdown-menu li.active {
+            background: rgba(200, 169, 126, 0.1);
+            color: var(--gold-dark);
+            font-weight: 600;
+        }
+
+        .dropdown-menu li .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dropdown-menu li[data-value="Confirmed"] .dot {
+            background: var(--blue);
+        }
+
+        .dropdown-menu li[data-value="Preparing"] .dot {
+            background: var(--orange);
+        }
+
+        .dropdown-menu li[data-value="Delivered"] .dot {
+            background: var(--green);
+        }
+
+        .dropdown-menu li[data-value="Cancelled"] .dot {
+            background: var(--red);
         }
 
         /* ===== RESERVATIONS TICKET STYLE ===== */
@@ -699,6 +812,7 @@
             padding: 10px 16px;
             border-radius: 10px;
             border: 1px solid #eee;
+            word-break: break-word;
         }
 
         .res-contact i {
@@ -886,6 +1000,11 @@
                 gap: 10px;
             }
 
+            .customer-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
             .res-card {
                 flex-direction: column;
             }
@@ -909,6 +1028,11 @@
                 top: -10px;
                 bottom: auto;
             }
+
+            .res-contact {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
 
         @media (max-width: 600px) {
@@ -923,9 +1047,18 @@
                 justify-content: space-between;
             }
 
-            .res-contact {
-                flex-direction: column;
-                gap: 10px;
+            .status-row {
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .custom-dropdown {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .dropdown-btn {
+                justify-content: space-between;
             }
         }
     </style>
@@ -936,7 +1069,6 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <h1>Mixtape Admin</h1>
-
         <div class="sidebar-nav">
             <a class="nav-item active" onclick="switchTab('orders')" id="nav-orders">
                 <i class="fas fa-shopping-bag"></i> Orders
@@ -945,11 +1077,8 @@
                 <i class="fas fa-calendar-alt"></i> Reservations
             </a>
         </div>
-
         <div class="sidebar-footer">
-            <a href="index.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i> Back to Site
-            </a>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Site</a>
         </div>
     </aside>
 
@@ -1026,14 +1155,11 @@
 
         <!-- ORDERS TAB -->
         <div id="tab-orders" class="tab-content active">
-
-            <!-- SEARCH BAR -->
             <div class="search-container">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchInput" placeholder="Search by Order ID, Name, Email, or Payment ID..."
                     oninput="renderOrderList()">
             </div>
-
             <div id="orders-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
                 orders...</div>
             <div id="orders-list"></div>
@@ -1058,13 +1184,12 @@
 
         if (!token || !user || user.role !== "admin") {
             alert("Access Denied. You are not an admin.");
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${tab}`).classList.add('active');
-
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
 
@@ -1083,38 +1208,25 @@
 
         async function refreshData(isManual = false) {
             const btn = document.getElementById('refreshBtn');
-            if (isManual) {
-                btn.classList.add('spinning');
-                setTimeout(() => btn.classList.remove('spinning'), 600);
-            }
-            if (document.getElementById('tab-orders').classList.contains('active')) {
-                await loadOrders(!isManual);
-            } else {
-                if (isManual) await loadReservations();
-            }
+            if (isManual) { btn.classList.add('spinning'); setTimeout(() => btn.classList.remove('spinning'), 600); }
+            if (document.getElementById('tab-orders').classList.contains('active')) { await loadOrders(!isManual); }
+            else { if (isManual) await loadReservations(); }
         }
 
         function timeAgo(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffMs = now - date;
+            const date = new Date(dateString); const now = new Date(); const diffMs = now - date;
             const diffMins = Math.floor(diffMs / 60000);
-
             if (diffMins < 1) return { text: "Just now", urgent: false };
             if (diffMins < 60) return { text: `${diffMins} mins ago`, urgent: diffMins > 20 };
-
             const diffHours = Math.floor(diffMins / 60);
             if (diffHours < 24) return { text: `${diffHours} hrs ago`, urgent: true };
-
             return { text: Math.floor(diffHours / 24) + " days ago", urgent: true };
         }
 
         function filterStatus(status) {
             currentFilter = (currentFilter === status) ? "All" : status;
             document.querySelectorAll('.status-box').forEach(el => el.classList.remove('active-filter'));
-            if (currentFilter !== "All") {
-                document.getElementById(`filter-${currentFilter}`).classList.add('active-filter');
-            }
+            if (currentFilter !== "All") { document.getElementById(`filter-${currentFilter}`).classList.add('active-filter'); }
             renderOrderList();
         }
 
@@ -1124,114 +1236,145 @@
 
             let filteredData = allOrdersData;
 
-            if (currentFilter !== "All") {
-                filteredData = filteredData.filter(o => (o.status || 'Confirmed') === currentFilter);
-            }
-
+            if (currentFilter !== "All") { filteredData = filteredData.filter(o => (o.status || 'Confirmed') === currentFilter); }
             if (searchTerm) {
                 filteredData = filteredData.filter(order => {
                     const orderId = order._id ? order._id.toLowerCase() : "";
                     const paymentId = order.paymentId ? order.paymentId.toLowerCase() : "";
                     const customerName = order.userId && order.userId.name ? order.userId.name.toLowerCase() : "";
                     const customerEmail = order.userId && order.userId.email ? order.userId.email.toLowerCase() : "";
-
-                    return orderId.includes(searchTerm) ||
-                        paymentId.includes(searchTerm) ||
-                        customerName.includes(searchTerm) ||
-                        customerEmail.includes(searchTerm);
+                    return orderId.includes(searchTerm) || paymentId.includes(searchTerm) || customerName.includes(searchTerm) || customerEmail.includes(searchTerm);
                 });
             }
 
             if (!filteredData.length) {
-                listEl.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <h3>No Orders Found</h3>
-                        <p>No orders match your current filter or search query.</p>
-                    </div>
-                `;
+                listEl.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>No Orders Found</h3><p>No orders match your current filter or search query.</p></div>`;
                 return;
             }
 
             listEl.innerHTML = filteredData.map(order => {
                 const customer = order.userId ? `<strong>${order.userId.name}</strong> (${order.userId.email})` : "Guest User";
-                const itemsHtml = order.items.map(item => `
+                const itemsHtml = order.items.map(item => {
+                    const isNonVeg = item.type === "non-veg";
+                    return `
                     <li>
-                        <span><i class="fas fa-utensils" style="color:#ccc; font-size:12px;"></i> ${item.quantity}x ${item.name}</span>
+                        <span class="item-info">
+                            <span class="item-type-dot ${isNonVeg ? 'nonveg' : ''}"></span>
+                            ${item.quantity}x ${item.name}
+                        </span>
                         <span>₹${(item.price * item.quantity).toFixed(2)}</span>
                     </li>
-                `).join("");
+                    `;
+                }).join("");
 
                 const showTimeAgo = order.status !== 'Delivered' && order.status !== 'Cancelled';
                 const timeInfo = timeAgo(order.createdAt);
+                const currentStatus = order.status || 'Confirmed';
 
                 return `
                     <div class="card">
                         <div class="card-header">
                             <div>
-                                <h3>
-                                    Order #${order._id.slice(-6).toUpperCase()}
-                                    ${showTimeAgo ? `<span class="time-ago ${timeInfo.urgent ? 'urgent' : ''}"><i class="far fa-clock"></i> ${timeInfo.text}</span>` : ''}
-                                </h3>
+                                <h3>Order #${order._id.slice(-6).toUpperCase()} ${showTimeAgo ? `<span class="time-ago ${timeInfo.urgent ? 'urgent' : ''}"><i class="far fa-clock"></i> ${timeInfo.text}</span>` : ''}</h3>
                                 <small><i class="far fa-calendar-alt"></i> ${new Date(order.createdAt).toLocaleString()}</small>
                             </div>
                             <div class="amount">₹${order.amount.toFixed(2)}</div>
                         </div>
-                        
                         <div class="customer-info">
                             <span><i class="fas fa-user"></i> ${customer}</span>
                             <span><i class="fas fa-credit-card"></i> ${order.paymentId}</span>
                         </div>
-
                         <ul class="items-list">${itemsHtml}</ul>
-
+                        
                         <div class="status-row">
                             <label>Update Status:</label>
-                            <span class="badge ${order.status || 'Confirmed'}" id="badge-${order._id}">${order.status || 'Confirmed'}</span>
-                            <select onchange="updateStatus('${order._id}', this.value)">
-                                <option value="Confirmed" ${order.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                                <option value="Preparing" ${order.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
-                                <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
-                                <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                            </select>
+                            <span class="badge ${currentStatus}" id="badge-${order._id}">${currentStatus}</span>
+                            
+                            <!-- CUSTOM DROPDOWN -->
+                            <div class="custom-dropdown" id="dropdown-${order._id}">
+                                <button class="dropdown-btn" onclick="toggleDropdown('${order._id}')">
+                                    ${currentStatus} <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li data-value="Confirmed" class="${currentStatus === 'Confirmed' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Confirmed')"><span class="dot"></span> Confirmed</li>
+                                    <li data-value="Preparing" class="${currentStatus === 'Preparing' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Preparing')"><span class="dot"></span> Preparing</li>
+                                    <li data-value="Delivered" class="${currentStatus === 'Delivered' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Delivered')"><span class="dot"></span> Delivered</li>
+                                    <li data-value="Cancelled" class="${currentStatus === 'Cancelled' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Cancelled')"><span class="dot"></span> Cancelled</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join("");
         }
 
-        async function loadOrders(isBackground = true) {
-            const loader = document.getElementById("orders-loading");
+        // 🚀 CUSTOM DROPDOWN LOGIC
+        function toggleDropdown(orderId) {
+            const dropdown = document.getElementById(`dropdown-${orderId}`);
+            document.querySelectorAll('.custom-dropdown').forEach(el => {
+                if (el.id !== `dropdown-${orderId}`) el.classList.remove('open');
+            });
+            dropdown.classList.toggle('open');
+        }
 
-            if (!isBackground) {
-                loader.style.display = "block";
-                document.getElementById("orders-list").innerHTML = "";
+        function selectStatus(orderId, newStatus) {
+            document.getElementById(`dropdown-${orderId}`).classList.remove('open');
+            updateStatus(orderId, newStatus);
+        }
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(el => el.classList.remove('open'));
+            }
+        });
+
+        // 🚀 UPDATE STATUS
+        async function updateStatus(orderId, newStatus) {
+            // Instantly update the badge
+            const badge = document.getElementById(`badge-${orderId}`);
+            if (badge) {
+                badge.className = `badge ${newStatus}`;
+                badge.innerText = newStatus;
             }
 
             try {
-                const res = await fetch(`${BACKEND_URL}/admin/orders`, {
-                    headers: { "Authorization": "Bearer " + token }
+                const res = await fetch(`${BACKEND_URL}/admin/orders/${orderId}/status`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({ status: newStatus })
                 });
-                const data = await res.json();
 
+                if (res.ok) {
+                    const orderIndex = allOrdersData.findIndex(o => o._id === orderId);
+                    if (orderIndex > -1) allOrdersData[orderIndex].status = newStatus;
+                    loadOrders(true);
+                } else {
+                    alert("Failed to update status on server.");
+                    loadOrders(true);
+                }
+            } catch (err) {
+                alert("Error: " + err.message);
+                loadOrders(true);
+            }
+        }
+
+        async function loadOrders(isBackground = true) {
+            const loader = document.getElementById("orders-loading");
+            if (!isBackground) { loader.style.display = "block"; document.getElementById("orders-list").innerHTML = ""; }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/admin/orders`, { headers: { "Authorization": "Bearer " + token } });
+                const data = await res.json();
                 if (!isBackground) loader.style.display = "none";
 
                 const newOrdersData = data.orders || [];
-
-                // Smart DOM update check
                 if (JSON.stringify(allOrdersData) !== JSON.stringify(newOrdersData) || !isBackground) {
                     allOrdersData = newOrdersData;
 
-                    let totalRevenue = 0;
-                    let countConfirmed = 0;
-                    let countPreparing = 0;
-                    let countDelivered = 0;
-                    let countCancelled = 0;
-
+                    let totalRevenue = 0, countConfirmed = 0, countPreparing = 0, countDelivered = 0, countCancelled = 0;
                     allOrdersData.forEach(o => {
                         totalRevenue += o.amount;
                         const status = o.status || 'Confirmed';
-
                         if (status === 'Confirmed') countConfirmed++;
                         else if (status === 'Preparing') countPreparing++;
                         else if (status === 'Delivered') countDelivered++;
@@ -1242,7 +1385,6 @@
                     document.getElementById("stat-revenue").innerText = "₹" + totalRevenue.toFixed(2);
                     document.getElementById("stat-pending").innerText = countConfirmed;
                     document.getElementById("stat-preparing").innerText = countPreparing;
-
                     document.getElementById("count-confirmed").innerText = countConfirmed;
                     document.getElementById("count-preparing").innerText = countPreparing;
                     document.getElementById("count-delivered").innerText = countDelivered;
@@ -1250,7 +1392,6 @@
 
                     renderOrderList();
                 }
-
             } catch (err) {
                 if (!isBackground) {
                     loader.style.display = "none";
@@ -1259,130 +1400,45 @@
             }
         }
 
-        // 🚀 FIXED: Update UI instantly, then sync with database
-        async function updateStatus(orderId, newStatus) {
-            // 1. Instantly update the badge UI
-            const badge = document.getElementById(`badge-${orderId}`);
-            if (badge) {
-                badge.className = `badge ${newStatus}`;
-                badge.innerText = newStatus;
-            }
-
-            try {
-                const res = await fetch(`${BACKEND_URL}/admin/orders/${orderId}/status`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token
-                    },
-                    body: JSON.stringify({ status: newStatus })
-                });
-
-                if (res.ok) {
-                    // 2. Update the local data array to keep stats correct
-                    const orderIndex = allOrdersData.findIndex(o => o._id === orderId);
-                    if (orderIndex > -1) allOrdersData[orderIndex].status = newStatus;
-
-                    // 3. Silently refresh the whole list to update counts & sorting
-                    loadOrders(true);
-                } else {
-                    alert("Failed to update status on server.");
-                    loadOrders(true); // Revert UI on failure
-                }
-            } catch (err) {
-                alert("Error: " + err.message);
-                loadOrders(true); // Revert UI on failure
-            }
-        }
-
-        async function loadReservations(isBackground = false) {
+        async function loadReservations() {
             const loader = document.getElementById("reservations-loading");
-
-            // Only show the loading spinner if it's NOT a background refresh
-            if (!isBackground) {
-                loader.style.display = "block";
-                document.getElementById("reservations-list").innerHTML = "";
-            }
+            loader.style.display = "block"; document.getElementById("reservations-list").innerHTML = "";
 
             try {
-                const res = await fetch(`${BACKEND_URL}/admin/reservations`, {
-                    headers: { "Authorization": "Bearer " + token }
-                });
+                const res = await fetch(`${BACKEND_URL}/admin/reservations`, { headers: { "Authorization": "Bearer " + token } });
                 const data = await res.json();
-
-                if (!isBackground) loader.style.display = "none";
+                loader.style.display = "none";
 
                 if (!data.reservations.length) {
-                    document.getElementById("reservations-list").innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-calendar-alt"></i>
-                            <h3>No reservations yet</h3>
-                            <p>New table bookings will appear here.</p>
-                        </div>
-                    `;
+                    document.getElementById("reservations-list").innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><h3>No reservations yet</h3><p>New table bookings will appear here.</p></div>`;
                     return;
                 }
 
                 document.getElementById("reservations-list").innerHTML = data.reservations.map(rsv => {
                     const timeInfo = timeAgo(rsv.createdAt);
-
                     return `
                     <div class="res-card">
                         <div class="res-left">
-                            <div class="res-header">
-                                <h3>${rsv.name}</h3>
-                                <span class="time-ago"><i class="far fa-clock"></i> Booked ${timeInfo.text}</span>
-                            </div>
-                            
-                            <div class="res-guests">
-                                <i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests
-                            </div>
-
-                            <div class="res-contact">
-                                <span><i class="fas fa-envelope"></i> ${rsv.email}</span>
-                                <span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span>
-                            </div>
+                            <div class="res-header"><h3>${rsv.name}</h3><span class="time-ago"><i class="far fa-clock"></i> Booked ${timeInfo.text}</span></div>
+                            <div class="res-guests"><i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests</div>
+                            <div class="res-contact"><span><i class="fas fa-envelope"></i> ${rsv.email}</span><span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span></div>
                         </div>
-
                         <div class="res-right">
-                            <div class="ticket-date">
-                                <i class="far fa-calendar-alt"></i>
-                                <div>
-                                    <small>DATE</small>
-                                    <span>${rsv.date}</span>
-                                </div>
-                            </div>
-                            <div class="ticket-time">
-                                <i class="far fa-clock"></i>
-                                <div>
-                                    <small>TIME</small>
-                                    <span>${rsv.time}</span>
-                                </div>
-                            </div>
+                            <div class="ticket-date"><i class="far fa-calendar-alt"></i><div><small>DATE</small><span>${rsv.date}</span></div></div>
+                            <div class="ticket-time"><i class="far fa-clock"></i><div><small>TIME</small><span>${rsv.time}</span></div></div>
                         </div>
                     </div>
                     `;
                 }).join("");
             } catch (err) {
-                if (!isBackground) {
-                    loader.style.display = "none";
-                    document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
-                }
+                loader.style.display = "none"; document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
             }
         }
+
         if (token && user && user.role === "admin") {
-            // Initial load
             loadOrders(false);
             loadReservations();
-
-            // 🔄 REAL-TIME POLLING: Check for updates every 10 seconds
-            setInterval(() => {
-                if (document.getElementById('tab-orders').classList.contains('active')) {
-                    loadOrders(true); // Silently refresh Orders
-                } else if (document.getElementById('tab-reservations').classList.contains('active')) {
-                    loadReservations(true); // Silently refresh Reservations
-                }
-            }, 10000);
+            setInterval(() => { if (document.getElementById('tab-orders').classList.contains('active')) { loadOrders(true); } }, 10000);
         }
     </script>
 </body>
