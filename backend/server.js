@@ -493,7 +493,7 @@ app.get("/menu", async (req, res) => {
     }
 });
 
-// 🚀 NEW: ADMIN MENU UPDATE ROUTE
+// 🚀 ADMIN: UPDATE MENU ITEM (Protected)
 app.put("/admin/menu/:id", adminMiddleware, async (req, res) => {
     try {
         const { name, price, description, image, category, type } = req.body;
@@ -513,24 +513,37 @@ app.put("/admin/menu/:id", adminMiddleware, async (req, res) => {
     }
 });
 
-app.post("/menu/add", async (req, res) => {
+// 🚀 ADMIN: ADD NEW MENU ITEM (Protected)
+app.post("/admin/menu/add", adminMiddleware, async (req, res) => {
     try {
         const { name, description, price, image, category, type, ingredients } = req.body;
-        if (!name || !price || !category) return res.status(400).json({ success: false, error: "Name, price, category required" });
+        if (!name || !price || !category) {
+            return res.status(400).json({ success: false, error: "Name, price, category required" });
+        }
         const item = await MenuItem.create({
-            name: name.trim(), description: (description || "").trim(), price: Number(price),
-            image: image || "", category: category.trim(), type: type === "non-veg" ? "non-veg" : "veg",
+            name: name.trim(),
+            description: (description || "").trim(),
+            price: Number(price),
+            image: image || "",
+            category: category.trim(),
+            type: type === "non-veg" ? "non-veg" : "veg",
             ingredients: Array.isArray(ingredients) ? ingredients : [],
         });
+        console.log("✅ Menu item added:", item.name);
         res.json({ success: true, item });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-app.delete("/menu/:id", async (req, res) => {
+// 🚀 ADMIN: DELETE MENU ITEM (Protected)
+app.delete("/admin/menu/:id", adminMiddleware, async (req, res) => {
     try {
-        await MenuItem.findByIdAndDelete(req.params.id);
+        const deleted = await MenuItem.findByIdAndDelete(req.params.id);
+        if (!deleted) {
+            return res.status(404).json({ success: false, error: "Item not found" });
+        }
+        console.log("🗑️ Menu item deleted:", deleted.name);
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });

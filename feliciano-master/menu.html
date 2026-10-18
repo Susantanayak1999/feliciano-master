@@ -25,244 +25,73 @@
 
 	<style>
 		/* ============================================================
-           FILTER BAR
+           EXISTING MENU STYLES
            ============================================================ */
 		.menu-filters {
-			background: #fff;
-			padding: 22px 30px;
-			border-radius: 16px;
-			margin: 0 auto 36px;
-			max-width: 1200px;
-			display: flex;
-			flex-wrap: wrap;
-			gap: 16px;
-			align-items: center;
-			box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05);
-			border: 1px solid rgba(200, 169, 126, 0.15);
+			background: #fff; padding: 22px 30px; border-radius: 16px; margin: 0 auto 36px;
+			max-width: 1200px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+			box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05); border: 1px solid rgba(200, 169, 126, 0.15);
 		}
-
-		.menu-filters .search-box {
-			flex: 1 1 260px;
-			position: relative;
-		}
-
+		.menu-filters .search-box { flex: 1 1 260px; position: relative; }
 		.menu-filters .search-box input {
-			width: 100%;
-			height: 48px;
-			border: 1.5px solid #eee;
-			background: #faf8f4;
-			border-radius: 30px;
-			padding: 0 18px 0 44px;
-			font-family: "Poppins", sans-serif;
-			font-size: 14px;
-			outline: none;
-			transition: all .25s ease;
+			width: 100%; height: 48px; border: 1.5px solid #eee; background: #faf8f4;
+			border-radius: 30px; padding: 0 18px 0 44px; font-family: "Poppins", sans-serif;
+			font-size: 14px; outline: none; transition: all .25s ease;
 		}
-
-		.menu-filters .search-box input:focus {
-			border-color: #c8a97e;
-			background: #fff;
-			box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12);
-		}
-
-		.menu-filters .search-box .icon {
-			position: absolute;
-			left: 16px;
-			top: 50%;
-			transform: translateY(-50%);
-			color: #c8a97e;
-			font-size: 18px;
-			pointer-events: none;
-		}
+		.menu-filters .search-box input:focus { border-color: #c8a97e; background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.12); }
+		.menu-filters .search-box .icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #c8a97e; font-size: 18px; pointer-events: none; }
 
 		.veg-toggle {
-			display: inline-flex;
-			align-items: center;
-			background: #faf8f4;
-			border: 1.5px solid #eee;
-			border-radius: 30px;
-			padding: 4px;
-			gap: 2px;
-			height: 48px;
+			display: inline-flex; align-items: center; background: #faf8f4; border: 1.5px solid #eee;
+			border-radius: 30px; padding: 4px; gap: 2px; height: 48px;
 		}
-
 		.veg-toggle button {
-			border: none;
-			background: transparent;
-			padding: 0 16px;
-			height: 38px;
-			border-radius: 30px;
-			font-family: "Poppins", sans-serif;
-			font-size: 13px;
-			font-weight: 500;
-			color: #666;
-			cursor: pointer;
-			transition: all .25s ease;
-			display: inline-flex;
-			align-items: center;
-			gap: 7px;
+			border: none; background: transparent; padding: 0 16px; height: 38px; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 500; color: #666;
+			cursor: pointer; transition: all .25s ease; display: inline-flex; align-items: center; gap: 7px;
 		}
-
-		.veg-toggle button .dot {
-			width: 10px;
-			height: 10px;
-			border: 1.5px solid #2e7d32;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			border-radius: 2px;
-		}
-
-		.veg-toggle button .dot::after {
-			content: "";
-			width: 5px;
-			height: 5px;
-			border-radius: 50%;
-			background: #2e7d32;
-		}
-
-		.veg-toggle button .dot.nonveg {
-			border-color: #b71c1c;
-		}
-
-		.veg-toggle button .dot.nonveg::after {
-			background: #b71c1c;
-		}
-
-		.veg-toggle button.active {
-			background: #c8a97e;
-			color: #fff;
-		}
-
-		.veg-toggle button.active .dot {
-			border-color: #fff;
-		}
-
-		.veg-toggle button.active .dot::after {
-			background: #fff;
-		}
+		.veg-toggle button .dot { width: 10px; height: 10px; border: 1.5px solid #2e7d32; display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; }
+		.veg-toggle button .dot::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #2e7d32; }
+		.veg-toggle button .dot.nonveg { border-color: #b71c1c; }
+		.veg-toggle button .dot.nonveg::after { background: #b71c1c; }
+		.veg-toggle button.active { background: #c8a97e; color: #fff; }
+		.veg-toggle button.active .dot { border-color: #fff; }
+		.veg-toggle button.active .dot::after { background: #fff; }
 
 		.price-filter {
-			display: inline-flex;
-			align-items: center;
-			gap: 10px;
-			background: #faf8f4;
-			border: 1.5px solid #eee;
-			border-radius: 30px;
-			height: 48px;
-			padding: 0 18px;
-			font-family: "Poppins", sans-serif;
-			font-size: 13px;
-			color: #666;
+			display: inline-flex; align-items: center; gap: 10px; background: #faf8f4;
+			border: 1.5px solid #eee; border-radius: 30px; height: 48px; padding: 0 18px;
+			font-family: "Poppins", sans-serif; font-size: 13px; color: #666;
 		}
+		.price-filter input[type="range"] { width: 130px; accent-color: #c8a97e; cursor: pointer; }
+		.price-filter .price-label { color: #c8a97e; font-weight: 700; font-size: 13px; min-width: 55px; text-align: right; }
 
-		.price-filter input[type="range"] {
-			width: 130px;
-			accent-color: #c8a97e;
-			cursor: pointer;
-		}
-
-		.price-filter .price-label {
-			color: #c8a97e;
-			font-weight: 700;
-			font-size: 13px;
-			min-width: 55px;
-			text-align: right;
-		}
-
-		/* Category tabs */
-		.cat-tabs-wrap {
-			display: flex;
-			justify-content: center;
-			flex-wrap: wrap;
-			gap: 10px;
-			margin-bottom: 40px;
-		}
-
+		.cat-tabs-wrap { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
 		.cat-tabs-wrap .cat-tab {
-			padding: 10px 22px;
-			background: #fff;
-			border: 1.5px solid #eee;
-			border-radius: 30px;
-			font-family: "Poppins", sans-serif;
-			font-size: 13.5px;
-			font-weight: 500;
-			color: #555;
-			cursor: pointer;
-			text-decoration: none;
-			transition: all .25s ease;
+			padding: 10px 22px; background: #fff; border: 1.5px solid #eee; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 13.5px; font-weight: 500; color: #555;
+			cursor: pointer; text-decoration: none; transition: all .25s ease;
 		}
+		.cat-tabs-wrap .cat-tab:hover { border-color: #c8a97e; color: #c8a97e; }
+		.cat-tabs-wrap .cat-tab.active { background: #c8a97e; border-color: #c8a97e; color: #fff; box-shadow: 0 6px 18px rgba(200, 169, 126, 0.35); }
 
-		.cat-tabs-wrap .cat-tab:hover {
-			border-color: #c8a97e;
-			color: #c8a97e;
-		}
-
-		.cat-tabs-wrap .cat-tab.active {
-			background: #c8a97e;
-			border-color: #c8a97e;
-			color: #fff;
-			box-shadow: 0 6px 18px rgba(200, 169, 126, 0.35);
-		}
-
-		/* Dynamic grid */
-		.dyn-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-			gap: 35px;
-			max-width: 1200px;
-			margin: 0 auto;
-		}
-
+		.dyn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 35px; max-width: 1200px; margin: 0 auto; }
 		.dyn-card {
-			background: #fff;
-			border-radius: 20px;
-			overflow: hidden;
-			box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
-			border: 1px solid rgba(200, 169, 126, 0.12);
-			transition: transform .3s ease, box-shadow .3s ease;
-			display: flex;
-			flex-direction: column;
-			position: relative;
+			background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
+			border: 1px solid rgba(200, 169, 126, 0.12); transition: transform .3s ease, box-shadow .3s ease;
+			display: flex; flex-direction: column; position: relative;
 		}
-
-		.dyn-card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 20px 50px rgba(200, 169, 126, 0.2);
-		}
-
-		.dyn-card .img-wrap {
-			width: 100%;
-			height: 240px; /* Taller images for premium look */
-			position: relative;
-			overflow: hidden;
-			background: #f4efe6;
-		}
-
-		.dyn-card .img-wrap img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform .6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		}
-
-		.dyn-card:hover .img-wrap img {
-			transform: scale(1.1);
-		}
+		.dyn-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(200, 169, 126, 0.2); }
+		.dyn-card .img-wrap { width: 100%; height: 220px; position: relative; overflow: hidden; background: #f4efe6; }
+		.dyn-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+		.dyn-card:hover .img-wrap img { transform: scale(1.08); }
 
 		.veg-badge {
-			position: absolute;
-			top: 15px; left: 15px;
-			background: #fff; padding: 5px 12px; border-radius: 20px;
-			display: inline-flex; align-items: center; gap: 6px;
-			font-family: "Poppins", sans-serif; font-size: 11px; font-weight: 600;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			position: absolute; top: 15px; left: 15px; background: #fff; padding: 5px 12px; border-radius: 20px;
+			display: inline-flex; align-items: center; gap: 6px; font-family: "Poppins", sans-serif; font-size: 11px;
+			font-weight: 600; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 		}
-
-		.veg-badge .dot {
-			width: 10px; height: 10px; border: 1.5px solid #2e7d32;
-			display: inline-flex; align-items: center; justify-content: center; border-radius: 2px;
-		}
+		.veg-badge .dot { width: 10px; height: 10px; border: 1.5px solid #2e7d32; display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; }
 		.veg-badge .dot::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #2e7d32; }
 		.veg-badge.nonveg .dot { border-color: #b71c1c; }
 		.veg-badge.nonveg .dot::after { background: #b71c1c; }
@@ -270,53 +99,84 @@
 		.veg-badge.nonveg .lbl { color: #b71c1c; }
 
 		.cat-tag {
-			position: absolute; top: 15px; right: 15px;
-			background: rgba(200, 169, 126, 0.95); color: #fff;
-			padding: 5px 14px; border-radius: 20px;
-			font-family: "Poppins", sans-serif; font-size: 11px; font-weight: 600;
-			letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
+			position: absolute; top: 15px; right: 15px; background: rgba(200, 169, 126, 0.95); color: #fff;
+			padding: 5px 14px; border-radius: 20px; font-family: "Poppins", sans-serif; font-size: 11px;
+			font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3);
 		}
 
-		.dyn-card .card-body {
-			padding: 24px; flex: 1; display: flex; flex-direction: column;
-		}
-
-		.dyn-card h3 {
-			font-family: "Playfair Display", serif; font-size: 21px; color: #1a1a1a;
-			font-weight: 700; margin-bottom: 8px; line-height: 1.3;
-		}
-
-		.dyn-card .desc {
-			font-size: 13px; color: #777; margin-bottom: 20px; line-height: 1.6;
-			min-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-		}
+		.dyn-card .card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+		.dyn-card h3 { font-family: "Playfair Display", serif; font-size: 20px; color: #1a1a1a; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+		.dyn-card .desc { font-size: 13px; color: #777; margin-bottom: 20px; line-height: 1.6; min-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 		.dyn-card .card-bottom {
 			display: flex; justify-content: space-between; align-items: center;
-			margin-top: auto; gap: 12px; padding-top: 15px; border-top: 1px dashed #eee;
+			margin-top: auto; gap: 12px; padding-top: 15px; border-top: 1px dashed #eee; flex-wrap: wrap;
 		}
+		.dyn-card .price-tag { font-family: "Poppins", sans-serif; font-size: 22px; font-weight: 800; color: #c8a97e; }
 
-		.dyn-card .price-tag {
-			font-family: "Poppins", sans-serif; font-size: 22px; font-weight: 800; color: #c8a97e;
-		}
-
+		.action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+		
 		.dyn-card .order-btn {
-			background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 30px;
+			background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 30px;
 			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
 			border: none; cursor: pointer; transition: all .3s ease;
-			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); display: inline-flex; align-items: center; gap: 8px;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); display: inline-flex; align-items: center; gap: 6px;
 		}
+		.dyn-card .order-btn:hover { background: #c8a97e; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(200, 169, 126, 0.4); }
 
-		.dyn-card .order-btn:hover {
-			background: #c8a97e; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(200, 169, 126, 0.4);
+		/* 🚀 ADMIN EDIT BUTTON */
+		.dyn-card .edit-btn {
+			background: #fff; color: #c8a97e; padding: 10px 14px; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
+			border: 1.5px solid #c8a97e; cursor: pointer; transition: all .3s ease;
+			display: inline-flex; align-items: center; gap: 6px;
 		}
+		.dyn-card .edit-btn:hover { background: #c8a97e; color: #fff; transform: translateY(-2px); }
+
+		/* 🚀 ADMIN DELETE BUTTON */
+		.dyn-card .delete-btn {
+			background: #fff; color: #c62828; padding: 10px 14px; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
+			border: 1.5px solid #c62828; cursor: pointer; transition: all .3s ease;
+			display: inline-flex; align-items: center; gap: 6px;
+		}
+		.dyn-card .delete-btn:hover { background: #c62828; color: #fff; transform: translateY(-2px); }
 
 		.menu-msg { text-align: center; padding: 60px 20px; color: #888; font-family: "Poppins", sans-serif; }
-		.menu-msg .spinner {
-			width: 50px; height: 50px; border: 3px solid rgba(200, 169, 126, 0.2); border-top-color: #c8a97e;
-			border-radius: 50%; margin: 0 auto 18px; animation: spin 0.8s linear infinite;
-		}
+		.menu-msg .spinner { width: 50px; height: 50px; border: 3px solid rgba(200, 169, 126, 0.2); border-top-color: #c8a97e; border-radius: 50%; margin: 0 auto 18px; animation: spin 0.8s linear infinite; }
 		@keyframes spin { to { transform: rotate(360deg); } }
+
+		/* 🚀 ADMIN ADD BUTTON WRAPPER */
+		.admin-add-wrap {
+			max-width: 1200px; margin: 0 auto 20px; display: flex; justify-content: flex-end;
+		}
+		.admin-add-wrap .add-item-btn {
+			background: linear-gradient(135deg, #c8a97e, #b18f64); color: #fff;
+			border: none; padding: 14px 28px; border-radius: 30px;
+			font-family: "Poppins", sans-serif; font-size: 14px; font-weight: 600;
+			cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+			box-shadow: 0 8px 25px rgba(200, 169, 126, 0.4); transition: all .3s ease;
+		}
+		.admin-add-wrap .add-item-btn:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 12px 30px rgba(200, 169, 126, 0.55);
+		}
+		.admin-add-wrap .add-item-btn i { font-size: 18px; }
+
+		/* 🚀 EDIT / ADD MODAL */
+		.edit-modal { position: fixed; inset: 0; background: rgba(17, 17, 17, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+		.edit-modal.active { display: flex; }
+		.edit-card { background: #fff; border-radius: 20px; padding: 35px; max-width: 500px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.4); position: relative; max-height: 90vh; overflow-y: auto; animation: popIn 0.3s ease; }
+		@keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+		.edit-card h3 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 20px; color: #1a1a1a; }
+		.edit-card .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+		.edit-card .form-group { margin-bottom: 15px; }
+		.edit-card label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; text-transform: uppercase; }
+		.edit-card input, .edit-card textarea, .edit-card select { width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 14px; outline: none; transition: 0.3s; }
+		.edit-card input:focus, .edit-card textarea:focus, .edit-card select:focus { border-color: #c8a97e; }
+		.save-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #c8a97e, #b18f64); color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+		.save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+		.save-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(200,169,126,0.4); }
 
 		@media (max-width: 700px) {
 			.menu-filters { padding: 16px; gap: 12px; }
@@ -325,7 +185,10 @@
 			.price-filter { flex: 1 1 100%; justify-content: space-between; }
 			.price-filter input[type="range"] { flex: 1; width: auto; }
 			.dyn-grid { grid-template-columns: 1fr; gap: 25px; }
-			.dyn-card .img-wrap { height: 260px; } /* Even taller on mobile */
+			.dyn-card .img-wrap { height: 240px; }
+			.edit-card { padding: 25px 20px; }
+			.admin-add-wrap { justify-content: stretch; }
+			.admin-add-wrap .add-item-btn { width: 100%; justify-content: center; }
 		}
 	</style>
 </head>
@@ -338,19 +201,9 @@
 			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
 				<div class="col-lg-12 d-block">
 					<div class="row d-flex">
-						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-							<span class="text">+91 98765 43210</span>
-						</div>
-						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-							<span class="text">hello@feliciano.in</span>
-						</div>
-						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
-							<p class="mb-0 register-link">
-								<span>Open hours:</span> <span>Monday - Sunday</span> <span>8:00AM - 9:00PM</span>
-							</p>
-						</div>
+						<div class="col-md pr-4 d-flex topper align-items-center"><div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div><span class="text">+91 98765 43210</span></div>
+						<div class="col-md pr-4 d-flex topper align-items-center"><div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div><span class="text">hello@feliciano.in</span></div>
+						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end"><p class="mb-0 register-link"><span>Open hours:</span> <span>Monday - Sunday</span> <span>8:00AM - 9:00PM</span></p></div>
 					</div>
 				</div>
 			</div>
@@ -361,9 +214,7 @@
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
 			<a class="navbar-brand" href="index.html">Mixtape</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="oi oi-menu"></span> Menu
-			</button>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation"><span class="oi oi-menu"></span> Menu</button>
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
@@ -372,12 +223,7 @@
 					<li class="nav-item"><a href="blog.html" class="nav-link">Stories</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 					<li class="nav-item cta"><a href="reservation.html" class="nav-link">Book a table</a></li>
-					<li class="nav-item cta cart-btn">
-						<a href="cart.html" class="nav-link cart-link">
-							<span class="ion-ios-cart"></span>
-							<span class="cart-badge" id="nav-cart-count">0</span>
-						</a>
-					</li>
+					<li class="nav-item cta cart-btn"><a href="cart.html" class="nav-link cart-link"><span class="ion-ios-cart"></span><span class="cart-badge" id="nav-cart-count">0</span></a></li>
 				</ul>
 			</div>
 		</div>
@@ -389,11 +235,8 @@
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-end justify-content-center">
 				<div class="col-md-9 ftco-animate text-center mb-4">
-					<h1 class="mb-2 bread">Indian Specialties</h1>
-					<p class="breadcrumbs">
-						<span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>
-						<span>Menu <i class="ion-ios-arrow-forward"></i></span>
-					</p>
+					<h1 class="mb-2 bread">Indian & Global Specialties</h1>
+					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Menu <i class="ion-ios-arrow-forward"></i></span></p>
 				</div>
 			</div>
 		</div>
@@ -403,27 +246,25 @@
 	<section class="ftco-section">
 		<div class="container">
 
-			<!-- FILTER BAR -->
-			<div class="menu-filters">
-				<div class="search-box">
-					<span class="icon ion-ios-search"></span>
-					<input type="text" id="searchInput" placeholder="Search dishes...">
-				</div>
+			<!-- 🚀 ADMIN ADD NEW ITEM BUTTON -->
+			<div class="admin-add-wrap" id="adminAddWrap" style="display:none;">
+				<button class="add-item-btn" id="addItemBtn">
+					<i class="ion-ios-add-circle-outline"></i> Add New Item
+				</button>
+			</div>
 
+			<div class="menu-filters">
+				<div class="search-box"><span class="icon ion-ios-search"></span><input type="text" id="searchInput" placeholder="Search dishes..."></div>
 				<div class="veg-toggle" id="vegToggle">
 					<button data-filter="all" class="active">All</button>
 					<button data-filter="veg"><span class="dot"></span> Veg</button>
 					<button data-filter="non-veg"><span class="dot nonveg"></span> Non-Veg</button>
 				</div>
-
 				<div class="price-filter">
-					<span>Max ₹</span>
-					<input type="range" id="priceRange" min="0" max="1000" step="10" value="1000">
-					<span class="price-label" id="priceLabel">₹1000</span>
+					<span>Max ₹</span><input type="range" id="priceRange" min="0" max="1000" step="10" value="1000"><span class="price-label" id="priceLabel">₹1000</span>
 				</div>
 			</div>
 
-			<!-- CATEGORY TABS -->
 			<div class="cat-tabs-wrap" id="catTabs">
 				<a class="cat-tab active" data-category="All">All</a>
 				<a class="cat-tab" data-category="Breakfast">Breakfast</a>
@@ -431,37 +272,90 @@
 				<a class="cat-tab" data-category="Dinner">Dinner</a>
 				<a class="cat-tab" data-category="Drinks">Drinks</a>
 				<a class="cat-tab" data-category="Desserts">Desserts</a>
-				<a class="cat-tab" data-category="Wine">Wine</a>
 			</div>
 
-			<!-- MENU GRID -->
 			<div id="menuArea">
-				<div class="menu-msg">
-					<div class="spinner"></div>
-					Loading menu...
-				</div>
+				<div class="menu-msg"><div class="spinner"></div>Loading menu...</div>
 			</div>
 
 		</div>
 	</section>
 
-	<!-- FOOTER -->
+	<!-- 🚀 EDIT MODAL -->
+	<div class="edit-modal" id="editModal">
+		<div class="edit-card">
+			<button class="close-btn" onclick="closeEditModal()">&times;</button>
+			<h3>Edit Dish</h3>
+			<input type="hidden" id="editItemId">
+			
+			<div class="form-group"><label>Dish Name</label><input type="text" id="editName"></div>
+			<div class="form-group"><label>Price (₹)</label><input type="number" id="editPrice"></div>
+			<div class="form-group"><label>Description</label><textarea id="editDesc" rows="3"></textarea></div>
+			<div class="form-group"><label>Image URL</label><input type="text" id="editImage"></div>
+			<div class="form-group">
+				<label>Category</label>
+				<select id="editCategory">
+					<option value="Breakfast">Breakfast</option>
+					<option value="Lunch">Lunch</option>
+					<option value="Dinner">Dinner</option>
+					<option value="Drinks">Drinks</option>
+					<option value="Desserts">Desserts</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>Type</label>
+				<select id="editType">
+					<option value="veg">Veg</option>
+					<option value="non-veg">Non-Veg</option>
+				</select>
+			</div>
+			
+			<button class="save-btn" onclick="saveItemChanges()">Save Changes</button>
+		</div>
+	</div>
+
+	<!-- 🚀 ADD NEW ITEM MODAL -->
+	<div class="edit-modal" id="addModal">
+		<div class="edit-card">
+			<button class="close-btn" onclick="closeAddModal()">&times;</button>
+			<h3>Add New Dish</h3>
+
+			<div class="form-group"><label>Dish Name *</label><input type="text" id="addName" placeholder="e.g. Paneer Butter Masala"></div>
+			<div class="form-group"><label>Price (₹) *</label><input type="number" id="addPrice" placeholder="299"></div>
+			<div class="form-group"><label>Description</label><textarea id="addDesc" rows="3" placeholder="Short description..."></textarea></div>
+			<div class="form-group"><label>Image URL</label><input type="text" id="addImage" placeholder="https://..."></div>
+			<div class="form-group">
+				<label>Category *</label>
+				<select id="addCategory">
+					<option value="Breakfast">Breakfast</option>
+					<option value="Lunch" selected>Lunch</option>
+					<option value="Dinner">Dinner</option>
+					<option value="Drinks">Drinks</option>
+					<option value="Desserts">Desserts</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>Type</label>
+				<select id="addType">
+					<option value="veg">Veg</option>
+					<option value="non-veg">Non-Veg</option>
+				</select>
+			</div>
+
+			<button class="save-btn" id="addSaveBtn" onclick="saveNewItem()">Add Dish</button>
+		</div>
+	</div>
+
 	<footer class="ftco-footer ftco-bg-dark ftco-section">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12 text-center">
-					<p>&copy; <script>document.write(new Date().getFullYear());</script> Mixtape Kitchen. All rights reserved.</p>
-				</div>
+				<div class="col-md-12 text-center"><p>&copy; <script>document.write(new Date().getFullYear());</script> Mixtape Kitchen. All rights reserved.</p></div>
 			</div>
 		</div>
 	</footer>
 
-	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
-		</svg></div>
+	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
-	<!-- Scripts -->
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-migrate-3.0.1.min.js"></script>
 	<script src="js/popper.min.js"></script>
@@ -483,6 +377,10 @@
 
 	<script>
 		const BACKEND_URL = "https://feliciano-master.onrender.com";
+
+		// 🚀 CHECK USER ROLE
+		const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+		const isAdmin = currentUser && currentUser.role === "admin";
 
 		let allItems = [];
 		const filters = { search: "", vegType: "all", category: "All", maxPrice: 1000 };
@@ -516,6 +414,7 @@
 			}, 2200);
 		}
 
+		// 🚀 ADD TO CART LOGIC
 		document.addEventListener("click", function (e) {
 			const btn = e.target.closest(".order-now-btn");
 			if (!btn) return;
@@ -542,29 +441,22 @@
 			showToast(`"${name}" added to cart!`);
 		});
 
+		// 🚀 FETCH MENU
 		async function loadMenu() {
 			menuArea.innerHTML = `<div class="menu-msg"><div class="spinner"></div>Loading menu...</div>`;
 			try {
 				const res = await fetch(`${BACKEND_URL}/menu`);
-				const text = await res.text();
-
-				let data;
-				try { data = JSON.parse(text); } 
-				catch (e) {
-					menuArea.innerHTML = `<div class="menu-msg">⚠️ Backend did not return JSON.</div>`;
-					return;
-				}
-
+				const data = await res.json();
 				if (!res.ok || !data.success) throw new Error(data.error || "Failed to load menu");
 
 				allItems = data.items || [];
 				applyFilters();
-
 			} catch (err) {
 				menuArea.innerHTML = `<div class="menu-msg">⚠️ Could not load menu.<br><small style="color:#bbb;">${err.message}</small></div>`;
 			}
 		}
 
+		// 🚀 RENDER MENU
 		function renderMenu(items) {
 			if (!items.length) {
 				menuArea.innerHTML = `<div class="menu-msg">😔 No items match your filters.</div>`;
@@ -578,7 +470,8 @@
 				const typeLabel = isNonVeg ? "Non-Veg" : "Veg";
 				const desc = (item.description && item.description.trim())
 					|| (item.ingredients && item.ingredients.length ? item.ingredients.join(" · ") : "Freshly prepared by Mixtape Kitchen");
-				const img = item.image || "https://via.placeholder.com/400x300?text=No+Image";
+				
+				const img = item.image && item.image.startsWith("http") ? item.image : "https://via.placeholder.com/400x300?text=No+Image";
 
 				return `
                             <div class="dyn-card" style="animation-delay:${i * 0.04}s;">
@@ -594,14 +487,20 @@
                                     <p class="desc">${desc}</p>
                                     <div class="card-bottom">
                                         <span class="price-tag">₹${Number(item.price).toFixed(0)}</span>
-                                        <button class="order-btn order-now-btn"
-                                            data-id="${item._id}"
-                                            data-name="${item.name}"
-                                            data-price="${item.price}"
-                                            data-image="${item.image || ""}"
-                                            data-type="${item.type || "veg"}">
-                                            <span class="ion-ios-cart"></span> Order Now
-                                        </button>
+                                        <div class="action-buttons">
+                                            ${isAdmin ? `
+                                                <button class="edit-btn" onclick="openEditModal('${item._id}')"><i class="ion-ios-create"></i> Edit</button>
+                                                <button class="delete-btn" onclick="deleteItem('${item._id}', '${item.name.replace(/'/g, "\\'")}')"><i class="ion-ios-trash"></i> Delete</button>
+                                            ` : ''}
+                                            <button class="order-btn order-now-btn"
+                                                data-id="${item._id}"
+                                                data-name="${item.name}"
+                                                data-price="${item.price}"
+                                                data-image="${item.image || ""}"
+                                                data-type="${item.type || "veg"}">
+                                                <i class="ion-ios-cart"></i> Order
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>`;
@@ -609,6 +508,155 @@
                 </div>`;
 		}
 
+		// 🚀 EDIT MODAL LOGIC (ADMIN ONLY)
+		function openEditModal(id) {
+			const item = allItems.find(i => i._id === id);
+			if (!item) return;
+
+			document.getElementById("editItemId").value = item._id;
+			document.getElementById("editName").value = item.name;
+			document.getElementById("editPrice").value = item.price;
+			document.getElementById("editDesc").value = item.description || "";
+			document.getElementById("editImage").value = item.image || "";
+			document.getElementById("editCategory").value = item.category;
+			document.getElementById("editType").value = item.type || "veg";
+
+			document.getElementById("editModal").classList.add("active");
+		}
+
+		function closeEditModal() {
+			document.getElementById("editModal").classList.remove("active");
+		}
+
+		async function saveItemChanges() {
+			const id = document.getElementById("editItemId").value;
+			const token = localStorage.getItem("token");
+
+			const payload = {
+				name: document.getElementById("editName").value,
+				price: Number(document.getElementById("editPrice").value),
+				description: document.getElementById("editDesc").value,
+				image: document.getElementById("editImage").value,
+				category: document.getElementById("editCategory").value,
+				type: document.getElementById("editType").value
+			};
+
+			try {
+				const res = await fetch(`${BACKEND_URL}/admin/menu/${id}`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer " + token
+					},
+					body: JSON.stringify(payload)
+				});
+
+				const data = await res.json();
+
+				if (res.ok && data.success) {
+					const index = allItems.findIndex(i => i._id === id);
+					if (index > -1) allItems[index] = { ...allItems[index], ...payload };
+					
+					applyFilters();
+					closeEditModal();
+					showToast("Dish updated successfully!");
+				} else {
+					alert("Failed to update: " + (data.error || "Unknown error"));
+				}
+			} catch (err) {
+				alert("Error: " + err.message);
+			}
+		}
+
+		// 🚀 ADD NEW ITEM LOGIC (ADMIN ONLY)
+		function openAddModal() {
+			document.getElementById("addName").value = "";
+			document.getElementById("addPrice").value = "";
+			document.getElementById("addDesc").value = "";
+			document.getElementById("addImage").value = "";
+			document.getElementById("addCategory").value = "Lunch";
+			document.getElementById("addType").value = "veg";
+			document.getElementById("addModal").classList.add("active");
+		}
+
+		function closeAddModal() {
+			document.getElementById("addModal").classList.remove("active");
+		}
+
+		async function saveNewItem() {
+			const token = localStorage.getItem("token");
+			const btn = document.getElementById("addSaveBtn");
+
+			const payload = {
+				name: document.getElementById("addName").value.trim(),
+				price: Number(document.getElementById("addPrice").value),
+				description: document.getElementById("addDesc").value.trim(),
+				image: document.getElementById("addImage").value.trim(),
+				category: document.getElementById("addCategory").value,
+				type: document.getElementById("addType").value,
+			};
+
+			if (!payload.name || !payload.price || !payload.category) {
+				alert("Name, price, and category are required.");
+				return;
+			}
+
+			btn.disabled = true;
+			btn.textContent = "Adding...";
+
+			try {
+				const res = await fetch(`${BACKEND_URL}/admin/menu/add`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer " + token
+					},
+					body: JSON.stringify(payload)
+				});
+
+				const data = await res.json();
+
+				if (res.ok && data.success) {
+					allItems.push(data.item);
+					applyFilters();
+					closeAddModal();
+					showToast(`"${data.item.name}" added to menu!`);
+				} else {
+					alert("Failed to add: " + (data.error || "Unknown error"));
+				}
+			} catch (err) {
+				alert("Error: " + err.message);
+			} finally {
+				btn.disabled = false;
+				btn.textContent = "Add Dish";
+			}
+		}
+
+		// 🚀 DELETE ITEM (ADMIN ONLY)
+		async function deleteItem(id, name) {
+			if (!confirm(`Delete "${name}" from the menu? This cannot be undone.`)) return;
+
+			const token = localStorage.getItem("token");
+			try {
+				const res = await fetch(`${BACKEND_URL}/admin/menu/${id}`, {
+					method: "DELETE",
+					headers: { "Authorization": "Bearer " + token }
+				});
+				const data = await res.json();
+
+				if (res.ok && data.success) {
+					allItems = allItems.filter(i => i._id !== id);
+					applyFilters();
+					showToast(`"${name}" deleted.`);
+				} else {
+					alert("Failed to delete: " + (data.error || "Unknown error"));
+				}
+			} catch (err) {
+				alert("Error: " + err.message);
+			}
+		}
+
+		// 🚀 FILTERS
 		function applyFilters() {
 			let list = allItems.slice();
 			if (filters.category !== "All") list = list.filter(i => i.category === filters.category);
@@ -655,8 +703,36 @@
 			applyFilters();
 		});
 
+		// 🚀 INIT
 		document.addEventListener("DOMContentLoaded", () => {
 			updateCartCount();
+
+			// Show "Add New Item" button for admins
+			if (isAdmin) {
+				const wrap = document.getElementById("adminAddWrap");
+				if (wrap) wrap.style.display = "flex";
+			}
+
+			// Wire up add button
+			const addBtn = document.getElementById("addItemBtn");
+			if (addBtn) addBtn.addEventListener("click", openAddModal);
+
+			// Close add modal when clicking backdrop
+			const addModal = document.getElementById("addModal");
+			if (addModal) {
+				addModal.addEventListener("click", (e) => {
+					if (e.target === addModal) closeAddModal();
+				});
+			}
+
+			// Close edit modal when clicking backdrop
+			const editModal = document.getElementById("editModal");
+			if (editModal) {
+				editModal.addEventListener("click", (e) => {
+					if (e.target === editModal) closeEditModal();
+				});
+			}
+
 			loadMenu();
 		});
 
