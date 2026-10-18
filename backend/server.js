@@ -16,18 +16,21 @@ app.use(cors());
 // WEBHOOK ROUTE MUST BE DEFINED BEFORE express.json() 
 // because Razorpay sends a raw body for signature verification.
 // ============================================================
-app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (req, res) => {
+app.post("/razorpay-webhook", async (req, res) => {
     try {
         const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-        
+
         if (!webhookSecret) {
             console.error("❌ RAZORPAY_WEBHOOK_SECRET is not set in .env");
             return res.status(500).send("Webhook secret not configured");
         }
 
         const signature = req.headers["x-razorpay-signature"];
-        const body = req.body; // This is a Buffer
-
+        const body = req.rawBody; // 👈 Use the raw buffer we captured
+        if (!body) {
+            console.error("❌ Webhook Error: Body is null");
+            return res.status(400).json({ status: "error", message: "No body" });
+        }
         // 1. Verify the signature to ensure it's actually from Razorpay
         const expectedSignature = crypto
             .createHmac("sha256", webhookSecret)
@@ -50,12 +53,12 @@ app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (
             const paymentEntity = payload.payload.payment.entity;
             const orderId = paymentEntity.order_id;
             const paymentId = paymentEntity.id;
-            
+
             console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Payment ID: ${paymentId}`);
-            
+
             // Check if order already exists in our DB
             const existingOrder = await Order.findOne({ orderId: orderId });
-            
+
             if (existingOrder) {
                 console.log(`✅ Webhook confirmed: Order ${orderId} is safely in the database.`);
                 // If the frontend failed to mark it confirmed for some reason, we force it here
@@ -71,7 +74,7 @@ app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (
 
         // 4. Always return 200 OK so Razorpay knows we received it
         res.status(200).json({ status: "ok" });
-        
+
     } catch (err) {
         console.error("❌ Webhook Error:", err);
         res.status(500).json({ status: "error", message: err.message });
@@ -79,8 +82,14 @@ app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (
 });
 
 // Normal JSON parsing for all other routes
-app.use(express.json());
-
+// 🚀 CAPTURE RAW BODY FOR WEBHOOKS
+app.use(express.json({
+    verify: (req, res, buf) => {
+        if (req.originalUrl.startsWith('/razorpay-webhook')) {
+            req.rawBody = buf;
+        }
+    }
+}));
 // ============================================================
 // MongoDB Connection
 // ============================================================
@@ -109,7 +118,7 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String, default: null },
     phone: { type: String, default: null },
     picture: { type: String, default: null },
-    role: { type: String, default: "user" }, 
+    role: { type: String, default: "user" },
     resetToken: { type: String, default: null },
     resetTokenExpiry: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
@@ -125,8 +134,8 @@ const orderSchema = new mongoose.Schema({
     amount: Number,
     paymentId: String,
     orderId: String,
-    deliveryAddress: Object, 
-    status: { type: String, default: "Confirmed" }, 
+    deliveryAddress: Object,
+    status: { type: String, default: "Confirmed" },
     createdAt: { type: Date, default: Date.now },
 });
 const Order = mongoose.model("Order", orderSchema);
@@ -274,11 +283,11 @@ app.post("/signup", async (req, res) => {
         if (password.length < 6) return res.status(400).json({ success: false, error: "Password must be 6+ characters" });
         const existing = await User.findOne({ email: email.toLowerCase() });
         if (existing) return res.status(400).json({ success: false, error: "Email already registered" });
-        
+
         const hashed = await bcrypt.hash(password, 10);
         const user = await User.create({ name, email: email.toLowerCase(), password: hashed });
         const token = generateToken(user._id);
-        
+
         res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
@@ -289,13 +298,13 @@ app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ success: false, error: "Email and password required" });
-        
+
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) return res.status(401).json({ success: false, error: "Invalid email or password" });
-        
+
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return res.status(401).json({ success: false, error: "Invalid email or password" });
-        
+
         const token = generateToken(user._id);
         res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
@@ -342,12 +351,12 @@ app.post("/phone-verify-otp", async (req, res) => {
     try {
         const { phone, otp } = req.body;
         if (!phone || !otp) return res.status(400).json({ success: false, error: "Phone and OTP required" });
-        
+
         const record = global._otpStore[phone];
         if (!record) return res.status(400).json({ success: false, error: "No OTP requested" });
         if (Date.now() > record.expiresAt) { delete global._otpStore[phone]; return res.status(400).json({ success: false, error: "OTP expired" }); }
         if (record.otp !== otp) return res.status(400).json({ success: false, error: "Invalid OTP" });
-        
+
         delete global._otpStore[phone];
         let user = await User.findOne({ phone: phone });
 
@@ -365,10 +374,10 @@ app.post("/phone-save-name", async (req, res) => {
     try {
         const { phone, name } = req.body;
         if (!phone || !name || name.trim().length < 2) return res.status(400).json({ success: false, error: "Valid name required" });
-        
+
         const cleanName = name.trim().slice(0, 60);
         let user = await User.findOne({ phone: phone });
-        
+
         if (!user) {
             const randomPass = crypto.randomBytes(20).toString("hex");
             const hashed = await bcrypt.hash(randomPass, 10);
@@ -377,7 +386,7 @@ app.post("/phone-save-name", async (req, res) => {
             user.name = cleanName;
             await user.save();
         }
-        
+
         const token = generateToken(user._id);
         res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
@@ -491,12 +500,12 @@ app.post("/create-order", async (req, res) => {
         if (!amount || amount <= 0) return res.status(400).json({ success: false, error: "Invalid amount" });
         const amountInPaise = Math.round(Number(amount) * 100);
         if (amountInPaise < 100) return res.status(400).json({ success: false, error: "Amount must be at least ₹1" });
-        
+
         const order = await razorpay.orders.create({
             amount: amountInPaise, currency, receipt: "rcpt_" + Date.now(),
             notes: { itemCount: items.length, source: "Mixtape Kitchen" },
         });
-        
+
         res.json({ success: true, order_id: order.id, amount: order.amount, currency: order.currency, key_id: process.env.RAZORPAY_KEY_ID });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
@@ -505,9 +514,9 @@ app.post("/create-order", async (req, res) => {
 
 app.post("/verify-payment", async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount, deliveryAddress } = req.body; 
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, amount, deliveryAddress } = req.body;
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) return res.status(400).json({ success: false, error: "Missing fields" });
-        
+
         const body = razorpay_order_id + "|" + razorpay_payment_id;
         const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
 
