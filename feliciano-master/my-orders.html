@@ -222,21 +222,15 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
         }
-              /* Base default style */
+        
+        /* Base default style */
         .status { background: #f5f5f5; color: #333; }
         
         /* Force colors by checking the data attribute */
-        .status[data-status="Confirmed"], 
-        .status[data-status="confirmed"] { background: #e3f2fd; color: #1976d2; }
-
-        .status[data-status="Preparing"], 
-        .status[data-status="preparing"] { background: #fff3e0; color: #f57c00; }
-
-        .status[data-status="Delivered"], 
-        .status[data-status="delivered"] { background: #e8f5e9; color: #2e7d32; }
-
-        .status[data-status="Cancelled"], 
-        .status[data-status="cancelled"] { background: #ffebee; color: #c62828; }
+        .status[data-status="Confirmed"], .status[data-status="confirmed"] { background: #e3f2fd; color: #1976d2; }
+        .status[data-status="Preparing"], .status[data-status="preparing"] { background: #fff3e0; color: #f57c00; }
+        .status[data-status="Delivered"], .status[data-status="delivered"] { background: #e8f5e9; color: #2e7d32; }
+        .status[data-status="Cancelled"], .status[data-status="cancelled"] { background: #ffebee; color: #c62828; }
 
         .order-items {
             display: flex;
@@ -378,7 +372,7 @@
         }
 
         /* ============================================================
-           TOAST NOTIFICATION (NEW)
+           TOAST NOTIFICATION
            ============================================================ */
         .toast-container {
             position: fixed;
@@ -646,7 +640,8 @@
                             </div>
                             <div class="right">
                                 <div class="total">₹${Number(order.amount || 0).toFixed(2)}</div>
-                                <span class="status" data-status="${currentStatus}" id="status-badge-${order._id}">${currentStatus}</span>
+                                <!-- We will target this data attribute for updates -->
+                                <span class="status" data-status="${currentStatus}" data-order-id="${order._id}" id="status-badge-${order._id}">${currentStatus}</span>
                             </div>
                         </div>
 
@@ -697,6 +692,7 @@
                 }
 
                 const orders = data.orders || [];
+                let hasStatusChanged = false; // Flag to re-render if needed
 
                 // 🔔 CHECK FOR STATUS CHANGES
                 if (!isFirstLoad) {
@@ -717,11 +713,12 @@
                                 showNotification("Order Cancelled ❌", `Order #${order._id.slice(-6).toUpperCase()} was cancelled.`, newStatus);
                             }
                             
-                            // Instantly update the badge on the page without reloading
-                                                      // Instantly update the badge on the page without reloading
-                            const badge = document.getElementById(`status-badge-${order._id}`);
+                            hasStatusChanged = true; // A change was detected
+
+                            // 🚀 DIRECT BADGE UPDATE
+                            // We use querySelector with the data attribute which is 100% reliable
+                            const badge = document.querySelector(`.status[data-order-id="${order._id}"]`);
                             if (badge) {
-                                // Standardize the status text (e.g. "preparing" -> "Preparing")
                                 const cleanStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).toLowerCase();
                                 badge.setAttribute("data-status", cleanStatus);
                                 badge.textContent = cleanStatus;
@@ -729,6 +726,13 @@
                         }
                         previousStatuses[order._id] = newStatus;
                     });
+                    
+                    // As an absolute fallback, if anything changed, re-render the whole list
+                    // This guarantees the UI is always in sync with the data.
+                    if (hasStatusChanged) {
+                        renderOrders(orders);
+                    }
+
                 } else {
                     // First load: Save statuses silently
                     orders.forEach(order => {
