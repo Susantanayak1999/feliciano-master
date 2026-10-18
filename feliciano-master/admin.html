@@ -12,20 +12,18 @@
 
     <style>
         :root {
-            --primary: #d4af37; /* Elegant Gold */
-            --primary-hover: #b5952f;
-            --dark: #1a1a1a;
-            --bg: #f8f9fa;
+            --gold: #c8a97e;
+            --gold-dark: #b18f64;
+            --dark: #111;
+            --bg: #f4f6f9;
             --surface: #ffffff;
-            --text-main: #2d3748;
-            --text-muted: #718096;
+            --text-main: #333;
+            --text-muted: #888;
             --border: #e2e8f0;
-            --success: #38a169;
-            --success-bg: #f0fff4;
-            --danger: #e53e3e;
-            --danger-bg: #fff5f5;
-            --warning: #dd6b20;
-            --warning-bg: #fffaf0;
+            --blue: #1976d2;
+            --orange: #f57c00;
+            --green: #2e7d32;
+            --red: #c62828;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,48 +37,49 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
         /* ===== SIDEBAR ===== */
         .sidebar {
             width: 260px; background: var(--dark); color: #fff; position: fixed; height: 100vh;
-            padding: 32px 24px; display: flex; flex-direction: column; z-index: 100;
+            padding: 30px 20px; display: flex; flex-direction: column; z-index: 100;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
         }
-        .sidebar h1 { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 600; color: var(--primary); margin-bottom: 40px; letter-spacing: 0.5px; text-align: center; }
+        .sidebar h1 { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 600; color: var(--gold); margin-bottom: 40px; letter-spacing: 0.5px; text-align: center; }
         
         .nav-item {
-            display: flex; align-items: center; gap: 14px; padding: 14px 18px; color: #a0aec0; text-decoration: none;
-            border-radius: 12px; font-size: 14px; font-weight: 500; transition: all 0.2s ease; cursor: pointer; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 14px; padding: 14px 18px; color: #ccc; text-decoration: none;
+            border-radius: 10px; font-size: 14px; font-weight: 500; transition: all 0.2s ease; cursor: pointer; margin-bottom: 8px;
         }
         .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
-        .nav-item.active { background: var(--primary); color: var(--dark); font-weight: 600; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3); }
+        .nav-item.active { background: var(--gold); color: #fff; font-weight: 600; box-shadow: 0 4px 12px rgba(200, 169, 126, 0.3); }
         .nav-item i { font-size: 18px; }
         
         .sidebar-footer { margin-top: auto; }
         .back-btn {
             display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
-            padding: 12px; background: rgba(255, 255, 255, 0.05); color: #cbd5e0; text-decoration: none; border-radius: 12px; font-size: 13px; font-weight: 500; transition: 0.2s;
+            padding: 12px; background: rgba(255, 255, 255, 0.1); color: #fff; text-decoration: none; border-radius: 10px; font-size: 13px; font-weight: 500; transition: 0.2s;
         }
-        .back-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .back-btn:hover { background: var(--gold); color: #fff; }
 
         /* ===== MAIN CONTENT ===== */
         .main-content { margin-left: 260px; flex: 1; padding: 40px 48px; width: calc(100% - 260px); }
 
         /* ===== TOP BAR ===== */
         .top-bar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; flex-wrap: wrap; gap: 20px; }
-        .top-bar-left h2 { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: var(--dark); letter-spacing: -0.5px; }
+        .top-bar-left h2 { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; }
         .top-bar-left p { color: var(--text-muted); font-size: 14px; margin-top: 6px; }
         .top-bar-right { display: flex; gap: 12px; align-items: center; }
 
         .clock-box {
-            background: var(--surface); padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--text-main);
+            background: var(--surface); padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #1a1a1a;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); border: 1px solid var(--border); display: flex; align-items: center; gap: 8px;
         }
-        .live-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(56, 161, 105, 0); } 100% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0); } }
+        .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(46, 125, 50, 0); } 100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); } }
 
         .refresh-btn {
             background: var(--surface); border: 1px solid var(--border); padding: 10px 18px; border-radius: 10px;
@@ -100,7 +99,7 @@
             width: 54px; height: 54px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
         }
         .stat-info h3 { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-info p { font-size: 24px; color: var(--dark); font-weight: 700; }
+        .stat-info p { font-size: 24px; color: #1a1a1a; font-weight: 700; }
         .live-split { display: flex; gap: 16px; margin-top: 4px; }
         .live-split div { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
         .live-split .dot { width: 6px; height: 6px; border-radius: 50%; }
@@ -112,9 +111,9 @@
             text-align: center; cursor: pointer; transition: 0.2s;
         }
         .status-box:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.04); }
-        .status-box.active-filter { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); }
+        .status-box.active-filter { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(200, 169, 126, 0.2); }
         .status-box .status-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 4px; }
-        .status-box .status-count { font-size: 24px; font-weight: 700; color: var(--dark); }
+        .status-box .status-count { font-size: 24px; font-weight: 700; color: #1a1a1a; }
 
         /* ===== SEARCH BAR ===== */
         .search-container { margin-bottom: 24px; position: relative; max-width: 400px; }
@@ -123,7 +122,7 @@
             width: 100%; padding: 14px 16px 14px 44px; border-radius: 10px; border: 1px solid var(--border);
             font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: 0.2s; background: var(--surface);
         }
-        .search-container input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); }
+        .search-container input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.15); }
 
         /* ===== TABS ===== */
         .tab-content { display: none; }
@@ -139,9 +138,9 @@
             font-weight: 600; color: var(--text-muted); background: transparent; border: none; cursor: pointer;
             transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;
         }
-        .res-toggle-btn.active { background: var(--surface); color: var(--dark); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .res-toggle-btn .count-badge { background: #cbd5e0; color: var(--dark); padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
-        .res-toggle-btn.active .count-badge { background: var(--primary); color: var(--surface); }
+        .res-toggle-btn.active { background: var(--surface); color: #1a1a1a; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .res-toggle-btn .count-badge { background: #cbd5e0; color: #1a1a1a; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+        .res-toggle-btn.active .count-badge { background: var(--gold); color: var(--surface); }
 
         /* ===== RESERVATION CARDS (PREMIUM TICKET STYLE) ===== */
         .res-card {
@@ -154,7 +153,7 @@
         
         /* Gold accent bar on the left */
         .res-card::before {
-            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary);
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--gold);
         }
 
         .res-card-header {
@@ -164,19 +163,19 @@
         
         .res-user-info { display: flex; align-items: center; gap: 16px; }
         .res-avatar {
-            width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; color: var(--primary);
+            width: 48px; height: 48px; border-radius: 50%; background: #fdfaf5; color: var(--gold);
             display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700;
         }
-        .res-name-wrap h3 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+        .res-name-wrap h3 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
         .res-time { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; font-weight: 500; }
 
         .status-badge {
             padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
             display: flex; align-items: center; gap: 6px;
         }
-        .status-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid #feebc8; }
-        .status-approved { background: var(--success-bg); color: var(--success); border: 1px solid #c6f6d5; }
-        .status-cancelled { background: var(--danger-bg); color: var(--danger); border: 1px solid #fed7d7; }
+        .status-pending { background: #fff3e0; color: var(--orange); border: 1px solid #feebc8; }
+        .status-approved { background: #e8f5e9; color: var(--green); border: 1px solid #c6f6d5; }
+        .status-cancelled { background: #ffebee; color: var(--red); border: 1px solid #fed7d7; }
 
         .res-card-body { padding: 24px 32px; display: flex; gap: 32px; flex-wrap: wrap; align-items: center; }
         
@@ -185,12 +184,12 @@
         .res-detail-item i { color: var(--text-muted); width: 16px; text-align: center; }
 
         .res-ticket { 
-            display: flex; gap: 24px; background: #f8fafc; padding: 16px 24px; border-radius: 12px; border: 1px solid var(--border);
+            display: flex; gap: 24px; background: #fdfaf5; padding: 16px 24px; border-radius: 12px; border: 1px solid rgba(200, 169, 126, 0.2);
         }
         .ticket-item { display: flex; align-items: center; gap: 12px; }
-        .ticket-item i { font-size: 20px; color: var(--primary); }
+        .ticket-item i { font-size: 20px; color: var(--gold); }
         .ticket-text small { display: block; font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .ticket-text span { display: block; font-size: 14px; font-weight: 600; color: var(--dark); }
+        .ticket-text span { display: block; font-size: 14px; font-weight: 600; color: #1a1a1a; }
 
         .res-card-footer { padding: 16px 32px; background: #fafafa; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
         
@@ -198,11 +197,11 @@
             padding: 10px 20px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
             cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease; border: none;
         }
-        .btn-approve { background: var(--success); color: #fff; }
-        .btn-approve:hover { background: #2f855a; box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3); }
+        .btn-approve { background: var(--green); color: #fff; }
+        .btn-approve:hover { background: #1b5e20; box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3); }
         
-        .btn-cancel { background: #fff; color: var(--danger); border: 1px solid #fed7d7; }
-        .btn-cancel:hover { background: var(--danger-bg); }
+        .btn-cancel { background: #fff; color: var(--red); border: 1px solid #fed7d7; }
+        .btn-cancel:hover { background: #ffebee; }
 
         /* ===== ORDERS CARDS ===== */
         .order-card {
@@ -210,8 +209,8 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border); padding: 24px;
         }
         .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border); }
-        .order-header h3 { font-size: 16px; font-weight: 600; color: var(--dark); display: flex; align-items: center; gap: 10px; }
-        .order-amount { font-size: 20px; font-weight: 700; color: var(--primary); }
+        .order-header h3 { font-size: 16px; font-weight: 600; color: #1a1a1a; display: flex; align-items: center; gap: 10px; }
+        .order-amount { font-size: 20px; font-weight: 700; color: var(--gold); }
         .order-customer { display: flex; gap: 20px; font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
         .order-items { list-style: none; margin-bottom: 20px; }
         .order-items li { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f1f5f9; }
@@ -257,7 +256,7 @@
             display: flex; align-items: center; justify-content: center; font-size: 24px;
         }
         
-        .custom-modal h3 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+        .custom-modal h3 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
         .custom-modal p { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin-bottom: 24px; }
         
         .custom-modal-actions { display: flex; gap: 12px; }
@@ -267,10 +266,10 @@
             font-weight: 600; cursor: pointer; transition: all 0.2s ease; flex: 1; border: none;
         }
         .modal-btn-cancel { background: var(--bg); color: var(--text-muted); }
-        .modal-btn-cancel:hover { background: #e2e8f0; color: var(--dark); }
+        .modal-btn-cancel:hover { background: #e2e8f0; color: #1a1a1a; }
         
-        .modal-btn-confirm { background: var(--primary); color: #fff; }
-        .modal-btn-confirm:hover { background: var(--primary-hover); }
+        .modal-btn-confirm { background: var(--gold); color: #fff; }
+        .modal-btn-confirm:hover { background: var(--gold-dark); }
 
         /* Responsive */
         @media (max-width: 1024px) {
@@ -330,26 +329,26 @@
         <!-- TOP STATS -->
         <div class="stats-grid" id="stats-container">
             <div class="stat-card">
-                <div class="stat-icon" style="background: #ebf8ff; color: #3182ce;"><i class="fas fa-receipt"></i></div>
+                <div class="stat-icon" style="background: #e3f2fd; color: #1976d2;"><i class="fas fa-receipt"></i></div>
                 <div class="stat-info">
                     <h3>Total Orders</h3>
                     <p id="stat-total-orders">0</p>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background: #f0fff4; color: #38a169;"><i class="fas fa-rupee-sign"></i></div>
+                <div class="stat-icon" style="background: #e8f5e9; color: #2e7d32;"><i class="fas fa-rupee-sign"></i></div>
                 <div class="stat-info">
                     <h3>Total Revenue</h3>
                     <p id="stat-revenue">₹0.00</p>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background: #fffaf0; color: #dd6b20;"><i class="fas fa-fire"></i></div>
+                <div class="stat-icon" style="background: #fff3e0; color: #f57c00;"><i class="fas fa-fire"></i></div>
                 <div class="stat-info">
                     <h3>Live Queue</h3>
                     <div class="live-split">
-                        <div style="color:#3182ce;"><span class="dot" style="background:#3182ce;"></span> <span id="stat-pending">0</span> Pending</div>
-                        <div style="color:#dd6b20;"><span class="dot" style="background:#dd6b20;"></span> <span id="stat-preparing">0</span> Preparing</div>
+                        <div style="color:#1976d2;"><span class="dot" style="background:#1976d2;"></span> <span id="stat-pending">0</span> Pending</div>
+                        <div style="color:#f57c00;"><span class="dot" style="background:#f57c00;"></span> <span id="stat-preparing">0</span> Preparing</div>
                     </div>
                 </div>
             </div>
@@ -648,7 +647,7 @@
 
                 // Render Pending
                 if (!pendingRes.length) {
-                    document.getElementById("pending-list").innerHTML = `<div class="empty-state"><i class="fas fa-check-circle" style="color:var(--success);"></i><h3>All caught up!</h3><p>No pending reservations to review.</p></div>`;
+                    document.getElementById("pending-list").innerHTML = `<div class="empty-state"><i class="fas fa-check-circle" style="color:var(--green);"></i><h3>All caught up!</h3><p>No pending reservations to review.</p></div>`;
                 } else {
                     document.getElementById("pending-list").innerHTML = pendingRes.map(rsv => {
                         const initials = rsv.name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
@@ -762,19 +761,19 @@
             const confirmBtn = document.getElementById('modalConfirmBtn');
 
             if (isApprove) {
-                iconBox.style.background = 'var(--success-bg)';
-                iconBox.style.color = 'var(--success)';
+                iconBox.style.background = '#e8f5e9';
+                iconBox.style.color = '#2e7d32';
                 iconBox.innerHTML = '<i class="fas fa-check-circle"></i>';
                 title.innerText = 'Approve Reservation?';
                 msg.innerText = 'This will confirm the table and send a confirmation email to the customer.';
-                confirmBtn.style.background = 'var(--success)';
+                confirmBtn.style.background = '#2e7d32';
             } else {
-                iconBox.style.background = 'var(--danger-bg)';
-                iconBox.style.color = 'var(--danger)';
+                iconBox.style.background = '#ffebee';
+                iconBox.style.color = '#c62828';
                 iconBox.innerHTML = '<i class="fas fa-times-circle"></i>';
                 title.innerText = 'Cancel Reservation?';
                 msg.innerText = 'This will cancel the booking and send a cancellation email to the customer.';
-                confirmBtn.style.background = 'var(--danger)';
+                confirmBtn.style.background = '#c62828';
             }
 
             document.getElementById('confirmModal').classList.add('show');
