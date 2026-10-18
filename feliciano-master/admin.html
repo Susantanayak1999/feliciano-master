@@ -134,69 +134,151 @@
             color: #1a1a1a;
         }
 
-        .top-bar-left p {
-            color: var(--muted);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .top-bar-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+        .top-bar-left p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+        .top-bar-right { display: flex; gap: 15px; align-items: center; }
 
         .clock-box {
-            background: #fff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            color: #1a1a1a;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-            border: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            background: #fff; padding: 10px 20px; border-radius: 12px; font-weight: 600; color: #1a1a1a;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); border: 1px solid #eee; display: flex; align-items: center; gap: 10px;
         }
-
         .clock-box i { color: var(--gold); }
 
         .refresh-btn {
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            background: #fff; border: 1px solid #ddd; padding: 12px 20px; border-radius: 12px;
+            cursor: pointer; font-size: 14px; font-weight: 600; color: #555; display: flex; align-items: center;
+            gap: 8px; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
+        .refresh-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+        .refresh-btn i { transition: transform 0.5s ease; }
+        .refresh-btn.spinning i { transform: rotate(360deg); }
 
-        .refresh-btn:hover {
-            background: var(--gold);
-            color: #fff;
-            border-color: var(--gold);
+        /* ===== STATS CARDS ===== */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+        .stat-card {
+            background: #fff; padding: 24px; border-radius: 16px; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(200, 169, 126, 0.15); display: flex; align-items: center; gap: 20px; transition: transform 0.3s;
         }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(200, 169, 126, 0.15); }
+        .stat-icon {
+            width: 60px; height: 60px; border-radius: 12px; background: rgba(200, 169, 126, 0.1);
+            color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+        }
+        .stat-info h3 { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-info p { font-size: 26px; color: #1a1a1a; font-weight: 700; line-height: 1.2; }
+        .live-split { display: flex; gap: 15px; margin-top: 6px; }
+        .live-split div { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .live-split .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .live-split .blue { background: var(--blue); }
+        .live-split .orange { background: var(--orange); }
 
-        .refresh-btn i {
-            transition: transform 0.5s ease;
+        /* ===== STATUS BREAKDOWN ===== */
+        .status-breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .status-box {
+            background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border-top: 4px solid; text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
         }
+        .status-box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06); }
+        .status-box.active-filter { box-shadow: inset 0 0 0 2px #333; }
+        .status-box .status-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px; }
+        .status-box .status-count { font-size: 28px; font-weight: 800; color: #1a1a1a; }
+        .confirmed-box { border-color: var(--blue); }
+        .preparing-box { border-color: var(--orange); }
+        .delivered-box { border-color: var(--green); }
+        .cancelled-box { border-color: var(--red); }
 
-        .refresh-btn.spinning i {
-            transform: rotate(360deg);
+        /* ===== SEARCH BAR ===== */
+        .search-container { margin-bottom: 24px; position: relative; max-width: 500px; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 18px; }
+        .search-container input {
+            width: 100%; padding: 16px 20px 16px 50px; border-radius: 12px; border: 1px solid #ddd;
+            font-size: 15px; font-weight: 500; outline: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
+        .search-container input:focus { border-color: var(--gold); box-shadow: 0 4px 20px rgba(200, 169, 126, 0.15); }
 
         /* ===== TABS ===== */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ===== RESERVATIONS (REVAMPED) ===== */
+        /* ===== ORDER CARDS ===== */
+        .card {
+            background: #fff; border-radius: 16px; padding: 24px 28px; margin-bottom: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04); border-left: 5px solid var(--gold); transition: 0.3s;
+        }
+        .card:hover { box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08); }
+        .card-header {
+            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;
+            border-bottom: 1px dashed #eee; padding-bottom: 16px;
+        }
+        .card-header h3 { font-size: 18px; color: #1a1a1a; font-weight: 600; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .card-header small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
+        .time-ago {
+            color: var(--orange); font-weight: 700; font-size: 11px; background: #fff3e0;
+            padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;
+        }
+        .time-ago.urgent { background: #ffebee; color: var(--red); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        .card-header .amount { font-size: 24px; font-weight: 800; color: var(--gold); }
+
+        .customer-info {
+            display: flex; gap: 24px; font-size: 13.5px; color: #555; margin-bottom: 20px;
+            background: #fdfaf5; padding: 12px 18px; border-radius: 10px; border: 1px solid rgba(200, 169, 126, 0.2);
+            flex-wrap: wrap; word-break: break-word; overflow-wrap: break-word;
+        }
+        .customer-info span { display: flex; align-items: center; gap: 8px; font-weight: 500; word-break: break-word; overflow-wrap: break-word; }
+        .customer-info i { color: var(--gold); font-size: 16px; flex-shrink: 0; }
+
+        .items-list { list-style: none; margin-bottom: 24px; }
+        .items-list li { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 14.5px; color: #444; border-bottom: 1px solid #f5f5f5; }
+        .items-list li:last-child { border-bottom: none; }
+        .item-info { display: flex; align-items: center; gap: 10px; font-weight: 500; color: #1a1a1a; }
+        .item-type-dot {
+            width: 14px; height: 14px; border: 1.5px solid var(--veg); border-radius: 3px;
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .item-type-dot::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--veg); }
+        .item-type-dot.nonveg { border-color: var(--nonveg); }
+        .item-type-dot.nonveg::after { background: var(--nonveg); }
+
+        .status-row {
+            display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-top: 20px;
+            padding-top: 20px; border-top: 1px solid #f5f5f5; flex-wrap: wrap;
+        }
+        .status-row label { font-size: 14px; font-weight: 600; color: #555; }
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge.Confirmed { background: #e3f2fd; color: var(--blue); }
+        .badge.Preparing { background: #fff3e0; color: var(--orange); }
+        .badge.Delivered { background: #e8f5e9; color: var(--green); }
+        .badge.Cancelled { background: #ffebee; color: var(--red); }
+
+        /* ===== CUSTOM DROPDOWN ===== */
+        .custom-dropdown { position: relative; display: inline-block; width: 140px; }
+        .dropdown-btn {
+            width: 100%; padding: 10px 16px; background: #fff; border: 1.5px solid #ddd; border-radius: 8px;
+            font-family: "Poppins", sans-serif; font-size: 14px; font-weight: 600; color: #333; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
+        }
+        .dropdown-btn:hover, .dropdown-btn:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2); outline: none; }
+        .dropdown-btn i { font-size: 12px; color: var(--muted); transition: transform 0.3s; }
+        .custom-dropdown.open .dropdown-btn i { transform: rotate(180deg); }
+        .dropdown-menu {
+            position: absolute; top: calc(100% + 5px); left: 0; width: 100%; background: #fff; border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); border: 1px solid #eee; padding: 6px 0; margin: 0; list-style: none;
+            opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s ease; z-index: 100;
+        }
+        .custom-dropdown.open .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-menu li { padding: 10px 16px; font-size: 13.5px; font-family: "Poppins", sans-serif; color: #444; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .dropdown-menu li:hover { background: #f8f6f3; color: var(--gold-dark); }
+        .dropdown-menu li.active { background: rgba(200, 169, 126, 0.1); color: var(--gold-dark); font-weight: 600; }
+        .dropdown-menu li .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dropdown-menu li[data-value="Confirmed"] .dot { background: var(--blue); }
+        .dropdown-menu li[data-value="Preparing"] .dot { background: var(--orange); }
+        .dropdown-menu li[data-value="Delivered"] .dot { background: var(--green); }
+        .dropdown-menu li[data-value="Cancelled"] .dot { background: var(--red); }
+
+        /* ============================================================
+           NEW RESERVATIONS UI
+           ============================================================ */
         .res-card {
             background: #fff; border-radius: 20px; margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); border: 1px solid rgba(200, 169, 126, 0.15);
@@ -205,7 +287,6 @@
         }
         .res-card:hover { box-shadow: 0 15px 40px rgba(200, 169, 126, 0.12); transform: translateY(-3px); }
 
-        /* Top Bar inside Card */
         .res-card-top {
             padding: 20px 30px; border-bottom: 1px dashed #eee;
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
@@ -223,9 +304,6 @@
         .status-approved { background: #e8f5e9; color: #2e7d32; }
         .status-cancelled { background: #ffebee; color: #c62828; }
 
-        .time-ago { color: var(--muted); font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 5px; }
-
-        /* Content Area */
         .res-card-content {
             display: flex; padding: 25px 30px; gap: 30px; flex-wrap: wrap; justify-content: space-between;
         }
@@ -246,7 +324,6 @@
         .ticket-text small { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
         .ticket-text span { display: block; font-size: 15px; font-weight: 700; color: #1a1a1a; }
 
-        /* Action Area */
         .res-actions { padding: 15px 30px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 15px; background: #fafafa; }
         
         .btn-action {
@@ -259,33 +336,51 @@
         .btn-cancel { background: #ffebee; color: #c62828; border: 1.5px solid #ffcdd2; }
         .btn-cancel:hover { background: #c62828; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3); }
 
+        /* ===== MISC ===== */
         .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px dashed #ddd; }
         .empty-state i { font-size: 40px; color: #ccc; margin-bottom: 15px; }
         .empty-state h3 { font-size: 18px; color: #555; margin-bottom: 5px; }
         .empty-state p { font-size: 14px; color: var(--muted); }
-        
         .loading { text-align: center; padding: 60px; font-size: 16px; color: var(--muted); }
         .loading i { font-size: 30px; color: var(--gold); animation: spin 1s linear infinite; margin-bottom: 15px; display: block; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Mobile Responsive */
         @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .status-breakdown { grid-template-columns: repeat(2, 1fr); }
             .res-card-content { flex-direction: column; }
             .res-ticket { width: 100%; justify-content: flex-start; }
         }
+
         @media (max-width: 900px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+            .sidebar { 
+                width: 100%; height: auto; position: relative; padding: 20px; 
+                display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; 
+            }
             .sidebar h1 { margin-bottom: 0; font-size: 22px; flex: 1; }
             .sidebar-footer { display: block; margin-top: 0; order: 3; }
             .back-btn { padding: 8px 16px; font-size: 13px; width: auto; }
             .back-btn span { display: none; }
+            
             .sidebar-nav { display: flex; gap: 10px; width: 100%; margin-top: 15px; order: 4; }
             .nav-item { margin-bottom: 0; padding: 10px 15px; font-size: 14px; }
+            
             .main-content { margin-left: 0; width: 100%; padding: 20px; }
-            .top-bar-left h2 { font-size: 24px; }
+            .top-bar h2 { font-size: 24px; }
+            .card-header { flex-direction: column; gap: 10px; }
+            .customer-info { flex-direction: column; gap: 10px; }
             .res-actions { justify-content: stretch; }
             .btn-action { flex: 1; justify-content: center; }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid, .status-breakdown { grid-template-columns: 1fr; }
+            .top-bar-right { width: 100%; justify-content: space-between; }
+            .status-row { justify-content: space-between; width: 100%; }
+            .custom-dropdown { width: 100%; margin-top: 10px; }
+            .dropdown-btn { justify-content: space-between; }
         }
     </style>
 </head>
@@ -296,7 +391,10 @@
     <aside class="sidebar">
         <h1>Mixtape Admin</h1>
         <div class="sidebar-nav">
-            <a class="nav-item active" onclick="switchTab('reservations')" id="nav-reservations">
+            <a class="nav-item active" onclick="switchTab('orders')" id="nav-orders">
+                <i class="fas fa-shopping-bag"></i> Orders
+            </a>
+            <a class="nav-item" onclick="switchTab('reservations')" id="nav-reservations">
                 <i class="fas fa-calendar-alt"></i> Reservations
             </a>
         </div>
@@ -310,12 +408,13 @@
 
         <div class="top-bar">
             <div class="top-bar-left">
-                <h2 id="page-title">Table Reservations</h2>
-                <p>Manage your restaurant's table bookings</p>
+                <h2 id="page-title">Manage Orders</h2>
+                <p>Real-time overview of your restaurant's activity</p>
             </div>
             <div class="top-bar-right">
                 <div class="clock-box">
-                    <i class="fas fa-circle" style="font-size: 8px; color: #2e7d32; animation: pulse 2s infinite;"></i> Live
+                    <i class="fas fa-circle" style="font-size: 8px; color: #2e7d32; animation: pulse 2s infinite;"></i>
+                    Live
                 </div>
                 <button class="refresh-btn" id="refreshBtn" onclick="refreshData(true)">
                     <i class="fas fa-sync-alt"></i> Refresh
@@ -323,9 +422,74 @@
             </div>
         </div>
 
+        <!-- TOP STATS -->
+        <div class="stats-grid" id="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+                <div class="stat-info">
+                    <h3>Total Orders</h3>
+                    <p id="stat-total-orders">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(46, 125, 50, 0.1); color: var(--green);"><i
+                        class="fas fa-rupee-sign"></i></div>
+                <div class="stat-info">
+                    <h3>Total Revenue</h3>
+                    <p id="stat-revenue">₹0.00</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 124, 0, 0.1); color: var(--orange);"><i
+                        class="fas fa-fire"></i></div>
+                <div class="stat-info">
+                    <h3>Live Kitchen Queue</h3>
+                    <div class="live-split">
+                        <div style="color:var(--blue);"><span class="dot blue"></span> <span id="stat-pending">0</span>
+                            Pending</div>
+                        <div style="color:var(--orange);"><span class="dot orange"></span> <span
+                                id="stat-preparing">0</span> Preparing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS BREAKDOWN -->
+        <div class="status-breakdown" id="status-breakdown-container">
+            <div class="status-box confirmed-box" onclick="filterStatus('Confirmed')" id="filter-Confirmed">
+                <div class="status-label">Confirmed</div>
+                <div class="status-count" id="count-confirmed">0</div>
+            </div>
+            <div class="status-box preparing-box" onclick="filterStatus('Preparing')" id="filter-Preparing">
+                <div class="status-label">Preparing</div>
+                <div class="status-count" id="count-preparing">0</div>
+            </div>
+            <div class="status-box delivered-box" onclick="filterStatus('Delivered')" id="filter-Delivered">
+                <div class="status-label">Delivered</div>
+                <div class="status-count" id="count-delivered">0</div>
+            </div>
+            <div class="status-box cancelled-box" onclick="filterStatus('Cancelled')" id="filter-Cancelled">
+                <div class="status-label">Cancelled</div>
+                <div class="status-count" id="count-cancelled">0</div>
+            </div>
+        </div>
+
+        <!-- ORDERS TAB -->
+        <div id="tab-orders" class="tab-content active">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by Order ID, Name, Email, or Payment ID..."
+                    oninput="renderOrderList()">
+            </div>
+            <div id="orders-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
+                orders...</div>
+            <div id="orders-list"></div>
+        </div>
+
         <!-- RESERVATIONS TAB -->
-        <div id="tab-reservations" class="tab-content active">
-            <div id="reservations-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading reservations...</div>
+        <div id="tab-reservations" class="tab-content">
+            <div id="reservations-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
+                reservations...</div>
             <div id="reservations-list"></div>
         </div>
 
@@ -335,6 +499,9 @@
         const BACKEND_URL = "https://feliciano-master.onrender.com";
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user") || "null");
+
+        let allOrdersData = [];
+        let currentFilter = "All";
 
         if (!token || !user || user.role !== "admin") {
             alert("Access Denied. You are not an admin.");
@@ -346,25 +513,215 @@
             document.getElementById(`nav-${tab}`).classList.add('active');
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
-            loadReservations();
+
+            if (tab === 'orders') {
+                document.getElementById('page-title').innerText = "Manage Orders";
+                document.getElementById('stats-container').style.display = "grid";
+                document.getElementById('status-breakdown-container').style.display = "grid";
+                loadOrders(false);
+            } else {
+                document.getElementById('page-title').innerText = "Table Reservations";
+                document.getElementById('stats-container').style.display = "none";
+                document.getElementById('status-breakdown-container').style.display = "none";
+                loadReservations();
+            }
         }
 
         async function refreshData(isManual = false) {
             const btn = document.getElementById('refreshBtn');
             if (isManual) { btn.classList.add('spinning'); setTimeout(() => btn.classList.remove('spinning'), 600); }
-            await loadReservations();
+            if (document.getElementById('tab-orders').classList.contains('active')) { await loadOrders(!isManual); }
+            else { if (isManual) await loadReservations(); }
         }
 
         function timeAgo(dateString) {
             const date = new Date(dateString); const now = new Date(); const diffMs = now - date;
             const diffMins = Math.floor(diffMs / 60000);
-            if (diffMins < 1) return "Just now";
-            if (diffMins < 60) return `${diffMins} mins ago`;
+            if (diffMins < 1) return { text: "Just now", urgent: false };
+            if (diffMins < 60) return { text: `${diffMins} mins ago`, urgent: diffMins > 20 };
             const diffHours = Math.floor(diffMins / 60);
-            if (diffHours < 24) return `${diffHours} hrs ago`;
-            return Math.floor(diffHours / 24) + " days ago";
+            if (diffHours < 24) return { text: `${diffHours} hrs ago`, urgent: true };
+            return { text: Math.floor(diffHours / 24) + " days ago", urgent: true };
         }
 
+        function filterStatus(status) {
+            currentFilter = (currentFilter === status) ? "All" : status;
+            document.querySelectorAll('.status-box').forEach(el => el.classList.remove('active-filter'));
+            if (currentFilter !== "All") { document.getElementById(`filter-${currentFilter}`).classList.add('active-filter'); }
+            renderOrderList();
+        }
+
+        function renderOrderList() {
+            const listEl = document.getElementById("orders-list");
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+
+            let filteredData = allOrdersData;
+
+            if (currentFilter !== "All") { filteredData = filteredData.filter(o => (o.status || 'Confirmed') === currentFilter); }
+            if (searchTerm) {
+                filteredData = filteredData.filter(order => {
+                    const orderId = order._id ? order._id.toLowerCase() : "";
+                    const paymentId = order.paymentId ? order.paymentId.toLowerCase() : "";
+                    const customerName = order.userId && order.userId.name ? order.userId.name.toLowerCase() : "";
+                    const customerEmail = order.userId && order.userId.email ? order.userId.email.toLowerCase() : "";
+                    return orderId.includes(searchTerm) || paymentId.includes(searchTerm) || customerName.includes(searchTerm) || customerEmail.includes(searchTerm);
+                });
+            }
+
+            if (!filteredData.length) {
+                listEl.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>No Orders Found</h3><p>No orders match your current filter or search query.</p></div>`;
+                return;
+            }
+
+            listEl.innerHTML = filteredData.map(order => {
+                const customer = order.userId ? `<strong>${order.userId.name}</strong> (${order.userId.email})` : "Guest User";
+                const itemsHtml = order.items.map(item => {
+                    const isNonVeg = item.type === "non-veg";
+                    return `
+                    <li>
+                        <span class="item-info">
+                            <span class="item-type-dot ${isNonVeg ? 'nonveg' : ''}"></span>
+                            ${item.quantity}x ${item.name}
+                        </span>
+                        <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+                    </li>
+                    `;
+                }).join("");
+
+                const showTimeAgo = order.status !== 'Delivered' && order.status !== 'Cancelled';
+                const timeInfo = timeAgo(order.createdAt);
+                const currentStatus = order.status || 'Confirmed';
+
+                return `
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Order #${order._id.slice(-6).toUpperCase()} ${showTimeAgo ? `<span class="time-ago ${timeInfo.urgent ? 'urgent' : ''}"><i class="far fa-clock"></i> ${timeInfo.text}</span>` : ''}</h3>
+                                <small><i class="far fa-calendar-alt"></i> ${new Date(order.createdAt).toLocaleString()}</small>
+                            </div>
+                            <div class="amount">₹${order.amount.toFixed(2)}</div>
+                        </div>
+                        <div class="customer-info">
+                            <span><i class="fas fa-user"></i> ${customer}</span>
+                            <span><i class="fas fa-credit-card"></i> ${order.paymentId}</span>
+                        </div>
+                        <ul class="items-list">${itemsHtml}</ul>
+                        
+                        <div class="status-row">
+                            <label>Update Status:</label>
+                            <span class="badge ${currentStatus}" id="badge-${order._id}">${currentStatus}</span>
+                            
+                            <!-- CUSTOM DROPDOWN -->
+                            <div class="custom-dropdown" id="dropdown-${order._id}">
+                                <button class="dropdown-btn" onclick="toggleDropdown('${order._id}')">
+                                    ${currentStatus} <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li data-value="Confirmed" class="${currentStatus === 'Confirmed' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Confirmed')"><span class="dot"></span> Confirmed</li>
+                                    <li data-value="Preparing" class="${currentStatus === 'Preparing' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Preparing')"><span class="dot"></span> Preparing</li>
+                                    <li data-value="Delivered" class="${currentStatus === 'Delivered' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Delivered')"><span class="dot"></span> Delivered</li>
+                                    <li data-value="Cancelled" class="${currentStatus === 'Cancelled' ? 'active' : ''}" onclick="selectStatus('${order._id}', 'Cancelled')"><span class="dot"></span> Cancelled</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // 🚀 CUSTOM DROPDOWN LOGIC
+        function toggleDropdown(orderId) {
+            const dropdown = document.getElementById(`dropdown-${orderId}`);
+            document.querySelectorAll('.custom-dropdown').forEach(el => {
+                if (el.id !== `dropdown-${orderId}`) el.classList.remove('open');
+            });
+            dropdown.classList.toggle('open');
+        }
+
+        function selectStatus(orderId, newStatus) {
+            document.getElementById(`dropdown-${orderId}`).classList.remove('open');
+            updateStatus(orderId, newStatus);
+        }
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(el => el.classList.remove('open'));
+            }
+        });
+
+        // 🚀 UPDATE STATUS
+        async function updateStatus(orderId, newStatus) {
+            // Instantly update the badge
+            const badge = document.getElementById(`badge-${orderId}`);
+            if (badge) {
+                badge.className = `badge ${newStatus}`;
+                badge.innerText = newStatus;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/admin/orders/${orderId}/status`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (res.ok) {
+                    const orderIndex = allOrdersData.findIndex(o => o._id === orderId);
+                    if (orderIndex > -1) allOrdersData[orderIndex].status = newStatus;
+                    loadOrders(true);
+                } else {
+                    alert("Failed to update status on server.");
+                    loadOrders(true);
+                }
+            } catch (err) {
+                alert("Error: " + err.message);
+                loadOrders(true);
+            }
+        }
+
+        async function loadOrders(isBackground = true) {
+            const loader = document.getElementById("orders-loading");
+            if (!isBackground) { loader.style.display = "block"; document.getElementById("orders-list").innerHTML = ""; }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/admin/orders`, { headers: { "Authorization": "Bearer " + token } });
+                const data = await res.json();
+                if (!isBackground) loader.style.display = "none";
+
+                const newOrdersData = data.orders || [];
+                if (JSON.stringify(allOrdersData) !== JSON.stringify(newOrdersData) || !isBackground) {
+                    allOrdersData = newOrdersData;
+
+                    let totalRevenue = 0, countConfirmed = 0, countPreparing = 0, countDelivered = 0, countCancelled = 0;
+                    allOrdersData.forEach(o => {
+                        totalRevenue += o.amount;
+                        const status = o.status || 'Confirmed';
+                        if (status === 'Confirmed') countConfirmed++;
+                        else if (status === 'Preparing') countPreparing++;
+                        else if (status === 'Delivered') countDelivered++;
+                        else if (status === 'Cancelled') countCancelled++;
+                    });
+
+                    document.getElementById("stat-total-orders").innerText = allOrdersData.length;
+                    document.getElementById("stat-revenue").innerText = "₹" + totalRevenue.toFixed(2);
+                    document.getElementById("stat-pending").innerText = countConfirmed;
+                    document.getElementById("stat-preparing").innerText = countPreparing;
+                    document.getElementById("count-confirmed").innerText = countConfirmed;
+                    document.getElementById("count-preparing").innerText = countPreparing;
+                    document.getElementById("count-delivered").innerText = countDelivered;
+                    document.getElementById("count-cancelled").innerText = countCancelled;
+
+                    renderOrderList();
+                }
+            } catch (err) {
+                if (!isBackground) {
+                    loader.style.display = "none";
+                    document.getElementById("orders-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                }
+            }
+        }
+
+        // 🚀 NEW RESERVATIONS LOGIC
         async function loadReservations() {
             const loader = document.getElementById("reservations-loading");
             loader.style.display = "block"; 
@@ -396,6 +753,8 @@
                     if (currentStatus === 'approved') { badgeClass = 'status-approved'; badgeIcon = 'fa-check-circle'; badgeText = 'Approved'; }
                     if (currentStatus === 'cancelled') { badgeClass = 'status-cancelled'; badgeIcon = 'fa-times-circle'; badgeText = 'Cancelled'; }
 
+                    const timeInfo = timeAgo(rsv.createdAt);
+
                     return `
                     <div class="res-card">
                         
@@ -405,7 +764,9 @@
                                 <h3>${rsv.name}</h3>
                                 <span class="status-badge ${badgeClass}"><i class="fas ${badgeIcon}"></i> ${badgeText}</span>
                             </div>
-                            <div class="time-ago"><i class="far fa-clock"></i> Booked ${timeAgo(rsv.createdAt)}</div>
+                            <div class="time-ago" style="color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;">
+                                <i class="far fa-clock"></i> Booked ${timeInfo.text}
+                            </div>
                         </div>
 
                         <!-- Details Area -->
@@ -452,12 +813,11 @@
             }
         }
 
-        // 🚀 Update Status Logic
+        // 🚀 Update Reservation Status Logic
         async function updateReservationStatus(id, status, btnElement) {
             const actionText = status === 'approved' ? 'Approve' : 'Cancel';
             if (!confirm(`Are you sure you want to ${actionText.toLowerCase()} this reservation? An email will be sent to the customer.`)) return;
 
-            // Change button text to show loading
             const originalText = btnElement.innerHTML;
             btnElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
             btnElement.disabled = true;
@@ -475,7 +835,7 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    loadReservations(); // Reload to update UI and badges
+                    loadReservations(); 
                 } else {
                     alert("Failed to update: " + (data.error || "Unknown error"));
                     btnElement.innerHTML = originalText;
@@ -488,9 +848,10 @@
             }
         }
 
-        // Load initially
         if (token && user && user.role === "admin") {
+            loadOrders(false);
             loadReservations();
+            setInterval(() => { if (document.getElementById('tab-orders').classList.contains('active')) { loadOrders(true); } }, 10000);
         }
     </script>
 </body>
