@@ -293,6 +293,18 @@
         .res-toggle-btn .count-badge { background: #cbd5e0; color: #1a1a1a; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
         .res-toggle-btn.active .count-badge { background: var(--gold); color: #fff; }
 
+        /* Secondary Toggle (Inside History) */
+        .history-toggle-wrap {
+            display: inline-flex; background: #f4f6f9; border-radius: 10px; padding: 4px; margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .history-toggle-btn {
+            padding: 8px 20px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 13px;
+            font-weight: 600; color: var(--muted); background: transparent; border: none; cursor: pointer;
+            transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .history-toggle-btn.active { background: #fff; color: #1a1a1a; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+
         .res-card {
             background: #fff; border-radius: 20px; margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); border: 1px solid rgba(200, 169, 126, 0.15);
@@ -536,7 +548,7 @@
             <div id="reservations-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
                 reservations...</div>
             
-            <!-- Toggle Switch -->
+            <!-- Primary Toggle Switch -->
             <div class="res-toggle-wrap">
                 <button class="res-toggle-btn active" id="btn-pending" onclick="switchResTab('pending')">
                     <i class="fas fa-clock"></i> Pending <span class="count-badge" id="count-pending-badge">0</span>
@@ -553,6 +565,17 @@
 
             <!-- History Section -->
             <div id="res-history-view" style="display: none;">
+                
+                <!-- Secondary Toggle Switch for Approved/Cancelled -->
+                <div class="history-toggle-wrap">
+                    <button class="history-toggle-btn active" id="btn-hist-approved" onclick="switchHistTab('approved')">
+                        <i class="fas fa-check-circle" style="color:var(--green);"></i> Approved
+                    </button>
+                    <button class="history-toggle-btn" id="btn-hist-cancelled" onclick="switchHistTab('cancelled')">
+                        <i class="fas fa-times-circle" style="color:var(--red);"></i> Cancelled
+                    </button>
+                </div>
+
                 <div id="history-list"></div>
             </div>
         </div>
@@ -579,6 +602,8 @@
 
         let allOrdersData = [];
         let currentFilter = "All";
+        let currentHistFilter = "approved";
+        let allHistoryData = [];
 
         if (!token || !user || user.role !== "admin") {
             alert("Access Denied. You are not an admin.");
@@ -828,7 +853,15 @@
             } else {
                 document.getElementById('res-pending-view').style.display = "none";
                 document.getElementById('res-history-view').style.display = "block";
+                renderHistory(); // Trigger render when switching to history
             }
+        }
+
+        function switchHistTab(view) {
+            currentHistFilter = view;
+            document.querySelectorAll('.history-toggle-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`btn-hist-${view}`).classList.add('active');
+            renderHistory();
         }
 
         async function loadReservations() {
@@ -845,11 +878,11 @@
                 const allRes = data.reservations || [];
                 
                 const pendingRes = allRes.filter(r => (r.status || 'pending') === 'pending').sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-                const historyRes = allRes.filter(r => r.status === 'approved' || r.status === 'cancelled').sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+                allHistoryData = allRes.filter(r => r.status === 'approved' || r.status === 'cancelled').sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 
                 // Update badges
                 document.getElementById("count-pending-badge").innerText = pendingRes.length;
-                document.getElementById("count-history-badge").innerText = historyRes.length;
+                document.getElementById("count-history-badge").innerText = allHistoryData.length;
 
                 // Render Pending
                 if (!pendingRes.length) {
@@ -900,57 +933,65 @@
                     }).join("");
                 }
 
-                // Render History
-                if (!historyRes.length) {
-                    document.getElementById("history-list").innerHTML = `<div class="empty-state"><i class="fas fa-history"></i><h3>No history yet</h3><p>Approved and cancelled bookings will appear here.</p></div>`;
-                } else {
-                    document.getElementById("history-list").innerHTML = historyRes.map(rsv => {
-                        const timeInfo = timeAgo(rsv.createdAt);
-                        const currentStatus = rsv.status;
-                        
-                        let badgeClass = currentStatus === 'approved' ? 'status-approved' : 'status-cancelled';
-                        let badgeIcon = currentStatus === 'approved' ? 'fa-check-circle' : 'fa-times-circle';
-                        let badgeText = currentStatus === 'approved' ? 'Approved' : 'Cancelled';
-
-                        return `
-                        <div class="res-card" style="opacity: 0.85;">
-                            <div class="res-card-top">
-                                <div class="res-header-info">
-                                    <h3>${rsv.name}</h3>
-                                    <span class="status-badge ${badgeClass}"><i class="fas ${badgeIcon}"></i> ${badgeText}</span>
-                                </div>
-                                <div class="time-ago" style="color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;">
-                                    <i class="far fa-clock"></i> Booked ${timeInfo.text}
-                                </div>
-                            </div>
-                            <div class="res-card-content">
-                                <div class="res-details">
-                                    <div class="res-guests"><i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests</div>
-                                    <div class="res-contact">
-                                        <span><i class="fas fa-envelope"></i> ${rsv.email}</span>
-                                        <span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span>
-                                    </div>
-                                </div>
-                                <div class="res-ticket">
-                                    <div class="ticket-item">
-                                        <i class="far fa-calendar-alt"></i>
-                                        <div class="ticket-text"><small>DATE</small><span>${rsv.date}</span></div>
-                                    </div>
-                                    <div class="ticket-item">
-                                        <i class="far fa-clock"></i>
-                                        <div class="ticket-text"><small>TIME</small><span>${rsv.time}</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                    }).join("");
-                }
+                // Render History (Based on current filter)
+                renderHistory();
 
             } catch (err) {
                 loader.style.display = "none"; 
                 document.getElementById("pending-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
             }
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById("history-list");
+            const filteredHistory = allHistoryData.filter(r => r.status === currentHistFilter);
+
+            if (!filteredHistory.length) {
+                historyList.innerHTML = `<div class="empty-state"><i class="fas fa-history"></i><h3>No ${currentHistFilter} bookings</h3><p>There are no ${currentHistFilter} reservations yet.</p></div>`;
+                return;
+            }
+
+            historyList.innerHTML = filteredHistory.map(rsv => {
+                const timeInfo = timeAgo(rsv.createdAt);
+                const currentStatus = rsv.status;
+                
+                let badgeClass = currentStatus === 'approved' ? 'status-approved' : 'status-cancelled';
+                let badgeIcon = currentStatus === 'approved' ? 'fa-check-circle' : 'fa-times-circle';
+                let badgeText = currentStatus === 'approved' ? 'Approved' : 'Cancelled';
+
+                return `
+                <div class="res-card" style="opacity: 0.85;">
+                    <div class="res-card-top">
+                        <div class="res-header-info">
+                            <h3>${rsv.name}</h3>
+                            <span class="status-badge ${badgeClass}"><i class="fas ${badgeIcon}"></i> ${badgeText}</span>
+                        </div>
+                        <div class="time-ago" style="color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;">
+                            <i class="far fa-clock"></i> Booked ${timeInfo.text}
+                        </div>
+                    </div>
+                    <div class="res-card-content">
+                        <div class="res-details">
+                            <div class="res-guests"><i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests</div>
+                            <div class="res-contact">
+                                <span><i class="fas fa-envelope"></i> ${rsv.email}</span>
+                                <span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span>
+                            </div>
+                        </div>
+                        <div class="res-ticket">
+                            <div class="ticket-item">
+                                <i class="far fa-calendar-alt"></i>
+                                <div class="ticket-text"><small>DATE</small><span>${rsv.date}</span></div>
+                            </div>
+                            <div class="ticket-item">
+                                <i class="far fa-clock"></i>
+                                <div class="ticket-text"><small>TIME</small><span>${rsv.time}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join("");
         }
 
         // ============================================================
@@ -1048,4 +1089,4 @@
     </script>
 </body>
 
-</html> 
+</html>
