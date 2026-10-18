@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
+    <!-- 🚀 LEAFLET MAP CSS & JS (100% FREE, NO API KEY NEEDED) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         :root {
             --gold: #c8a97e;
@@ -169,47 +173,32 @@
         footer .copyright span { color: var(--gold); }
 
         /* ============================================================
-           ADDRESS MODAL (NEW)
+           ADDRESS MODAL WITH LEAFLET MAP
            ============================================================ */
-        .address-modal {
-            position: fixed; inset: 0; background: rgba(17, 17, 17, 0.85); backdrop-filter: blur(8px);
-            z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px;
-        }
+        .address-modal { position: fixed; inset: 0; background: rgba(17, 17, 17, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
         .address-modal.active { display: flex; }
         
-        .address-card {
-            background: #fff; border-radius: 20px; padding: 40px; max-width: 520px; width: 100%;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4); position: relative; animation: popIn 0.4s ease both;
-            max-height: 90vh; overflow-y: auto;
-        }
+        .address-card { background: #fff; border-radius: 20px; padding: 35px; max-width: 600px; width: 100%; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4); position: relative; animation: popIn 0.4s ease both; max-height: 90vh; overflow-y: auto; }
         @keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         
-        .address-card .close-btn {
-            position: absolute; top: 15px; right: 20px; background: transparent; border: none;
-            font-size: 24px; color: #bbb; cursor: pointer; transition: 0.3s;
-        }
+        .address-card .close-btn { position: absolute; top: 15px; right: 20px; background: transparent; border: none; font-size: 24px; color: #bbb; cursor: pointer; transition: 0.3s; }
         .address-card .close-btn:hover { color: var(--red); }
         
         .address-card h3 { font-family: "Playfair Display", serif; font-size: 32px; color: #1a1a1a; margin-bottom: 6px; font-weight: 700; }
-        .address-card p { color: var(--muted); font-size: 14px; margin-bottom: 25px; }
+        .address-card p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
 
-        .form-group { margin-bottom: 18px; }
+        .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .form-group input, .form-group textarea {
-            width: 100%; padding: 14px 16px; border: 1.5px solid #ddd; border-radius: 10px;
-            font-family: "Poppins", sans-serif; font-size: 14px; outline: none; transition: 0.3s; background: #faf8f4;
-        }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.15); }
-        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group input { width: 100%; padding: 14px 16px; border: 1.5px solid #ddd; border-radius: 10px; font-family: "Poppins", sans-serif; font-size: 14px; outline: none; transition: 0.3s; background: #faf8f4; }
+        .form-group input:focus { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200, 169, 126, 0.15); }
+
+        /* Leaflet Map Container */
+        #map { width: 100%; height: 200px; border-radius: 12px; margin-bottom: 16px; border: 1px solid #ddd; display: none; z-index: 1;}
 
         .map-hint { font-size: 12px; color: #888; margin-top: 6px; display: flex; align-items: center; gap: 6px; }
-        .map-hint i { color: #4285F4; }
+        .map-hint i { color: #2e7d32; }
 
-        .save-address-btn {
-            width: 100%; padding: 16px; background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #fff; border: none; border-radius: 30px; font-size: 15px; font-weight: 600;
-            cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 8px 20px rgba(200, 169, 126, 0.4);
-        }
+        .save-address-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #fff; border: none; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 8px 20px rgba(200, 169, 126, 0.4); }
         .save-address-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(200, 169, 126, 0.5); }
 
         /* Responsive */
@@ -258,7 +247,7 @@
             .cart-summary h3 { font-size: 22px; }
             .summary-row.total { font-size: 19px; }
             .checkout-btn { padding: 15px; font-size: 14px; }
-            .address-card { padding: 30px 20px; }
+            .address-card { padding: 24px 20px; }
         }
 
         .processing-overlay { position: fixed; inset: 0; background: rgba(17, 17, 17, 0.75); backdrop-filter: blur(6px); z-index: 9998; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 22px; }
@@ -276,7 +265,7 @@
         <div class="processing-text">Creating your <span>secure order</span>...</div>
     </div>
 
-    <!-- ADDRESS MODAL -->
+    <!-- ADDRESS MODAL WITH LEAFLET MAP -->
     <div class="address-modal" id="addressModal">
         <div class="address-card">
             <button class="close-btn" onclick="closeAddressModal()">&times;</button>
@@ -284,23 +273,24 @@
             <p>Where should we deliver your delicious food?</p>
 
             <div class="form-group">
+                <label>Search Location</label>
+                <input type="text" id="addressSearch" placeholder="Start typing your area... e.g. Bandra West">
+                <div class="map-hint">
+                    <i class="fas fa-map-marker-alt"></i> Click on the map to drop a pin for exact delivery
+                </div>
+            </div>
+
+            <!-- The map will appear here -->
+            <div id="map"></div>
+
+            <div class="form-group">
                 <label>House / Flat / Block No.</label>
                 <input type="text" id="addressHouse" placeholder="e.g. Flat 402, Block B" required>
             </div>
-            <div class="form-group">
-                <label>Area / Landmark</label>
-                <input type="text" id="addressArea" placeholder="e.g. Near City Mall, Bandra West" required>
-            </div>
+            
             <div class="form-group">
                 <label>Pincode</label>
                 <input type="text" id="addressPincode" placeholder="e.g. 400050" maxlength="6" required>
-            </div>
-            <div class="form-group">
-                <label>Google Maps Link (Optional)</label>
-                <input type="url" id="addressMapLink" placeholder="Paste your Google Maps location link here">
-                <div class="map-hint">
-                    <i class="fab fa-google"></i> Helps the driver find you faster
-                </div>
             </div>
             
             <button class="save-address-btn" onclick="saveAddressAndCheckout()">
@@ -460,6 +450,9 @@
         // ============================================
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
         let currentDeliveryAddress = null;
+        
+        // Leaflet Map Variables
+        let map, marker;
 
         // ============================================
         // DISPLAY CART
@@ -579,6 +572,86 @@
         }
 
         // ============================================
+        // LEAFLET MAP LOGIC (100% FREE)
+        // ============================================
+        function initLeafletMap() {
+            if (map) return; // Prevent re-initialization
+
+            // Default center (Mumbai)
+            const defaultCenter = [19.0760, 72.8777];
+
+            map = L.map('map').setView(defaultCenter, 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            marker = L.marker(defaultCenter, { draggable: true }).addTo(map);
+
+            // Handle marker drag end
+            marker.on('dragend', function (e) {
+                const latlng = marker.getLatLng();
+                fetchAddressFromCoords(latlng.lat, latlng.lng);
+            });
+
+            // Handle map click
+            map.on('click', function (e) {
+                marker.setLatLng(e.latlng);
+                fetchAddressFromCoords(e.latlng.lat, e.latlng.lng);
+            });
+        }
+
+        // Reverse Geocoding using Nominatim (Free)
+        async function fetchAddressFromCoords(lat, lon) {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const data = await res.json();
+                if (data && data.display_name) {
+                    document.getElementById("addressSearch").value = data.display_name;
+                    if (data.address && data.address.postcode) {
+                        document.getElementById("addressPincode").value = data.address.postcode;
+                    }
+                }
+            } catch (err) {
+                console.error("Geocoding error:", err);
+            }
+        }
+
+        // Address Search using Nominatim (Free)
+        let searchTimeout;
+        document.getElementById("addressSearch")?.addEventListener("input", function(e) {
+            clearTimeout(searchTimeout);
+            const query = e.target.value;
+            if (query.length < 3) return;
+
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        const result = data[0]; // Take the first result
+                        const lat = parseFloat(result.lat);
+                        const lon = parseFloat(result.lon);
+                        
+                        // Show map and move
+                        document.getElementById("map").style.display = "block";
+                        if (!map) initLeafletMap();
+                        
+                        map.setView([lat, lon], 16);
+                        marker.setLatLng([lat, lon]);
+                        
+                        if (result.address && result.address.postcode) {
+                            document.getElementById("addressPincode").value = result.address.postcode;
+                        }
+                    }
+                } catch (err) {
+                    console.error("Search error:", err);
+                }
+            }, 800); // Wait 800ms after user stops typing
+        });
+
+        // ============================================
         // ADDRESS MODAL LOGIC
         // ============================================
         function openAddressModal() {
@@ -595,16 +668,23 @@
                 return;
             }
 
-            // Pre-fill if address already exists in localStorage
+            // Pre-fill if address already exists
             const savedAddress = JSON.parse(localStorage.getItem("deliveryAddress"));
             if (savedAddress) {
+                document.getElementById("addressSearch").value = savedAddress.area || "";
                 document.getElementById("addressHouse").value = savedAddress.house || "";
-                document.getElementById("addressArea").value = savedAddress.area || "";
                 document.getElementById("addressPincode").value = savedAddress.pincode || "";
-                document.getElementById("addressMapLink").value = savedAddress.mapLink || "";
             }
 
             document.getElementById("addressModal").classList.add("active");
+            
+            // Initialize map slightly delayed so the modal renders first
+            setTimeout(() => {
+                document.getElementById("map").style.display = "block";
+                initLeafletMap();
+                // Fix map rendering issue when inside a hidden modal
+                setTimeout(() => { if(map) map.invalidateSize(); }, 200);
+            }, 100);
         }
 
         function closeAddressModal() {
@@ -612,22 +692,20 @@
         }
 
         function saveAddressAndCheckout() {
+            const area = document.getElementById("addressSearch").value.trim();
             const house = document.getElementById("addressHouse").value.trim();
-            const area = document.getElementById("addressArea").value.trim();
             const pincode = document.getElementById("addressPincode").value.trim();
-            const mapLink = document.getElementById("addressMapLink").value.trim();
 
-            if (!house || !area || !pincode) {
-                alert("Please fill in your House No, Area, and Pincode.");
+            if (!area || !house || !pincode) {
+                alert("Please select a location on the map, fill in your house no., and pincode.");
                 return;
             }
 
             // Save to memory and localStorage
-            currentDeliveryAddress = { house, area, pincode, mapLink };
+            currentDeliveryAddress = { house, area, pincode };
             localStorage.setItem("deliveryAddress", JSON.stringify(currentDeliveryAddress));
 
             closeAddressModal();
-            // Now that we have the address, proceed to Razorpay
             checkout();
         }
 
@@ -681,7 +759,6 @@
 
                     handler: async function (response) {
                         try {
-                            // 🚀 INCLUDE THE DELIVERY ADDRESS IN THE VERIFY REQUEST
                             const verifyRes = await fetch(`${BACKEND_URL}/verify-payment`, {
                                 method: "POST",
                                 headers: {
@@ -694,7 +771,7 @@
                                     razorpay_signature: response.razorpay_signature,
                                     items: cart,
                                     amount: totalAmount,
-                                    deliveryAddress: currentDeliveryAddress, // <--- ADDED ADDRESS
+                                    deliveryAddress: currentDeliveryAddress,
                                 }),
                             });
 
