@@ -203,15 +203,60 @@
         .dropdown-menu li[data-value="Cancelled"] .dot { background: var(--red); }
 
         /* ============================================================
-           RESERVATIONS
+           RESERVATIONS PAGE TOGGLE
            ============================================================ */
-        .res-section-title {
-            font-family: 'Playfair Display', serif; font-size: 24px; color: #1a1a1a; 
-            margin: 40px 0 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(200, 169, 126, 0.3);
-            display: flex; align-items: center; gap: 10px;
+        .res-toggle-wrap {
+            display: flex;
+            background: #fff;
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid #eee;
+            width: fit-content;
         }
-        .res-section-title:first-child { margin-top: 0; }
+        
+        .res-toggle-btn {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #777;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .res-toggle-btn:hover {
+            color: var(--gold);
+        }
+        
+        .res-toggle-btn.active {
+            background: var(--gold);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(200, 169, 126, 0.3);
+        }
 
+        .res-toggle-btn .count-badge {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        
+        .res-toggle-btn.active .count-badge {
+            background: rgba(255,255,255,0.3);
+            color: #fff;
+        }
+
+        /* ============================================================
+           RESERVATIONS CARDS
+           ============================================================ */
         .res-card {
             background: #fff; border-radius: 20px; margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); border: 1px solid rgba(200, 169, 126, 0.15);
@@ -268,7 +313,7 @@
         .btn-cancel { background: #ffebee; color: #c62828; border: 1.5px solid #ffcdd2; }
         .btn-cancel:hover { background: #c62828; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3); }
 
-        .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px dashed #ddd; margin-bottom: 30px; }
+        .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px dashed #ddd; }
         .empty-state i { font-size: 40px; color: #ccc; margin-bottom: 15px; }
         .empty-state h3 { font-size: 18px; color: #555; margin-bottom: 5px; }
         .empty-state p { font-size: 14px; color: var(--muted); }
@@ -298,6 +343,8 @@
             .customer-info { flex-direction: column; gap: 10px; }
             .res-actions { justify-content: stretch; }
             .btn-action { flex: 1; justify-content: center; }
+            .res-toggle-wrap { width: 100%; flex-direction: column; }
+            .res-toggle-btn { justify-content: center; }
         }
 
         @media (max-width: 600px) {
@@ -411,16 +458,30 @@
             <div id="orders-list"></div>
         </div>
 
-        <!-- RESERVATIONS TAB (PENDING & HISTORY) -->
+        <!-- RESERVATIONS TAB -->
         <div id="tab-reservations" class="tab-content">
             <div id="reservations-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
                 reservations...</div>
             
+            <!-- Toggle Switch -->
+            <div class="res-toggle-wrap">
+                <button class="res-toggle-btn active" id="btn-pending" onclick="switchResTab('pending')">
+                    <i class="fas fa-clock"></i> Pending <span class="count-badge" id="count-pending-badge">0</span>
+                </button>
+                <button class="res-toggle-btn" id="btn-history" onclick="switchResTab('history')">
+                    <i class="fas fa-history"></i> History <span class="count-badge" id="count-history-badge">0</span>
+                </button>
+            </div>
+
             <!-- Pending Section -->
-            <div id="pending-section"></div>
+            <div id="res-pending-view">
+                <div id="pending-list"></div>
+            </div>
 
             <!-- History Section -->
-            <div id="history-section"></div>
+            <div id="res-history-view" style="display: none;">
+                <div id="history-list"></div>
+            </div>
         </div>
 
     </main>
@@ -452,7 +513,7 @@
                 loadOrders(false);
             } else {
                 document.getElementById('page-title').innerText = "Reservations";
-                document.getElementById('page-subtitle').innerText = "Manage pending bookings and view history";
+                document.getElementById('page-subtitle').innerText = "Manage pending requests and view history";
                 document.getElementById('stats-container').style.display = "none";
                 document.getElementById('status-breakdown-container').style.display = "none";
                 loadReservations();
@@ -669,13 +730,26 @@
         }
 
         // ============================================================
-        // RESERVATIONS LOGIC (PENDING & HISTORY IN ONE PAGE)
+        // RESERVATIONS LOGIC (TOGGLE VIEW)
         // ============================================================
+        function switchResTab(view) {
+            document.querySelectorAll('.res-toggle-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`btn-${view}`).classList.add('active');
+
+            if (view === 'pending') {
+                document.getElementById('res-pending-view').style.display = "block";
+                document.getElementById('res-history-view').style.display = "none";
+            } else {
+                document.getElementById('res-pending-view').style.display = "none";
+                document.getElementById('res-history-view').style.display = "block";
+            }
+        }
+
         async function loadReservations() {
             const loader = document.getElementById("reservations-loading");
             loader.style.display = "block"; 
-            document.getElementById("pending-section").innerHTML = "";
-            document.getElementById("history-section").innerHTML = "";
+            document.getElementById("pending-list").innerHTML = "";
+            document.getElementById("history-list").innerHTML = "";
 
             try {
                 const res = await fetch(`${BACKEND_URL}/admin/reservations`, { headers: { "Authorization": "Bearer " + token } });
@@ -687,12 +761,15 @@
                 const pendingRes = allRes.filter(r => (r.status || 'pending') === 'pending').sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
                 const historyRes = allRes.filter(r => r.status === 'approved' || r.status === 'cancelled').sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-                // Render Pending Section
-                let pendingHtml = `<h3 class="res-section-title"><i class="fas fa-clock" style="color:var(--orange);"></i> Pending Approvals</h3>`;
+                // Update badges
+                document.getElementById("count-pending-badge").innerText = pendingRes.length;
+                document.getElementById("count-history-badge").innerText = historyRes.length;
+
+                // Render Pending
                 if (!pendingRes.length) {
-                    pendingHtml += `<div class="empty-state"><i class="fas fa-check-circle" style="color:var(--green);"></i><h3>All caught up!</h3><p>No pending reservations to review.</p></div>`;
+                    document.getElementById("pending-list").innerHTML = `<div class="empty-state"><i class="fas fa-check-circle" style="color:var(--green);"></i><h3>All caught up!</h3><p>No pending reservations to review.</p></div>`;
                 } else {
-                    pendingHtml += pendingRes.map(rsv => {
+                    document.getElementById("pending-list").innerHTML = pendingRes.map(rsv => {
                         const timeInfo = timeAgo(rsv.createdAt);
                         return `
                         <div class="res-card">
@@ -736,14 +813,12 @@
                         `;
                     }).join("");
                 }
-                document.getElementById("pending-section").innerHTML = pendingHtml;
 
-                // Render History Section
-                let historyHtml = `<h3 class="res-section-title" style="margin-top:50px;"><i class="fas fa-history" style="color:var(--muted);"></i> Reservation History</h3>`;
+                // Render History
                 if (!historyRes.length) {
-                    historyHtml += `<div class="empty-state"><i class="fas fa-history"></i><h3>No history yet</h3><p>Approved and cancelled bookings will appear here.</p></div>`;
+                    document.getElementById("history-list").innerHTML = `<div class="empty-state"><i class="fas fa-history"></i><h3>No history yet</h3><p>Approved and cancelled bookings will appear here.</p></div>`;
                 } else {
-                    historyHtml += historyRes.map(rsv => {
+                    document.getElementById("history-list").innerHTML = historyRes.map(rsv => {
                         const timeInfo = timeAgo(rsv.createdAt);
                         const currentStatus = rsv.status;
                         
@@ -785,11 +860,10 @@
                         `;
                     }).join("");
                 }
-                document.getElementById("history-section").innerHTML = historyHtml;
 
             } catch (err) {
                 loader.style.display = "none"; 
-                document.getElementById("pending-section").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                document.getElementById("pending-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
             }
         }
 
@@ -817,7 +891,7 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
-                    // Reload the whole view to move it from Pending to History
+                    // Reload data. The item will disappear from Pending and go to History.
                     loadReservations(); 
                 } else {
                     alert("Failed to update: " + (data.error || "Unknown error"));
