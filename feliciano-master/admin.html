@@ -307,6 +307,133 @@
         .badge.Delivered { background: #e8f5e9; color: var(--green); }
         .badge.Cancelled { background: #ffebee; color: var(--red); }
 
+        /* ===== RESERVATIONS TICKET STYLE ===== */
+        .res-card {
+            display: flex;
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid rgba(200, 169, 126, 0.2);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .res-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15);
+        }
+
+        /* Left Side */
+        .res-left {
+            flex: 1;
+            padding: 28px 32px;
+            position: relative;
+        }
+        .res-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .res-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin: 0;
+        }
+        .res-guests {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fdfaf5;
+            color: var(--gold-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(200, 169, 126, 0.3);
+            margin-bottom: 20px;
+        }
+        .res-guests i { color: var(--gold); }
+
+        .res-contact {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            color: #555;
+            flex-wrap: wrap;
+        }
+        .res-contact span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+        .res-contact i { color: #888; }
+
+        /* Right Side (Ticket) */
+        .res-right {
+            background: linear-gradient(135deg, rgba(200, 169, 126, 0.08), rgba(200, 169, 126, 0.03));
+            padding: 28px 32px;
+            border-left: 2px dashed rgba(200, 169, 126, 0.4);
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+        /* The ticket punch holes */
+        .res-right::before, .res-right::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background: var(--bg);
+            border-radius: 50%;
+            border: 1px solid rgba(200, 169, 126, 0.2);
+        }
+        .res-right::before { top: -10px; }
+        .res-right::after { bottom: -10px; }
+
+        .ticket-date, .ticket-time {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .ticket-date i, .ticket-time i {
+            font-size: 24px;
+            color: var(--gold);
+            background: #fff;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(200, 169, 126, 0.2);
+        }
+        .ticket-date small, .ticket-time small {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+        .ticket-date span, .ticket-time span {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
         .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px dashed #ddd;}
         .empty-state i { font-size: 40px; color: #ccc; margin-bottom: 15px; }
         .empty-state h3 { font-size: 18px; color: #555; margin-bottom: 5px; }
@@ -331,10 +458,21 @@
             .main-content { margin-left: 0; width: 100%; padding: 20px; }
             .top-bar h2 { font-size: 24px; }
             .card-header { flex-direction: column; gap: 10px; }
+            .res-card { flex-direction: column; }
+            .res-right { 
+                border-left: none; 
+                border-top: 2px dashed rgba(200, 169, 126, 0.4); 
+                flex-direction: row; 
+                justify-content: flex-start;
+                padding: 20px 32px;
+            }
+            .res-right::before { left: -10px; top: -10px; }
+            .res-right::after { left: auto; right: -10px; top: -10px; bottom: auto; }
         }
         @media (max-width: 600px) {
             .stats-grid, .status-breakdown { grid-template-columns: 1fr; }
             .top-bar-right { width: 100%; justify-content: space-between; }
+            .res-contact { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
@@ -446,8 +584,8 @@
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user") || "null");
         
-        let allOrdersData = []; // Store all orders for filtering
-        let currentFilter = "All"; // Current active filter
+        let allOrdersData = []; 
+        let currentFilter = "All"; 
 
         // 🔒 SECURITY CHECK
         if (!token || !user || user.role !== "admin") {
@@ -483,7 +621,7 @@
         function refreshData() {
             const btn = document.getElementById('refreshBtn');
             btn.classList.add('spinning');
-            setTimeout(() => btn.classList.remove('spinning'), 600); // reset animation
+            setTimeout(() => btn.classList.remove('spinning'), 600); 
 
             if (document.getElementById('tab-orders').classList.contains('active')) {
                 loadOrders();
@@ -510,9 +648,8 @@
 
         // FILTER LOGIC
         function filterStatus(status) {
-            currentFilter = (currentFilter === status) ? "All" : status; // Toggle
+            currentFilter = (currentFilter === status) ? "All" : status; 
 
-            // Update UI highlights
             document.querySelectorAll('.status-box').forEach(el => el.classList.remove('active-filter'));
             if (currentFilter !== "All") {
                 document.getElementById(`filter-${currentFilter}`).classList.add('active-filter');
@@ -521,11 +658,10 @@
             renderOrderList();
         }
 
-        // RENDER ORDER LIST (Handles filtering)
+        // RENDER ORDER LIST
         function renderOrderList() {
             const listEl = document.getElementById("orders-list");
             
-            // Filter data
             let filteredData = allOrdersData;
             if (currentFilter !== "All") {
                 filteredData = allOrdersData.filter(o => (o.status || 'Confirmed') === currentFilter);
@@ -551,7 +687,6 @@
                     </li>
                 `).join("");
 
-                // Only show "time ago" if the order is not delivered or cancelled
                 const showTimeAgo = order.status !== 'Delivered' && order.status !== 'Cancelled';
                 const timeInfo = timeAgo(order.createdAt);
 
@@ -655,11 +790,9 @@
                     body: JSON.stringify({ status: newStatus })
                 });
                 if (res.ok) {
-                    // Update local data
                     const orderIndex = allOrdersData.findIndex(o => o._id === orderId);
                     if (orderIndex > -1) allOrdersData[orderIndex].status = newStatus;
                     
-                    // Silently refresh UI without reloading data
                     loadOrders(); 
                 } else {
                     alert("Failed to update status");
@@ -693,24 +826,46 @@
                     return;
                 }
 
-                document.getElementById("reservations-list").innerHTML = data.reservations.map(rsv => `
-                    <div class="card" style="border-left-color: var(--blue);">
-                        <div class="card-header">
-                            <div>
-                                <h3><i class="fas fa-users" style="color:var(--blue); margin-right:8px;"></i> ${rsv.name} — ${rsv.persons} Guests</h3>
-                                <small><i class="far fa-calendar-check"></i> Booked on: ${new Date(rsv.createdAt).toLocaleString()}</small>
+                document.getElementById("reservations-list").innerHTML = data.reservations.map(rsv => {
+                    const timeInfo = timeAgo(rsv.createdAt);
+                    
+                    return `
+                    <div class="res-card">
+                        <div class="res-left">
+                            <div class="res-header">
+                                <h3>${rsv.name}</h3>
+                                <span class="time-ago"><i class="far fa-clock"></i> Booked ${timeInfo.text}</span>
                             </div>
-                            <div class="amount" style="color:var(--blue); font-size:18px;">
-                                <i class="far fa-calendar-alt"></i> ${rsv.date} <br> 
-                                <i class="far fa-clock"></i> ${rsv.time}
+                            
+                            <div class="res-guests">
+                                <i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests
+                            </div>
+
+                            <div class="res-contact">
+                                <span><i class="fas fa-envelope"></i> ${rsv.email}</span>
+                                <span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span>
                             </div>
                         </div>
-                        <div class="customer-info" style="border-color: rgba(25,118,210,0.2); background:#f0f8ff;">
-                            <span><i class="fas fa-envelope" style="color:var(--blue);"></i> ${rsv.email}</span>
-                            <span><i class="fas fa-phone" style="color:var(--blue);"></i> ${rsv.phone}</span>
+
+                        <div class="res-right">
+                            <div class="ticket-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <div>
+                                    <small>DATE</small>
+                                    <span>${rsv.date}</span>
+                                </div>
+                            </div>
+                            <div class="ticket-time">
+                                <i class="far fa-clock"></i>
+                                <div>
+                                    <small>TIME</small>
+                                    <span>${rsv.time}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                `).join("");
+                    `;
+                }).join("");
             } catch (err) {
                 loader.style.display = "none";
                 document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
