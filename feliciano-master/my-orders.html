@@ -33,7 +33,6 @@
             background-color: var(--bg-color);
         }
 
-        /* ===== HERO SECTION ===== */
         .orders-hero {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2418 100%);
             padding: 80px 20px 60px;
@@ -77,11 +76,10 @@
             font-family: "Poppins", sans-serif;
         }
 
-        /* ===== MAIN SECTION ===== */
         .orders-section {
             padding: 50px 7% 100px;
             min-height: 500px;
-            margin-top: -30px; /* Overlaps the hero slightly */
+            margin-top: -30px; 
             position: relative;
             z-index: 10;
         }
@@ -90,7 +88,6 @@
             margin: 0 auto;
         }
 
-        /* ===== LOADING & EMPTY STATES ===== */
         .orders-loading {
             text-align: center;
             padding: 60px 20px;
@@ -158,7 +155,6 @@
             box-shadow: 0 12px 30px rgba(200,169,126,0.6);
         }
 
-        /* ===== ORDER CARD REDESIGN ===== */
         .order-card {
             background: #fff;
             border-radius: 20px;
@@ -180,7 +176,6 @@
             to   { opacity: 1; transform: translateY(0); }
         }
         
-        /* Gold accent line on the left */
         .order-card::before {
             content: "";
             position: absolute;
@@ -234,7 +229,7 @@
             line-height: 1;
         }
 
-        /* ===== TIMELINE TRACKER ===== */
+        /* Timeline Tracker */
         .order-timeline {
             display: flex;
             align-items: center;
@@ -294,7 +289,6 @@
             background: var(--gold);
         }
         
-        /* ===== STATUS BADGES ===== */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -306,7 +300,6 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
-        .status-badge i { font-size: 14px; }
         
         .status-badge.Confirmed { background: #e3f2fd; color: #1976d2; }
         .status-badge.Preparing { background: #fff3e0; color: #f57c00; animation: pulse-badge 2s infinite; }
@@ -319,7 +312,6 @@
             100% { box-shadow: 0 0 0 0 rgba(245, 124, 0, 0); }
         }
 
-        /* ===== ORDER ITEMS ===== */
         .order-items {
             display: flex;
             flex-direction: column;
@@ -392,7 +384,6 @@
             font-size: 15px;
         }
 
-        /* ===== ORDER FOOTER ===== */
         .order-footer {
             display: flex;
             justify-content: space-between;
@@ -414,7 +405,7 @@
             color: #555;
         }
 
-        /* ===== TOAST NOTIFICATION ===== */
+        /* Toast */
         .toast-container {
             position: fixed;
             bottom: 30px;
@@ -461,7 +452,6 @@
             font-weight: 500;
         }
 
-        /* ===== MOBILE RESPONSIVE ===== */
         @media (max-width: 768px) {
             .orders-hero { padding: 60px 20px 50px; }
             .orders-hero h1 { font-size: 34px; }
@@ -472,7 +462,6 @@
             .order-header .right { align-items: flex-start; text-align: left; width: 100%; flex-direction: row; justify-content: space-between;}
             .order-header .total { font-size: 22px; }
             
-            /* Timeline mobile adjustments */
             .order-timeline { padding: 0; }
             .timeline-icon { width: 34px; height: 34px; font-size: 14px; }
             .timeline-step span { font-size: 9.5px; }
@@ -604,20 +593,17 @@
             } catch { return iso; }
         }
 
-        // ============================================
-        // POPUP NOTIFICATION
-        // ============================================
         function showNotification(title, message, status) {
             const container = document.getElementById("toastContainer");
             const toast = document.createElement("div");
             toast.className = "custom-toast";
             
             let icon = "fa-info-circle";
-            let color = "#1976d2"; // Blue 
+            let color = "#1976d2"; 
             
-            if (status === "Preparing") { icon = "fa-fire"; color = "#f57c00"; } // Orange
-            if (status === "Delivered") { icon = "fa-check-circle"; color = "#2e7d32"; } // Green
-            if (status === "Cancelled") { icon = "fa-times-circle"; color = "#c62828"; } // Red
+            if (status === "Preparing") { icon = "fa-fire"; color = "#f57c00"; } 
+            if (status === "Delivered") { icon = "fa-check-circle"; color = "#2e7d32"; } 
+            if (status === "Cancelled") { icon = "fa-times-circle"; color = "#c62828"; } 
 
             toast.style.borderLeftColor = color;
             
@@ -645,9 +631,6 @@
             }
         }
 
-        // ============================================
-        // RENDER ORDERS (WITH TIMELINE TRACKER)
-        // ============================================
         function renderOrders(orders) {
             loadingEl.style.display = "none";
 
@@ -685,12 +668,11 @@
 
                 const currentStatus = order.status || "Confirmed";
                 
-                // Timeline Logic
                 const isPreparing = currentStatus === "Preparing";
                 const isDelivered = currentStatus === "Delivered";
                 const isCancelled = currentStatus === "Cancelled";
                 
-                let step1Class = "active"; // Confirmed is always active
+                let step1Class = "active"; 
                 let step2Class = isPreparing || isDelivered ? "active" : "";
                 let step3Class = isDelivered ? "active" : "";
                 
@@ -751,9 +733,6 @@
             }).join("");
         }
 
-        // ============================================
-        // LOAD ORDERS & POLLING LOGIC
-        // ============================================
         async function loadOrders(isPolling = false) {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -796,11 +775,13 @@
 
                         if (oldStatus && oldStatus !== newStatus) {
                             
-                            // Trigger the popup
-                            if (newStatus === "Preparing") {
+                            // 🚀 FIX: Only show notification if the card isn't cancelled right now
+                            // This prevents the "Preparing" notification from popping up 
+                            // if it was immediately cancelled.
+                            if (newStatus === "Preparing" && oldStatus !== "Cancelled") {
                                 showNotification("Order is Preparing! 👨‍🍳", `Your order #${order._id.slice(-6).toUpperCase()} is now in the kitchen.`, newStatus);
                             }
-                            if (newStatus === "Delivered") {
+                            if (newStatus === "Delivered" && oldStatus !== "Cancelled") {
                                 showNotification("Order Delivered! 🎉", `Enjoy your meal! Order #${order._id.slice(-6).toUpperCase()} has arrived.`, newStatus);
                             }
                             if (newStatus === "Cancelled") {
@@ -812,14 +793,11 @@
                         previousStatuses[order._id] = newStatus;
                     });
                     
-                    // THE FIX: Re-render everything if a change was detected. 
-                    // This forces the HTML to redraw with the correct badge and timeline.
                     if (hasStatusChanged) {
                         renderOrders(orders);
                     }
 
                 } else {
-                    // First load: Save statuses silently
                     orders.forEach(order => {
                         previousStatuses[order._id] = order.status || "Confirmed";
                     });
@@ -835,9 +813,6 @@
             }
         }
 
-        // ============================================
-        // INIT
-        // ============================================
         document.addEventListener("DOMContentLoaded", () => {
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
                 Notification.requestPermission();
@@ -845,7 +820,6 @@
 
             loadOrders(false);
 
-            // Check for updates every 5 seconds
             setInterval(() => {
                 loadOrders(true);
             }, 5000); 
