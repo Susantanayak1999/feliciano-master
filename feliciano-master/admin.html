@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Mixtape Kitchen</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -27,20 +25,9 @@
             --nonveg: #b71c1c;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -49,93 +36,30 @@
 
         /* ===== SIDEBAR ===== */
         .sidebar {
-            width: 260px;
-            background: var(--dark);
-            color: #fff;
-            position: fixed;
-            height: 100vh;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-            z-index: 100;
+            width: 260px; background: var(--dark); color: #fff; position: fixed; height: 100vh;
+            padding: 30px 20px; display: flex; flex-direction: column; box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1); z-index: 100;
         }
-
-        .sidebar h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            color: var(--gold);
-            margin-bottom: 40px;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
+        .sidebar h1 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold); margin-bottom: 40px; text-align: center; letter-spacing: 1px; }
         .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: #ccc;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            margin-bottom: 10px;
+            display: flex; align-items: center; gap: 15px; padding: 15px 20px; color: #ccc; text-decoration: none;
+            border-radius: 10px; font-size: 15px; font-weight: 500; transition: all 0.3s ease; cursor: pointer; margin-bottom: 10px;
         }
-
         .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
-        .nav-item.active {
-            background: linear-gradient(135deg, rgba(200, 169, 126, 0.15), rgba(200, 169, 126, 0.05));
-            color: var(--gold);
-            border-left: 4px solid var(--gold);
-        }
-
+        .nav-item.active { background: linear-gradient(135deg, rgba(200, 169, 126, 0.15), rgba(200, 169, 126, 0.05)); color: var(--gold); border-left: 4px solid var(--gold); }
         .nav-item i { font-size: 18px; width: 20px; text-align: center; }
         .sidebar-footer { margin-top: auto; }
-
         .back-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+            padding: 12px; background: rgba(255, 255, 255, 0.1); color: #fff; text-decoration: none; border-radius: 8px; font-size: 14px; transition: 0.3s;
         }
-
         .back-btn:hover { background: var(--gold); color: #fff; }
 
         /* ===== MAIN CONTENT ===== */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            padding: 40px;
-            width: calc(100% - 260px);
-        }
+        .main-content { margin-left: 260px; flex: 1; padding: 40px; width: calc(100% - 260px); }
 
         /* ===== TOP BAR ===== */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .top-bar-left h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            color: #1a1a1a;
-        }
-
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .top-bar-left h2 { font-family: 'Playfair Display', serif; font-size: 32px; color: #1a1a1a; }
         .top-bar-left p { color: var(--muted); font-size: 14px; margin-top: 4px; }
         .top-bar-right { display: flex; gap: 15px; align-items: center; }
 
@@ -306,9 +230,7 @@
         .status-approved { background: #e8f5e9; color: #2e7d32; }
         .status-cancelled { background: #ffebee; color: #c62828; }
 
-        .res-card-content {
-            display: flex; padding: 25px 30px; gap: 30px; flex-wrap: wrap; justify-content: space-between;
-        }
+        .res-card-content { display: flex; padding: 25px 30px; gap: 30px; flex-wrap: wrap; justify-content: space-between; }
         .res-details { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 15px; }
         
         .res-guests { display: inline-flex; align-items: center; gap: 8px; background: #fdfaf5; color: var(--gold-dark); padding: 8px 16px; border-radius: 30px; font-size: 14px; font-weight: 600; width: fit-content; border: 1px solid rgba(200, 169, 126, 0.3); }
@@ -360,8 +282,8 @@
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; padding: 20px; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; }
             .sidebar h1 { margin-bottom: 0; font-size: 22px; }
-            .sidebar-nav { display: flex; gap: 10px; width: 100%; margin-top: 15px; }
-            .nav-item { margin-bottom: 0; padding: 10px 15px; font-size: 14px; }
+            .sidebar-nav { display: flex; gap: 10px; width: 100%; margin-top: 15px; overflow-x: auto; }
+            .nav-item { margin-bottom: 0; padding: 10px 15px; font-size: 14px; white-space: nowrap; }
             .sidebar-footer { display: none; }
             .main-content { margin-left: 0; width: 100%; padding: 20px; }
             .top-bar h2 { font-size: 24px; }
@@ -393,6 +315,9 @@
             <a class="nav-item" onclick="switchTab('reservations')" id="nav-reservations">
                 <i class="fas fa-calendar-alt"></i> Reservations
             </a>
+            <a class="nav-item" onclick="switchTab('history')" id="nav-history">
+                <i class="fas fa-history"></i> History
+            </a>
         </div>
         <div class="sidebar-footer">
             <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Site</a>
@@ -405,7 +330,7 @@
         <div class="top-bar">
             <div class="top-bar-left">
                 <h2 id="page-title">Manage Orders</h2>
-                <p>Real-time overview of your restaurant's activity</p>
+                <p id="page-subtitle">Real-time overview of your restaurant's activity</p>
             </div>
             <div class="top-bar-right">
                 <div class="clock-box">
@@ -482,11 +407,18 @@
             <div id="orders-list"></div>
         </div>
 
-        <!-- RESERVATIONS TAB -->
+        <!-- RESERVATIONS TAB (PENDING ONLY) -->
         <div id="tab-reservations" class="tab-content">
             <div id="reservations-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
                 reservations...</div>
             <div id="reservations-list"></div>
+        </div>
+
+        <!-- HISTORY TAB (APPROVED & CANCELLED) -->
+        <div id="tab-history" class="tab-content">
+            <div id="history-loading" class="loading" style="display:none;"><i class="fas fa-spinner"></i> Loading
+                history...</div>
+            <div id="history-list"></div>
         </div>
 
     </main>
@@ -497,6 +429,7 @@
         const user = JSON.parse(localStorage.getItem("user") || "null");
 
         let allOrdersData = [];
+        let allReservationsData = [];
         let currentFilter = "All";
 
         if (!token || !user || user.role !== "admin") {
@@ -512,22 +445,32 @@
 
             if (tab === 'orders') {
                 document.getElementById('page-title').innerText = "Manage Orders";
+                document.getElementById('page-subtitle').innerText = "Real-time overview of your restaurant's activity";
                 document.getElementById('stats-container').style.display = "grid";
                 document.getElementById('status-breakdown-container').style.display = "grid";
                 loadOrders(false);
-            } else {
-                document.getElementById('page-title').innerText = "Table Reservations";
+            } else if (tab === 'reservations') {
+                document.getElementById('page-title').innerText = "Pending Reservations";
+                document.getElementById('page-subtitle').innerText = "Approve or cancel new table bookings";
                 document.getElementById('stats-container').style.display = "none";
                 document.getElementById('status-breakdown-container').style.display = "none";
                 loadReservations();
+            } else if (tab === 'history') {
+                document.getElementById('page-title').innerText = "Reservation History";
+                document.getElementById('page-subtitle').innerText = "View all approved and cancelled bookings";
+                document.getElementById('stats-container').style.display = "none";
+                document.getElementById('status-breakdown-container').style.display = "none";
+                loadHistory();
             }
         }
 
         async function refreshData(isManual = false) {
             const btn = document.getElementById('refreshBtn');
             if (isManual) { btn.classList.add('spinning'); setTimeout(() => btn.classList.remove('spinning'), 600); }
+            
             if (document.getElementById('tab-orders').classList.contains('active')) { await loadOrders(!isManual); }
-            else { if (isManual) await loadReservations(); }
+            else if (document.getElementById('tab-reservations').classList.contains('active')) { if (isManual) await loadReservations(); }
+            else if (document.getElementById('tab-history').classList.contains('active')) { if (isManual) await loadHistory(); }
         }
 
         function timeAgo(dateString) {
@@ -547,6 +490,9 @@
             renderOrderList();
         }
 
+        // ============================================================
+        // ORDERS LOGIC (UNCHANGED)
+        // ============================================================
         function renderOrderList() {
             const listEl = document.getElementById("orders-list");
             const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
@@ -625,7 +571,6 @@
             }).join("");
         }
 
-        // 🚀 CUSTOM DROPDOWN LOGIC
         function toggleDropdown(orderId) {
             const dropdown = document.getElementById(`dropdown-${orderId}`);
             document.querySelectorAll('.custom-dropdown').forEach(el => {
@@ -645,16 +590,13 @@
             }
         });
 
-        // 🚀 UPDATE STATUS
         async function updateStatus(orderId, newStatus) {
-            // 1. Instantly update the badge
             const badge = document.getElementById(`badge-${orderId}`);
             if (badge) {
                 badge.className = `badge ${newStatus}`;
                 badge.innerText = newStatus;
             }
 
-            // 2. Instantly update the Dropdown Button text & highlights
             const dropdownWrap = document.getElementById(`dropdown-${orderId}`);
             if (dropdownWrap) {
                 const btnText = dropdownWrap.querySelector('.dropdown-val-text');
@@ -669,7 +611,6 @@
                 });
             }
 
-            // 3. Update the server
             try {
                 const res = await fetch(`${BACKEND_URL}/admin/orders/${orderId}/status`, {
                     method: "PUT",
@@ -733,7 +674,9 @@
             }
         }
 
-        // 🚀 NEW RESERVATIONS LOGIC
+        // ============================================================
+        // RESERVATIONS LOGIC (PENDING)
+        // ============================================================
         async function loadReservations() {
             const loader = document.getElementById("reservations-loading");
             loader.style.display = "block"; 
@@ -744,31 +687,110 @@
                 const data = await res.json();
                 loader.style.display = "none";
 
-                if (!data.reservations.length) {
-                    document.getElementById("reservations-list").innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><h3>No reservations yet</h3><p>New table bookings will appear here.</p></div>`;
+                // Filter ONLY pending
+                const pendingReservations = data.reservations.filter(rsv => (rsv.status || 'pending') === 'pending');
+
+                if (!pendingReservations.length) {
+                    document.getElementById("reservations-list").innerHTML = `<div class="empty-state"><i class="fas fa-check-circle" style="color:var(--green);"></i><h3>All caught up!</h3><p>No pending reservations to review.</p></div>`;
                     return;
                 }
 
-                // Sort so 'pending' is at the top
-                const sortedReservations = data.reservations.sort((a, b) => {
-                    if (a.status === 'pending' && b.status !== 'pending') return -1;
-                    if (a.status !== 'pending' && b.status === 'pending') return 1;
-                    return new Date(b.createdAt) - new Date(a.createdAt);
-                });
+                // Sort newest first
+                pendingReservations.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-                document.getElementById("reservations-list").innerHTML = sortedReservations.map(rsv => {
-                    const currentStatus = rsv.status || 'pending';
-                    
-                    let badgeClass = 'status-pending';
-                    let badgeIcon = 'fa-clock';
-                    let badgeText = 'Pending';
-                    if (currentStatus === 'approved') { badgeClass = 'status-approved'; badgeIcon = 'fa-check-circle'; badgeText = 'Approved'; }
-                    if (currentStatus === 'cancelled') { badgeClass = 'status-cancelled'; badgeIcon = 'fa-times-circle'; badgeText = 'Cancelled'; }
-
+                document.getElementById("reservations-list").innerHTML = pendingReservations.map(rsv => {
                     const timeInfo = timeAgo(rsv.createdAt);
 
                     return `
                     <div class="res-card">
+                        
+                        <!-- Top Header -->
+                        <div class="res-card-top">
+                            <div class="res-header-info">
+                                <h3>${rsv.name}</h3>
+                                <span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span>
+                            </div>
+                            <div class="time-ago" style="color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;">
+                                <i class="far fa-clock"></i> Booked ${timeInfo.text}
+                            </div>
+                        </div>
+
+                        <!-- Details Area -->
+                        <div class="res-card-content">
+                            <div class="res-details">
+                                <div class="res-guests"><i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests</div>
+                                <div class="res-contact">
+                                    <span><i class="fas fa-envelope"></i> ${rsv.email}</span>
+                                    <span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span>
+                                </div>
+                            </div>
+
+                            <!-- Ticket Style Date/Time -->
+                            <div class="res-ticket">
+                                <div class="ticket-item">
+                                    <i class="far fa-calendar-alt"></i>
+                                    <div class="ticket-text"><small>DATE</small><span>${rsv.date}</span></div>
+                                </div>
+                                <div class="ticket-item">
+                                    <i class="far fa-clock"></i>
+                                    <div class="ticket-text"><small>TIME</small><span>${rsv.time}</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="res-actions">
+                            <button class="btn-action btn-cancel" onclick="updateReservationStatus('${rsv._id}', 'cancelled', this)">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button class="btn-action btn-approve" onclick="updateReservationStatus('${rsv._id}', 'approved', this)">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                        </div>
+
+                    </div>
+                    `;
+                }).join("");
+            } catch (err) {
+                loader.style.display = "none"; 
+                document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+            }
+        }
+
+        // ============================================================
+        // HISTORY LOGIC (APPROVED & CANCELLED)
+        // ============================================================
+        async function loadHistory() {
+            const loader = document.getElementById("history-loading");
+            loader.style.display = "block"; 
+            document.getElementById("history-list").innerHTML = "";
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/admin/reservations`, { headers: { "Authorization": "Bearer " + token } });
+                const data = await res.json();
+                loader.style.display = "none";
+
+                // Filter out PENDING, keep only approved/cancelled
+                const historyReservations = data.reservations.filter(rsv => rsv.status === 'approved' || rsv.status === 'cancelled');
+
+                if (!historyReservations.length) {
+                    document.getElementById("history-list").innerHTML = `<div class="empty-state"><i class="fas fa-history"></i><h3>No history yet</h3><p>Approved and cancelled bookings will appear here.</p></div>`;
+                    return;
+                }
+
+                // Sort by newest first
+                historyReservations.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                document.getElementById("history-list").innerHTML = historyReservations.map(rsv => {
+                    const timeInfo = timeAgo(rsv.createdAt);
+                    const currentStatus = rsv.status;
+                    
+                    let badgeClass = currentStatus === 'approved' ? 'status-approved' : 'status-cancelled';
+                    let badgeIcon = currentStatus === 'approved' ? 'fa-check-circle' : 'fa-times-circle';
+                    let badgeText = currentStatus === 'approved' ? 'Approved' : 'Cancelled';
+
+                    return `
+                    <div class="res-card" style="opacity: 0.85;">
                         
                         <!-- Top Header -->
                         <div class="res-card-top">
@@ -804,28 +826,18 @@
                             </div>
                         </div>
 
-                        <!-- Action Buttons (Only show if pending) -->
-                        ${currentStatus === 'pending' ? `
-                        <div class="res-actions">
-                            <button class="btn-action btn-cancel" onclick="updateReservationStatus('${rsv._id}', 'cancelled', this)">
-                                <i class="fas fa-times"></i> Cancel
-                            </button>
-                            <button class="btn-action btn-approve" onclick="updateReservationStatus('${rsv._id}', 'approved', this)">
-                                <i class="fas fa-check"></i> Approve
-                            </button>
-                        </div>
-                        ` : ''}
-
                     </div>
                     `;
                 }).join("");
             } catch (err) {
                 loader.style.display = "none"; 
-                document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                document.getElementById("history-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
             }
         }
 
-        // 🚀 Update Reservation Status Logic
+        // ============================================================
+        // UPDATE STATUS (APPROVE/CANCEL)
+        // ============================================================
         async function updateReservationStatus(id, status, btnElement) {
             const actionText = status === 'approved' ? 'Approve' : 'Cancel';
             if (!confirm(`Are you sure you want to ${actionText.toLowerCase()} this reservation? An email will be sent to the customer.`)) return;
@@ -847,6 +859,7 @@
                 const data = await res.json();
 
                 if (res.ok && data.success) {
+                    // Reload the Pending list
                     loadReservations(); 
                 } else {
                     alert("Failed to update: " + (data.error || "Unknown error"));
@@ -862,8 +875,9 @@
 
         if (token && user && user.role === "admin") {
             loadOrders(false);
-            loadReservations();
-            setInterval(() => { if (document.getElementById('tab-orders').classList.contains('active')) { loadOrders(true); } }, 10000);
+            setInterval(() => { 
+                if (document.getElementById('tab-orders').classList.contains('active')) { loadOrders(true); } 
+            }, 10000);
         }
     </script>
 </body>
