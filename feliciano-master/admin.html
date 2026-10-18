@@ -278,42 +278,66 @@
         .dropdown-menu li[data-value="Delivered"] .dot { background: var(--green); }
         .dropdown-menu li[data-value="Cancelled"] .dot { background: var(--red); }
 
-        /* ===== RESERVATIONS TICKET STYLE ===== */
+        /* ============================================================
+           RESERVATIONS
+           ============================================================ */
         .res-card {
-            display: flex; background: #fff; border-radius: 16px; margin-bottom: 24px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06); border: 1px solid rgba(200, 169, 126, 0.2);
-            overflow: hidden; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #fff; border-radius: 20px; margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); border: 1px solid rgba(200, 169, 126, 0.15);
+            overflow: hidden; position: relative; transition: all 0.3s ease;
+            display: flex; flex-direction: column;
         }
-        .res-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15); }
-        .res-left { flex: 1; padding: 28px 32px; position: relative; }
-        .res-header { display: flex; align-items: center; gap: 15px; margin-bottom: 16px; flex-wrap: wrap; }
-        .res-header h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #1a1a1a; font-weight: 700; margin: 0; }
-        .res-guests {
-            display: inline-flex; align-items: center; gap: 8px; background: #fdfaf5; color: var(--gold-dark);
-            padding: 6px 14px; border-radius: 20px; font-size: 14px; border: 1px solid rgba(200, 169, 126, 0.3); margin-bottom: 20px;
+        .res-card:hover { box-shadow: 0 15px 40px rgba(200, 169, 126, 0.12); transform: translateY(-3px); }
+
+        .res-card-top {
+            padding: 20px 30px; border-bottom: 1px dashed #eee;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+            background: #fafaf8;
         }
-        .res-guests i { color: var(--gold); }
-        .res-contact { display: flex; gap: 24px; font-size: 14px; color: #555; flex-wrap: wrap; }
-        .res-contact span { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px 16px; border-radius: 10px; border: 1px solid #eee; word-break: break-word; }
+        
+        .res-header-info { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .res-header-info h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: #1a1a1a; font-weight: 700; margin: 0; }
+        
+        .status-badge {
+            padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .status-pending { background: #fff3e0; color: #f57c00; }
+        .status-approved { background: #e8f5e9; color: #2e7d32; }
+        .status-cancelled { background: #ffebee; color: #c62828; }
+
+        .res-card-content {
+            display: flex; padding: 25px 30px; gap: 30px; flex-wrap: wrap; justify-content: space-between;
+        }
+        .res-details { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .res-guests { display: inline-flex; align-items: center; gap: 8px; background: #fdfaf5; color: var(--gold-dark); padding: 8px 16px; border-radius: 30px; font-size: 14px; font-weight: 600; width: fit-content; border: 1px solid rgba(200, 169, 126, 0.3); }
+        
+        .res-contact { display: flex; gap: 15px; flex-wrap: wrap; }
+        .res-contact span { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px 16px; border-radius: 10px; border: 1px solid #eee; font-size: 14px; color: #555; font-weight: 500; }
         .res-contact i { color: #888; }
-        .res-right {
-            background: linear-gradient(135deg, rgba(200, 169, 126, 0.08), rgba(200, 169, 126, 0.03));
-            padding: 28px 32px; border-left: 2px dashed rgba(200, 169, 126, 0.4); min-width: 240px;
-            display: flex; flex-direction: column; justify-content: center; gap: 20px; position: relative;
+
+        .res-ticket { 
+            display: flex; gap: 20px; background: linear-gradient(135deg, rgba(200,169,126,0.08), rgba(200,169,126,0.02));
+            padding: 20px 25px; border-radius: 16px; border: 1px solid rgba(200, 169, 126, 0.2); align-items: center; min-width: 280px;
         }
-        .res-right::before, .res-right::after {
-            content: ''; position: absolute; left: -10px; width: 20px; height: 20px;
-            background: var(--bg); border-radius: 50%; border: 1px solid rgba(200, 169, 126, 0.2);
+        .ticket-item { display: flex; align-items: center; gap: 12px; }
+        .ticket-item i { font-size: 20px; color: var(--gold); background: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 10px rgba(200, 169, 126, 0.2); }
+        .ticket-text small { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
+        .ticket-text span { display: block; font-size: 15px; font-weight: 700; color: #1a1a1a; }
+
+        /* Action Area */
+        .res-actions { padding: 15px 30px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 15px; background: #fafafa; }
+        
+        .btn-action {
+            padding: 10px 24px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease; border: none;
         }
-        .res-right::before { top: -10px; }
-        .res-right::after { bottom: -10px; }
-        .ticket-date, .ticket-time { display: flex; align-items: center; gap: 14px; }
-        .ticket-date i, .ticket-time i {
-            font-size: 24px; color: var(--gold); background: #fff; width: 44px; height: 44px;
-            display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 10px rgba(200, 169, 126, 0.2);
-        }
-        .ticket-date small, .ticket-time small { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
-        .ticket-date span, .ticket-time span { display: block; font-size: 16px; font-weight: 700; color: #1a1a1a; }
+        .btn-approve { background: #e8f5e9; color: #2e7d32; border: 1.5px solid #c8e6c9; }
+        .btn-approve:hover { background: #2e7d32; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3); }
+        
+        .btn-cancel { background: #ffebee; color: #c62828; border: 1.5px solid #ffcdd2; }
+        .btn-cancel:hover { background: #c62828; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3); }
 
         .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px dashed #ddd; }
         .empty-state i { font-size: 40px; color: #ccc; margin-bottom: 15px; }
@@ -328,6 +352,8 @@
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .status-breakdown { grid-template-columns: repeat(2, 1fr); }
+            .res-card-content { flex-direction: column; }
+            .res-ticket { width: 100%; justify-content: flex-start; }
         }
 
         @media (max-width: 900px) {
@@ -341,11 +367,8 @@
             .top-bar h2 { font-size: 24px; }
             .card-header { flex-direction: column; gap: 10px; }
             .customer-info { flex-direction: column; gap: 10px; }
-            .res-card { flex-direction: column; }
-            .res-right { border-left: none; border-top: 2px dashed rgba(200, 169, 126, 0.4); flex-direction: row; justify-content: flex-start; padding: 20px 32px; }
-            .res-right::before { left: -10px; top: -10px; }
-            .res-right::after { left: auto; right: -10px; top: -10px; bottom: auto; }
-            .res-contact { flex-direction: column; gap: 10px; }
+            .res-actions { justify-content: stretch; }
+            .btn-action { flex: 1; justify-content: center; }
         }
 
         @media (max-width: 600px) {
@@ -634,11 +657,9 @@
             // 2. Instantly update the Dropdown Button text & highlights
             const dropdownWrap = document.getElementById(`dropdown-${orderId}`);
             if (dropdownWrap) {
-                // Update the text inside the button
                 const btnText = dropdownWrap.querySelector('.dropdown-val-text');
                 if (btnText) btnText.innerText = newStatus;
 
-                // Move the 'active' highlight to the newly selected item
                 dropdownWrap.querySelectorAll('li').forEach(li => {
                     if (li.getAttribute('data-value') === newStatus) {
                         li.classList.add('active');
@@ -712,9 +733,11 @@
             }
         }
 
+        // 🚀 NEW RESERVATIONS LOGIC
         async function loadReservations() {
             const loader = document.getElementById("reservations-loading");
-            loader.style.display = "block"; document.getElementById("reservations-list").innerHTML = "";
+            loader.style.display = "block"; 
+            document.getElementById("reservations-list").innerHTML = "";
 
             try {
                 const res = await fetch(`${BACKEND_URL}/admin/reservations`, { headers: { "Authorization": "Bearer " + token } });
@@ -726,24 +749,114 @@
                     return;
                 }
 
-                document.getElementById("reservations-list").innerHTML = data.reservations.map(rsv => {
+                // Sort so 'pending' is at the top
+                const sortedReservations = data.reservations.sort((a, b) => {
+                    if (a.status === 'pending' && b.status !== 'pending') return -1;
+                    if (a.status !== 'pending' && b.status === 'pending') return 1;
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+
+                document.getElementById("reservations-list").innerHTML = sortedReservations.map(rsv => {
+                    const currentStatus = rsv.status || 'pending';
+                    
+                    let badgeClass = 'status-pending';
+                    let badgeIcon = 'fa-clock';
+                    let badgeText = 'Pending';
+                    if (currentStatus === 'approved') { badgeClass = 'status-approved'; badgeIcon = 'fa-check-circle'; badgeText = 'Approved'; }
+                    if (currentStatus === 'cancelled') { badgeClass = 'status-cancelled'; badgeIcon = 'fa-times-circle'; badgeText = 'Cancelled'; }
+
                     const timeInfo = timeAgo(rsv.createdAt);
+
                     return `
                     <div class="res-card">
-                        <div class="res-left">
-                            <div class="res-header"><h3>${rsv.name}</h3><span class="time-ago"><i class="far fa-clock"></i> Booked ${timeInfo.text}</span></div>
-                            <div class="res-guests"><i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests</div>
-                            <div class="res-contact"><span><i class="fas fa-envelope"></i> ${rsv.email}</span><span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span></div>
+                        
+                        <!-- Top Header -->
+                        <div class="res-card-top">
+                            <div class="res-header-info">
+                                <h3>${rsv.name}</h3>
+                                <span class="status-badge ${badgeClass}"><i class="fas ${badgeIcon}"></i> ${badgeText}</span>
+                            </div>
+                            <div class="time-ago" style="color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;">
+                                <i class="far fa-clock"></i> Booked ${timeInfo.text}
+                            </div>
                         </div>
-                        <div class="res-right">
-                            <div class="ticket-date"><i class="far fa-calendar-alt"></i><div><small>DATE</small><span>${rsv.date}</span></div></div>
-                            <div class="ticket-time"><i class="far fa-clock"></i><div><small>TIME</small><span>${rsv.time}</span></div></div>
+
+                        <!-- Details Area -->
+                        <div class="res-card-content">
+                            <div class="res-details">
+                                <div class="res-guests"><i class="fas fa-users"></i> <strong>${rsv.persons}</strong> Guests</div>
+                                <div class="res-contact">
+                                    <span><i class="fas fa-envelope"></i> ${rsv.email}</span>
+                                    <span><i class="fas fa-phone-alt"></i> ${rsv.phone}</span>
+                                </div>
+                            </div>
+
+                            <!-- Ticket Style Date/Time -->
+                            <div class="res-ticket">
+                                <div class="ticket-item">
+                                    <i class="far fa-calendar-alt"></i>
+                                    <div class="ticket-text"><small>DATE</small><span>${rsv.date}</span></div>
+                                </div>
+                                <div class="ticket-item">
+                                    <i class="far fa-clock"></i>
+                                    <div class="ticket-text"><small>TIME</small><span>${rsv.time}</span></div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Action Buttons (Only show if pending) -->
+                        ${currentStatus === 'pending' ? `
+                        <div class="res-actions">
+                            <button class="btn-action btn-cancel" onclick="updateReservationStatus('${rsv._id}', 'cancelled', this)">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button class="btn-action btn-approve" onclick="updateReservationStatus('${rsv._id}', 'approved', this)">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                        </div>
+                        ` : ''}
+
                     </div>
                     `;
                 }).join("");
             } catch (err) {
-                loader.style.display = "none"; document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                loader.style.display = "none"; 
+                document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+            }
+        }
+
+        // 🚀 Update Reservation Status Logic
+        async function updateReservationStatus(id, status, btnElement) {
+            const actionText = status === 'approved' ? 'Approve' : 'Cancel';
+            if (!confirm(`Are you sure you want to ${actionText.toLowerCase()} this reservation? An email will be sent to the customer.`)) return;
+
+            const originalText = btnElement.innerHTML;
+            btnElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
+            btnElement.disabled = true;
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/admin/reservations/${id}/status`, {
+                    method: "PUT",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token 
+                    },
+                    body: JSON.stringify({ status })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    loadReservations(); 
+                } else {
+                    alert("Failed to update: " + (data.error || "Unknown error"));
+                    btnElement.innerHTML = originalText;
+                    btnElement.disabled = false;
+                }
+            } catch (err) {
+                alert("Error: " + err.message);
+                btnElement.innerHTML = originalText;
+                btnElement.disabled = false;
             }
         }
 
