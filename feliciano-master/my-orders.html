@@ -8,6 +8,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
@@ -219,6 +220,7 @@
             font-weight: 600;
             letter-spacing: 0.3px;
             text-transform: uppercase;
+            transition: all 0.3s ease;
         }
         .status[data-status="Confirmed"] { background: #e3f2fd; color: #1976d2; }
         .status[data-status="Preparing"] { background: #fff3e0; color: #f57c00; }
@@ -364,6 +366,45 @@
             text-align: center;
         }
 
+        /* ============================================================
+           TOAST NOTIFICATION (NEW)
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .custom-toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-left: 5px solid #c8a97e;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 320px;
+            max-width: 400px;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-toast.show { transform: translateX(0); }
+        .custom-toast .icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            flex-shrink: 0;
+        }
+        .custom-toast .toast-text h4 {
+            font-size: 14px; color: #1a1a1a; margin-bottom: 2px; font-weight: 700;
+        }
+        .custom-toast .toast-text p {
+            font-size: 12.5px; color: #666; margin: 0; line-height: 1.4;
+        }
+
         @media (max-width: 600px) {
             .orders-hero { padding: 50px 20px 40px; }
             .orders-hero h1 { font-size: 32px; }
@@ -371,6 +412,8 @@
             .orders-section { padding: 40px 5% 60px; }
             .order-card { padding: 20px; }
             .order-header .total { font-size: 18px; }
+            .toast-container { bottom: 20px; right: 20px; left: 20px; }
+            .custom-toast { min-width: auto; width: 100%; }
         }
     </style>
 </head>
@@ -436,6 +479,9 @@
         </div>
     </section>
 
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -461,6 +507,9 @@
         const listEl    = document.getElementById("ordersList");
         const emptyEl   = document.getElementById("ordersEmpty");
         const errorEl   = document.getElementById("ordersError");
+
+        let previousStatuses = {}; // Keeps track of past statuses to detect changes
+        let isFirstLoad = true;    // Prevents notifying on initial page load
 
         function showError(msg) {
             loadingEl.style.display = "none";
@@ -489,6 +538,53 @@
             } catch { return iso; }
         }
 
+        // ============================================
+        // POPUP NOTIFICATION FUNCTION
+        // ============================================
+        function showNotification(title, message, status) {
+            const container = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            toast.className = "custom-toast";
+            
+            let icon = "fa-info-circle";
+            let color = "#1976d2"; // Blue (Confirmed)
+            
+            if (status === "Preparing") { icon = "fa-fire"; color = "#f57c00"; } // Orange
+            if (status === "Delivered") { icon = "fa-check-circle"; color = "#2e7d32"; } // Green
+            if (status === "Cancelled") { icon = "fa-times-circle"; color = "#c62828"; } // Red
+
+            toast.style.borderLeftColor = color;
+            
+            toast.innerHTML = `
+                <div class="icon" style="color:${color}; background:${color}1A;">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="toast-text">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => toast.classList.add("show"), 100);
+
+            // Remove after 6 seconds
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => toast.remove(), 400);
+            }, 6000);
+
+            // Browser system notification (if allowed)
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: message, icon: "images/default-food.jpg" });
+            }
+        }
+
+        // ============================================
+        // RENDER ORDERS
+        // ============================================
         function renderOrders(orders) {
             loadingEl.style.display = "none";
 
@@ -496,6 +592,7 @@
                 emptyEl.style.display = "block";
                 return;
             }
+            emptyEl.style.display = "none";
 
             listEl.innerHTML = orders.map((order, i) => {
                 const items = order.items || [];
@@ -527,7 +624,6 @@
                     `;
                 }).join("");
 
-                // 👇 GET STATUS FROM DATABASE (FALLBACK TO "CONFIRMED")
                 const currentStatus = order.status || "Confirmed";
 
                 return `
@@ -539,7 +635,7 @@
                             </div>
                             <div class="right">
                                 <div class="total">₹${Number(order.amount || 0).toFixed(2)}</div>
-                                <span class="status" data-status="${currentStatus}">${currentStatus}</span>
+                                <span class="status" data-status="${currentStatus}" id="status-badge-${order._id}">${currentStatus}</span>
                             </div>
                         </div>
 
@@ -554,11 +650,16 @@
             }).join("");
         }
 
-        async function loadOrders() {
+        // ============================================
+        // LOAD ORDERS & POLLING LOGIC
+        // ============================================
+        async function loadOrders(isPolling = false) {
             const token = localStorage.getItem("token");
             if (!token) {
-                sessionStorage.setItem("lg_return_to", "/my-orders.html");
-                window.location.href = "login.html";
+                if (!isPolling) {
+                    sessionStorage.setItem("lg_return_to", "/my-orders.html");
+                    window.location.href = "login.html";
+                }
                 return;
             }
 
@@ -570,28 +671,85 @@
                 const data = await res.json();
 
                 if (res.status === 401) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-                    sessionStorage.setItem("lg_return_to", "/my-orders.html");
-                    window.location.href = "login.html";
+                    if (!isPolling) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        sessionStorage.setItem("lg_return_to", "/my-orders.html");
+                        window.location.href = "login.html";
+                    }
                     return;
                 }
 
                 if (!res.ok || !data.success) {
-                    showError(data.error || "Could not load orders.");
+                    if (!isPolling) showError(data.error || "Could not load orders.");
                     return;
                 }
 
-                renderOrders(data.orders || []);
+                const orders = data.orders || [];
+
+                // 🔔 CHECK FOR STATUS CHANGES
+                if (!isFirstLoad) {
+                    orders.forEach(order => {
+                        const oldStatus = previousStatuses[order._id];
+                        const newStatus = order.status || "Confirmed";
+
+                        if (oldStatus && oldStatus !== newStatus) {
+                            
+                            // Trigger the popup
+                            if (newStatus === "Preparing") {
+                                showNotification("Order is Preparing! 👨‍🍳", `Your order #${order._id.slice(-6).toUpperCase()} is now in the kitchen.`, newStatus);
+                            }
+                            if (newStatus === "Delivered") {
+                                showNotification("Order Delivered! 🎉", `Enjoy your meal! Order #${order._id.slice(-6).toUpperCase()} has arrived.`, newStatus);
+                            }
+                            if (newStatus === "Cancelled") {
+                                showNotification("Order Cancelled ❌", `Order #${order._id.slice(-6).toUpperCase()} was cancelled.`, newStatus);
+                            }
+                            
+                            // Instantly update the badge on the page without reloading
+                            const badge = document.getElementById(`status-badge-${order._id}`);
+                            if (badge) {
+                                badge.setAttribute("data-status", newStatus);
+                                badge.textContent = newStatus;
+                            }
+                        }
+                        previousStatuses[order._id] = newStatus;
+                    });
+                } else {
+                    // First load: Save statuses silently
+                    orders.forEach(order => {
+                        previousStatuses[order._id] = order.status || "Confirmed";
+                    });
+                    isFirstLoad = false;
+                    renderOrders(orders);
+                }
+
             } catch (err) {
-                console.error("Load orders error:", err);
-                showError("Server is waking up. Please refresh in a moment.");
+                if (!isPolling) {
+                    console.error("Load orders error:", err);
+                    showError("Server is waking up. Please refresh in a moment.");
+                }
             }
         }
 
-        document.addEventListener("DOMContentLoaded", loadOrders);
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener("DOMContentLoaded", () => {
+            // Ask for browser notification permission
+            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+
+            // Load initially
+            loadOrders(false);
+
+            // 🔄 POLLING: Check for updates every 10 seconds
+            setInterval(() => {
+                loadOrders(true);
+            }, 10000); // 10,000 ms = 10 seconds
+        });
     </script>
 
 </body>
-
 </html>
