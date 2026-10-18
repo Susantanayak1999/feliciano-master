@@ -1,5 +1,5 @@
 // ============================================================
-// One-time script: populate MenuItem collection with existing items
+// One-time script: populate MenuItem collection with items
 // Run:  node seed-menu.js
 // ============================================================
 require("dotenv").config();
@@ -19,59 +19,55 @@ const menuItemSchema = new mongoose.Schema({
 const MenuItem = mongoose.model("MenuItem", menuItemSchema);
 
 const items = [
-    // BREAKFAST
-    { name: "Masala Dosa",             price: 149, category: "Breakfast", type: "veg",     image: "images/breakfast-1.jpg", ingredients: ["Rice", "Lentils", "Potato", "Spices"] },
-    { name: "Idli Sambar",             price: 99,  category: "Breakfast", type: "veg",     image: "images/breakfast-2.jpg", ingredients: ["Rice", "Lentils", "Sambar", "Coconut"] },
-    { name: "Poha Jhatpat",            price: 79,  category: "Breakfast", type: "veg",     image: "images/breakfast-3.jpg", ingredients: ["Flattened Rice", "Peanuts", "Curry Leaves", "Lemon"] },
-    { name: "Aloo Paratha",            price: 119, category: "Breakfast", type: "veg",     image: "images/breakfast-4.jpg", ingredients: ["Wheat", "Potato", "Butter", "Curd"] },
-    { name: "Uttapam",                 price: 129, category: "Breakfast", type: "veg",     image: "images/breakfast-5.jpg", ingredients: ["Rice", "Lentils", "Onion", "Tomato"] },
-    { name: "Vada Pav",                price: 69,  category: "Breakfast", type: "veg",     image: "images/breakfast-6.jpg", ingredients: ["Potato", "Bread", "Chutney", "Fried Chili"] },
-    { name: "Upma",                    price: 89,  category: "Breakfast", type: "veg",     image: "images/breakfast-7.jpg", ingredients: ["Semolina", "Vegetables", "Mustard", "Ghee"] },
-    { name: "Medu Vada",               price: 109, category: "Breakfast", type: "veg",     image: "images/breakfast-8.jpg", ingredients: ["Lentils", "Curry Leaves", "Ginger", "Coconut"] },
+    // ================= BREAKFAST =================
+    { name: "Masala Dosa", price: 149, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?q=80&w=800&auto=format&fit=crop", ingredients: ["Rice", "Lentils", "Potato", "Spices"], description: "Crispy rice crepe stuffed with spiced potato mash." },
+    { name: "Idli Sambar", price: 99, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=800&auto=format&fit=crop", ingredients: ["Rice", "Lentils", "Sambar", "Coconut"], description: "Steamed rice cakes served with lentil soup and chutney." },
+    { name: "Poha Jhatpat", price: 79, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop", ingredients: ["Flattened Rice", "Peanuts", "Curry Leaves", "Lemon"], description: "Light and fluffy flattened rice with peanuts and spices." },
+    { name: "Aloo Paratha", price: 119, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1626202496101-3e2759c80727?q=80&w=800&auto=format&fit=crop", ingredients: ["Wheat", "Potato", "Butter", "Curd"], description: "Whole wheat flatbread stuffed with spiced potatoes, served with curd." },
+    { name: "Uttapam", price: 129, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?q=80&w=800&auto=format&fit=crop", ingredients: ["Rice", "Lentils", "Onion", "Tomato"], description: "Thick pancake topped with onions and tomatoes." },
+    { name: "Vada Pav", price: 69, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop", ingredients: ["Potato", "Bread", "Chutney", "Fried Chili"], description: "Mumbai's favorite street food - spicy potato fritter in a bun." },
+    { name: "Upma", price: 89, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1626200419199-391ae4be7a41?q=80&w=800&auto=format&fit=crop", ingredients: ["Semolina", "Vegetables", "Mustard", "Ghee"], description: "Savory semolina porridge with vegetables and mustard seeds." },
+    { name: "Medu Vada", price: 109, category: "Breakfast", type: "veg", image: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?q=80&w=800&auto=format&fit=crop", ingredients: ["Lentils", "Curry Leaves", "Ginger", "Coconut"], description: "Crispy, savory lentil donuts served with sambar." },
 
-    // LUNCH
-    { name: "Butter Chicken",          price: 349, category: "Lunch",     type: "non-veg", image: "images/lunch-1.jpg",     ingredients: ["Chicken", "Tomato", "Cream", "Butter"] },
-    { name: "Paneer Tikka Masala",     price: 299, category: "Lunch",     type: "veg",     image: "images/lunch-2.jpg",     ingredients: ["Paneer", "Tomato", "Cashew", "Spices"] },
-    { name: "Chole Bhature",           price: 199, category: "Lunch",     type: "veg",     image: "images/lunch-3.jpg",     ingredients: ["Chickpeas", "Flour", "Onion", "Spices"] },
-    { name: "Dal Makhani",             price: 249, category: "Lunch",     type: "veg",     image: "images/lunch-4.jpg",     ingredients: ["Black Lentils", "Kidney Beans", "Cream", "Butter"] },
-    { name: "Hyderabadi Biryani",      price: 399, category: "Lunch",     type: "non-veg", image: "images/lunch-5.jpg",     ingredients: ["Basmati Rice", "Chicken", "Saffron", "Yogurt"] },
-    { name: "Rajma Chawal",            price: 179, category: "Lunch",     type: "veg",     image: "images/lunch-6.jpg",     ingredients: ["Kidney Beans", "Rice", "Onion", "Tomato"] },
-    { name: "Kadai Paneer",            price: 279, category: "Lunch",     type: "veg",     image: "images/lunch-7.jpg",     ingredients: ["Paneer", "Capsicum", "Onion", "Tomato"] },
-    { name: "Veg Thali",               price: 299, category: "Lunch",     type: "veg",     image: "images/lunch-8.jpg",     ingredients: ["Roti", "Rice", "Dal", "Sabzi", "Sweet"] },
+    // ================= LUNCH =================
+    { name: "Butter Chicken", price: 349, category: "Lunch", type: "non-veg", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=800&auto=format&fit=crop", ingredients: ["Chicken", "Tomato", "Cream", "Butter"], description: "Tender chicken simmered in a rich, creamy tomato-butter sauce." },
+    { name: "Paneer Tikka Masala", price: 299, category: "Lunch", type: "veg", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=800&auto=format&fit=crop", ingredients: ["Paneer", "Tomato", "Cashew", "Spices"], description: "Grilled paneer cubes in a spiced onion-tomato gravy." },
+    { name: "Chole Bhature", price: 199, category: "Lunch", type: "veg", image: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?q=80&w=800&auto=format&fit=crop", ingredients: ["Chickpeas", "Flour", "Onion", "Spices"], description: "Spicy chickpeas served with deep-fried puffed bread." },
+    { name: "Dal Makhani", price: 249, category: "Lunch", type: "veg", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=800&auto=format&fit=crop", ingredients: ["Black Lentils", "Kidney Beans", "Cream", "Butter"], description: "Slow-cooked black lentils enriched with butter and cream." },
+    { name: "Hyderabadi Biryani", price: 399, category: "Lunch", type: "non-veg", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=800&auto=format&fit=crop", ingredients: ["Basmati Rice", "Chicken", "Saffron", "Yogurt"], description: "Fragrant basmati rice layered with marinated chicken and saffron." },
+    { name: "Rajma Chawal", price: 179, category: "Lunch", type: "veg", image: "https://images.unsplash.com/photo-1626200419199-391ae4be7a41?q=80&w=800&auto=format&fit=crop", ingredients: ["Kidney Beans", "Rice", "Onion", "Tomato"], description: "Comforting red kidney bean curry served with steamed rice." },
+    { name: "Kadai Paneer", price: 279, category: "Lunch", type: "veg", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc0?q=80&w=800&auto=format&fit=crop", ingredients: ["Paneer", "Capsicum", "Onion", "Tomato"], description: "Paneer cooked with bell peppers in a spicy kadai masala." },
+    { name: "Veg Thali", price: 299, category: "Lunch", type: "veg", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=800&auto=format&fit=crop", ingredients: ["Roti", "Rice", "Dal", "Sabzi", "Sweet"], description: "A complete platter with assorted vegetarian dishes." },
 
-    // DINNER
-    { name: "Rogan Josh",              price: 379, category: "Dinner",    type: "non-veg", image: "images/dinner-1.jpg",    ingredients: ["Mutton", "Yogurt", "Kashmiri Chili", "Spices"] },
-    { name: "Chicken Tikka",           price: 329, category: "Dinner",    type: "non-veg", image: "images/dinner-2.jpg",    ingredients: ["Chicken", "Yogurt", "Tandoori Masala", "Lemon"] },
-    { name: "Malai Kofta",             price: 289, category: "Dinner",    type: "veg",     image: "images/dinner-3.jpg",    ingredients: ["Paneer", "Potato", "Cream", "Cashew"] },
-    { name: "Prawn Curry",             price: 449, category: "Dinner",    type: "non-veg", image: "images/dinner-4.jpg",    ingredients: ["Prawns", "Coconut", "Curry Leaves", "Spices"] },
-    { name: "Mutton Biryani",          price: 499, category: "Dinner",    type: "non-veg", image: "images/dinner-5.jpg",    ingredients: ["Basmati Rice", "Mutton", "Saffron", "Spices"] },
-    { name: "Palak Paneer",            price: 269, category: "Dinner",    type: "veg",     image: "images/dinner-6.jpg",    ingredients: ["Spinach", "Paneer", "Garlic", "Cream"] },
+    // ================= DINNER =================
+    { name: "Rogan Josh", price: 379, category: "Dinner", type: "non-veg", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=800&auto=format&fit=crop", ingredients: ["Mutton", "Yogurt", "Kashmiri Chili", "Spices"], description: "Aromatic Kashmiri mutton curry with a rich red gravy." },
+    { name: "Chicken Tikka", price: 329, category: "Dinner", type: "non-veg", image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=800&auto=format&fit=crop", ingredients: ["Chicken", "Yogurt", "Tandoori Masala", "Lemon"], description: "Boneless chicken marinated in yogurt and spices, grilled to perfection." },
+    { name: "Malai Kofta", price: 289, category: "Dinner", type: "veg", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=800&auto=format&fit=crop", ingredients: ["Paneer", "Potato", "Cream", "Cashew"], description: "Soft paneer and potato dumplings in a creamy cashew gravy." },
+    { name: "Prawn Curry", price: 449, category: "Dinner", type: "non-veg", image: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?q=80&w=800&auto=format&fit=crop", ingredients: ["Prawns", "Coconut", "Curry Leaves", "Spices"], description: "Juicy prawns cooked in a rich, coconut-based coastal curry." },
+    { name: "Mutton Biryani", price: 499, category: "Dinner", type: "non-veg", image: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=800&auto=format&fit=crop", ingredients: ["Basmati Rice", "Mutton", "Saffron", "Spices"], description: "Authentic dum-cooked biryani with tender mutton pieces." },
+    { name: "Palak Paneer", price: 269, category: "Dinner", type: "veg", image: "https://images.unsplash.com/photo-1618449840665-9ed506d73a34?q=80&w=800&auto=format&fit=crop", ingredients: ["Spinach", "Paneer", "Garlic", "Cream"], description: "Fresh spinach puree cooked with paneer cubes and mild spices." },
 
-    // DRINKS
-    { name: "Masala Chai",             price: 49,  category: "Drinks",    type: "veg",     image: "images/drink-1.jpg",     ingredients: ["Tea", "Milk", "Ginger", "Cardamom"] },
-    { name: "Mango Lassi",             price: 129, category: "Drinks",    type: "veg",     image: "images/drink-2.jpg",     ingredients: ["Yogurt", "Mango", "Sugar", "Cardamom"] },
-    { name: "Rose Sherbet",            price: 99,  category: "Drinks",    type: "veg",     image: "images/drink-3.jpg",     ingredients: ["Rose Syrup", "Milk", "Ice", "Nuts"] },
-    { name: "Jal Jeera",               price: 69,  category: "Drinks",    type: "veg",     image: "images/drink-4.jpg",     ingredients: ["Cumin", "Mint", "Lemon", "Black Salt"] },
-    { name: "Filter Coffee",           price: 59,  category: "Drinks",    type: "veg",     image: "images/drink-5.jpg",     ingredients: ["Chicory", "Milk", "Sugar", "Filter Brew"] },
-    { name: "Sugarcane Juice",         price: 79,  category: "Drinks",    type: "veg",     image: "images/drink-6.jpg",     ingredients: ["Sugarcane", "Lemon", "Ginger", "Ice"] },
+    // ================= DRINKS =================
+    { name: "Masala Chai", price: 49, category: "Drinks", type: "veg", image: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?q=80&w=800&auto=format&fit=crop", ingredients: ["Tea", "Milk", "Ginger", "Cardamom"], description: "Traditional Indian spiced tea brewed with milk and aromatic spices." },
+    { name: "Mango Lassi", price: 129, category: "Drinks", type: "veg", image: "https://images.unsplash.com/photo-1572490122747-3968b75ab3a8?q=80&w=800&auto=format&fit=crop", ingredients: ["Yogurt", "Mango", "Sugar", "Cardamom"], description: "Sweet and creamy yogurt drink blended with fresh mango pulp." },
+    { name: "Rose Sherbet", price: 99, category: "Drinks", type: "veg", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e?q=80&w=800&auto=format&fit=crop", ingredients: ["Rose Syrup", "Milk", "Ice", "Nuts"], description: "Chilled milk drink flavored with rose syrup and topped with nuts." },
+    { name: "Jal Jeera", price: 69, category: "Drinks", type: "veg", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800&auto=format&fit=crop", ingredients: ["Cumin", "Mint", "Lemon", "Black Salt"], description: "Refreshing tangy drink made with cumin and mint." },
+    { name: "Filter Coffee", price: 59, category: "Drinks", type: "veg", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", ingredients: ["Chicory", "Milk", "Sugar", "Filter Brew"], description: "Strong South Indian filter coffee with frothy milk." },
+    { name: "Fresh Lime Soda", price: 79, category: "Drinks", type: "veg", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800&auto=format&fit=crop", ingredients: ["Lemon", "Soda", "Sugar/Salt", "Mint"], description: "Refreshing fizzy drink with fresh lime juice." },
 
-    // DESSERTS
-    { name: "Gulab Jamun",             price: 129, category: "Desserts",  type: "veg",     image: "images/dessert-1.jpg",   ingredients: ["Khoya", "Sugar Syrup", "Cardamom", "Rose Water"] },
-    { name: "Rasmalai",                price: 149, category: "Desserts",  type: "veg",     image: "images/dessert-2.jpg",   ingredients: ["Paneer", "Milk", "Saffron", "Pistachio"] },
-    { name: "Gajar Ka Halwa",          price: 139, category: "Desserts",  type: "veg",     image: "images/dessert-3.jpg",   ingredients: ["Carrot", "Ghee", "Milk", "Nuts"] },
-    { name: "Kaju Katli",              price: 199, category: "Desserts",  type: "veg",     image: "images/dessert-4.jpg",   ingredients: ["Cashew", "Sugar", "Ghee", "Silver Leaf"] },
-    { name: "Jalebi",                  price: 99,  category: "Desserts",  type: "veg",     image: "images/dessert-5.jpg",   ingredients: ["Flour", "Sugar Syrup", "Saffron", "Ghee"] },
-    { name: "Kheer",                   price: 119, category: "Desserts",  type: "veg",     image: "images/drink-6.jpg",     ingredients: ["Rice", "Milk", "Cardamom", "Almonds"] },
+    // ================= DESSERTS =================
+    { name: "Gulab Jamun", price: 129, category: "Desserts", type: "veg", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop", ingredients: ["Khoya", "Sugar Syrup", "Cardamom", "Rose Water"], description: "Deep-fried milk dumplings soaked in sweet rose-flavored syrup." },
+    { name: "Rasmalai", price: 149, category: "Desserts", type: "veg", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=800&auto=format&fit=crop", ingredients: ["Paneer", "Milk", "Saffron", "Pistachio"], description: "Soft paneer discs in creamy, saffron-infused milk." },
+    { name: "Gajar Ka Halwa", price: 139, category: "Desserts", type: "veg", image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=800&auto=format&fit=crop", ingredients: ["Carrot", "Ghee", "Milk", "Nuts"], description: "Warm, sweet carrot pudding cooked with ghee and nuts." },
+    { name: "Kaju Katli", price: 199, category: "Desserts", type: "veg", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=800&auto=format&fit=crop", ingredients: ["Cashew", "Sugar", "Ghee", "Silver Leaf"], description: "Premium cashew fudge, a classic Indian sweet." },
+    { name: "Jalebi", price: 99, category: "Desserts", type: "veg", image: "https://images.unsplash.com/photo-1626202496101-3e2759c80727?q=80&w=800&auto=format&fit=crop", ingredients: ["Flour", "Sugar Syrup", "Saffron", "Ghee"], description: "Crispy, spiral-shaped sweet soaked in sugar syrup." },
+    { name: "Chocolate Lava Cake", price: 199, category: "Desserts", type: "veg", image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?q=80&w=800&auto=format&fit=crop", ingredients: ["Chocolate", "Flour", "Egg", "Butter"], description: "Rich chocolate cake with a gooey, molten center." },
 
-    // WINE
-    { name: "Sula Red Wine",           price: 599, category: "Wine",      type: "veg",     image: "images/wine-1.jpg",      ingredients: ["Nashik Grapes", "Oak Aged", "Full Bodied", "Dry"] },
-    { name: "Grover Zampa",            price: 749, category: "Wine",      type: "veg",     image: "images/wine-2.jpg",      ingredients: ["Chenin Blanc", "Fruity", "Crisp", "White"] },
-    { name: "Fratelli Shiraz",         price: 899, category: "Wine",      type: "veg",     image: "images/wine-3.jpg",      ingredients: ["Shiraz", "Spicy", "Dark Berry", "Bold"] },
-    { name: "Chandon Brut",            price: 999, category: "Wine",      type: "veg",     image: "images/wine-4.jpg",      ingredients: ["Sparkling", "Chardonnay", "Fresh", "Elegant"] },
-    { name: "Zinfandel Rosé",          price: 649, category: "Wine",      type: "veg",     image: "images/wine-5.jpg",      ingredients: ["Zinfandel", "Sweet", "Berries", "Rosé"] },
-    { name: "Port Wine",               price: 799, category: "Wine",      type: "veg",     image: "images/wine-6.jpg",      ingredients: ["Fortified", "Rich", "Caramel", "Sweet"] },
-    { name: "Cabernet Sauvignon",      price: 849, category: "Wine",      type: "veg",     image: "images/wine-7.jpg",      ingredients: ["Blackcurrant", "Oak", "Tannic", "Bold"] },
-    { name: "Sauvignon Blanc",         price: 699, category: "Wine",      type: "veg",     image: "images/wine-8.jpg",      ingredients: ["Citrus", "Grassy", "Crisp", "Refreshing"] },
+    // ================= WINE =================
+    { name: "Sula Red Wine", price: 599, category: "Wine", type: "veg", image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=800&auto=format&fit=crop", ingredients: ["Nashik Grapes", "Oak Aged", "Full Bodied", "Dry"], description: "A rich, full-bodied red wine from Nashik." },
+    { name: "Grover Zampa", price: 749, category: "Wine", type: "veg", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop", ingredients: ["Chenin Blanc", "Fruity", "Crisp", "White"], description: "Crisp and fruity white wine with a refreshing finish." },
+    { name: "Fratelli Shiraz", price: 899, category: "Wine", type: "veg", image: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=800&auto=format&fit=crop", ingredients: ["Shiraz", "Spicy", "Dark Berry", "Bold"], description: "Bold and spicy red wine with dark berry notes." },
+    { name: "Chandon Brut", price: 999, category: "Wine", type: "veg", image: "https://images.unsplash.com/photo-1592483648228-b35146a4330c?q=80&w=800&auto=format&fit=crop", ingredients: ["Sparkling", "Chardonnay", "Fresh", "Elegant"], description: "Elegant sparkling wine, perfect for celebrations." }
 ];
 
 (async () => {
@@ -83,10 +79,10 @@ const items = [
         console.log("🗑️  Cleared existing menu items");
 
         await MenuItem.insertMany(items);
-        console.log(`✅ Inserted ${items.length} menu items`);
+        console.log(`✅ Inserted ${items.length} menu items with real images`);
 
         await mongoose.disconnect();
-        console.log("👋 Done");
+        console.log("👋 Done. Check your website!");
         process.exit(0);
     } catch (err) {
         console.error("❌ Seed error:", err.message);
