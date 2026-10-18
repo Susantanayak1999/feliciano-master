@@ -33,70 +33,34 @@
 
         /* ===== SIDEBAR ===== */
         .sidebar {
-            width: 260px;
-            background: var(--dark);
-            color: #fff;
-            position: fixed;
-            height: 100vh;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
-            z-index: 100;
+            width: 260px; background: var(--dark); color: #fff; position: fixed; height: 100vh;
+            padding: 30px 20px; display: flex; flex-direction: column; box-shadow: 4px 0 20px rgba(0,0,0,0.1); z-index: 100;
         }
         .sidebar h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            color: var(--gold);
-            margin-bottom: 40px;
-            text-align: center;
-            letter-spacing: 1px;
+            font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold);
+            margin-bottom: 40px; text-align: center; letter-spacing: 1px;
         }
         .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: #ccc;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            margin-bottom: 10px;
+            display: flex; align-items: center; gap: 15px; padding: 15px 20px;
+            color: #ccc; text-decoration: none; border-radius: 10px; font-size: 15px;
+            font-weight: 500; transition: all 0.3s ease; cursor: pointer; margin-bottom: 10px;
         }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active {
             background: linear-gradient(135deg, rgba(200, 169, 126, 0.15), rgba(200, 169, 126, 0.05));
-            color: var(--gold);
-            border-left: 4px solid var(--gold);
+            color: var(--gold); border-left: 4px solid var(--gold);
         }
         .nav-item i { font-size: 18px; width: 20px; text-align: center; }
         .sidebar-footer { margin-top: auto; }
         .back-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 12px;
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.1);
+            color: #fff; text-decoration: none; border-radius: 8px; font-size: 14px; transition: 0.3s;
         }
         .back-btn:hover { background: var(--gold); color: #fff; }
 
         /* ===== MAIN CONTENT ===== */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            padding: 40px;
-            width: calc(100% - 260px);
-        }
+        .main-content { margin-left: 260px; flex: 1; padding: 40px; width: calc(100% - 260px); }
         
         /* ===== TOP BAR ===== */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;}
@@ -105,68 +69,31 @@
         .top-bar-right { display: flex; gap: 15px; align-items: center; }
         
         .clock-box {
-            background: #fff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            color: #1a1a1a;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            background: #fff; padding: 10px 20px; border-radius: 12px; font-weight: 600; color: #1a1a1a;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; display: flex; align-items: center; gap: 10px;
         }
         .clock-box i { color: var(--gold); }
+        .clock-box small { font-size: 10px; color: var(--green); font-weight: 700; margin-left: 5px; animation: pulse 2s infinite;}
 
         .refresh-btn {
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            background: #fff; border: 1px solid #ddd; padding: 12px 20px; border-radius: 12px;
+            cursor: pointer; font-size: 14px; font-weight: 600; color: #555;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .refresh-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
         .refresh-btn i { transition: transform 0.5s ease; }
         .refresh-btn.spinning i { transform: rotate(360deg); }
 
         /* ===== STATS CARDS (TOP) ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 24px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
         .stat-card {
-            background: #fff;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.03);
-            border: 1px solid rgba(200, 169, 126, 0.15);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: transform 0.3s;
+            background: #fff; padding: 24px; border-radius: 16px; box-shadow: 0 5px 25px rgba(0,0,0,0.03);
+            border: 1px solid rgba(200, 169, 126, 0.15); display: flex; align-items: center; gap: 20px; transition: transform 0.3s;
         }
         .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(200, 169, 126, 0.15); }
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            background: rgba(200, 169, 126, 0.1);
-            color: var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
+            width: 60px; height: 60px; border-radius: 12px; background: rgba(200, 169, 126, 0.1);
+            color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
         }
         .stat-info h3 { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
         .stat-info p { font-size: 26px; color: #1a1a1a; font-weight: 700; line-height: 1.2; }
@@ -177,23 +104,10 @@
         .live-split .orange { background: var(--orange); }
 
         /* ===== STATUS BREAKDOWN CARDS ===== */
-        .status-breakdown {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
+        .status-breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
         .status-box {
-            background: #fff;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border-top: 4px solid;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
+            background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border-top: 4px solid; text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
         }
         .status-box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
         .status-box.active-filter { box-shadow: inset 0 0 0 2px #333; }
@@ -204,35 +118,14 @@
         .delivered-box { border-color: var(--green); }
         .cancelled-box { border-color: var(--red); }
 
-        /* ===== SEARCH BAR (NEW) ===== */
-        .search-container {
-            margin-bottom: 24px;
-            position: relative;
-            max-width: 500px;
-        }
-        .search-container i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gold);
-            font-size: 18px;
-        }
+        /* ===== SEARCH BAR ===== */
+        .search-container { margin-bottom: 24px; position: relative; max-width: 500px; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 18px; }
         .search-container input {
-            width: 100%;
-            padding: 16px 20px 16px 50px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            font-size: 15px;
-            font-weight: 500;
-            outline: none;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            width: 100%; padding: 16px 20px 16px 50px; border-radius: 12px; border: 1px solid #ddd;
+            font-size: 15px; font-weight: 500; outline: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
-        .search-container input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 4px 20px rgba(200, 169, 126, 0.15);
-        }
+        .search-container input:focus { border-color: var(--gold); box-shadow: 0 4px 20px rgba(200, 169, 126, 0.15); }
 
         /* ===== TABS ===== */
         .tab-content { display: none; }
@@ -241,93 +134,39 @@
 
         /* ===== ORDER CARDS ===== */
         .card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 24px 28px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.04);
-            border-left: 5px solid var(--gold);
-            transition: 0.3s;
+            background: #fff; border-radius: 16px; padding: 24px 28px; margin-bottom: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.04); border-left: 5px solid var(--gold); transition: 0.3s;
         }
         .card:hover { box-shadow: 0 10px 35px rgba(0,0,0,0.08); }
         
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            border-bottom: 1px dashed #eee;
-            padding-bottom: 16px;
-        }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px dashed #eee; padding-bottom: 16px; }
         .card-header h3 { font-size: 18px; color: #1a1a1a; font-weight: 600; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;}
         .card-header small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
         
-        .time-ago { 
-            color: var(--orange); 
-            font-weight: 700; 
-            font-size: 11px; 
-            background: #fff3e0; 
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
+        .time-ago { color: var(--orange); font-weight: 700; font-size: 11px; background: #fff3e0; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; }
         .time-ago.urgent { background: #ffebee; color: var(--red); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         
         .card-header .amount { font-size: 24px; font-weight: 800; color: var(--gold); }
         
         .customer-info {
-            display: flex;
-            gap: 24px;
-            font-size: 13.5px;
-            color: #555;
-            margin-bottom: 20px;
-            background: #fdfaf5;
-            padding: 12px 18px;
-            border-radius: 10px;
-            border: 1px solid rgba(200, 169, 126, 0.2);
-            flex-wrap: wrap;
+            display: flex; gap: 24px; font-size: 13.5px; color: #555; margin-bottom: 20px;
+            background: #fdfaf5; padding: 12px 18px; border-radius: 10px; border: 1px solid rgba(200, 169, 126, 0.2); flex-wrap: wrap;
         }
         .customer-info span { display: flex; align-items: center; gap: 8px; font-weight: 500; }
         .customer-info i { color: var(--gold); font-size: 16px; }
         
         .items-list { list-style: none; margin-bottom: 24px; }
-        .items-list li {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            font-size: 14.5px;
-            color: #444;
-            border-bottom: 1px solid #f5f5f5;
-        }
+        .items-list li { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14.5px; color: #444; border-bottom: 1px solid #f5f5f5; }
         .items-list li:last-child { border-bottom: none; }
         .items-list li span:first-child { font-weight: 500; color: #1a1a1a; display: flex; align-items: center; gap: 10px;}
         
-        .status-row {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 16px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #f5f5f5;
-            flex-wrap: wrap;
-        }
+        .status-row { display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #f5f5f5; flex-wrap: wrap; }
         .status-row label { font-size: 14px; font-weight: 600; color: #555; }
         
         select {
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: 1.5px solid #ddd;
-            font-size: 14px;
-            font-weight: 600;
-            outline: none;
-            background: #fff;
-            cursor: pointer;
-            transition: 0.3s;
-            color: #333;
+            padding: 10px 16px; border-radius: 8px; border: 1.5px solid #ddd; font-size: 14px;
+            font-weight: 600; outline: none; background: #fff; cursor: pointer; transition: 0.3s; color: #333;
         }
         select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200, 169, 126, 0.2); }
         
@@ -339,20 +178,10 @@
 
         /* ===== RESERVATIONS TICKET STYLE ===== */
         .res-card {
-            display: flex;
-            background: #fff;
-            border-radius: 16px;
-            margin-bottom: 24px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-            border: 1px solid rgba(200, 169, 126, 0.2);
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; background: #fff; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            border: 1px solid rgba(200, 169, 126, 0.2); overflow: hidden; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .res-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15);
-        }
+        .res-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(200, 169, 126, 0.15); }
         .res-left { flex: 1; padding: 28px 32px; position: relative; }
         .res-header { display: flex; align-items: center; gap: 15px; margin-bottom: 16px; flex-wrap: wrap; }
         .res-header h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #1a1a1a; font-weight: 700; margin: 0; }
@@ -366,9 +195,7 @@
             padding: 28px 32px; border-left: 2px dashed rgba(200, 169, 126, 0.4); min-width: 240px;
             display: flex; flex-direction: column; justify-content: center; gap: 20px; position: relative;
         }
-        .res-right::before, .res-right::after {
-            content: ''; position: absolute; left: -10px; width: 20px; height: 20px; background: var(--bg); border-radius: 50%; border: 1px solid rgba(200, 169, 126, 0.2);
-        }
+        .res-right::before, .res-right::after { content: ''; position: absolute; left: -10px; width: 20px; height: 20px; background: var(--bg); border-radius: 50%; border: 1px solid rgba(200, 169, 126, 0.2); }
         .res-right::before { top: -10px; }
         .res-right::after { bottom: -10px; }
         .ticket-date, .ticket-time { display: flex; align-items: center; gap: 14px; }
@@ -401,9 +228,7 @@
             .top-bar h2 { font-size: 24px; }
             .card-header { flex-direction: column; gap: 10px; }
             .res-card { flex-direction: column; }
-            .res-right { 
-                border-left: none; border-top: 2px dashed rgba(200, 169, 126, 0.4); flex-direction: row; justify-content: flex-start; padding: 20px 32px;
-            }
+            .res-right { border-left: none; border-top: 2px dashed rgba(200, 169, 126, 0.4); flex-direction: row; justify-content: flex-start; padding: 20px 32px; }
             .res-right::before { left: -10px; top: -10px; }
             .res-right::after { left: auto; right: -10px; top: -10px; bottom: auto; }
         }
@@ -446,10 +271,10 @@
             </div>
             <div class="top-bar-right">
                 <div class="clock-box">
-                    <i class="far fa-clock"></i>
-                    <span id="live-clock">--:-- --</span>
+                    <i class="fas fa-circle" style="font-size: 8px; color: #2e7d32; animation: pulse 2s infinite;"></i>
+                    Live
                 </div>
-                <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshData(true)">
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
@@ -538,12 +363,6 @@
             window.location.href = "login.html";
         }
 
-        // LIVE CLOCK
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-        }, 1000);
-
         // UI SWITCHING
         function switchTab(tab) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -556,22 +375,28 @@
                 document.getElementById('page-title').innerText = "Manage Orders";
                 document.getElementById('stats-container').style.display = "grid";
                 document.getElementById('status-breakdown-container').style.display = "grid";
+                loadOrders(false); // Silent load when switching tab
             } else {
                 document.getElementById('page-title').innerText = "Table Reservations";
                 document.getElementById('stats-container').style.display = "none";
                 document.getElementById('status-breakdown-container').style.display = "none";
+                loadReservations();
             }
         }
 
-        function refreshData() {
+        // REFRESH LOGIC (Manual or Auto)
+        async function refreshData(isManual = false) {
             const btn = document.getElementById('refreshBtn');
-            btn.classList.add('spinning');
-            setTimeout(() => btn.classList.remove('spinning'), 600); 
+            
+            if (isManual) {
+                btn.classList.add('spinning');
+                setTimeout(() => btn.classList.remove('spinning'), 600); 
+            }
 
             if (document.getElementById('tab-orders').classList.contains('active')) {
-                loadOrders();
+                await loadOrders(!isManual); // Show loader if manual
             } else {
-                loadReservations();
+                if (isManual) await loadReservations();
             }
         }
 
@@ -594,12 +419,10 @@
         // FILTER LOGIC (Status)
         function filterStatus(status) {
             currentFilter = (currentFilter === status) ? "All" : status; 
-
             document.querySelectorAll('.status-box').forEach(el => el.classList.remove('active-filter'));
             if (currentFilter !== "All") {
                 document.getElementById(`filter-${currentFilter}`).classList.add('active-filter');
             }
-
             renderOrderList();
         }
 
@@ -689,56 +512,68 @@
             }).join("");
         }
 
-        // FETCH ORDERS
-        async function loadOrders() {
+        // FETCH ORDERS (Real-time Polling)
+        async function loadOrders(isBackground = true) {
             const loader = document.getElementById("orders-loading");
-            loader.style.display = "block";
-            document.getElementById("orders-list").innerHTML = "";
+            
+            // Only show loading spinner if it's NOT a background refresh
+            if (!isBackground) {
+                loader.style.display = "block";
+                document.getElementById("orders-list").innerHTML = "";
+            }
 
             try {
                 const res = await fetch(`${BACKEND_URL}/admin/orders`, {
                     headers: { "Authorization": "Bearer " + token }
                 });
                 const data = await res.json();
-                loader.style.display = "none";
+                
+                if (!isBackground) loader.style.display = "none";
 
-                allOrdersData = data.orders || [];
+                const newOrdersData = data.orders || [];
 
-                // Calculate Stats
-                let totalRevenue = 0;
-                let countConfirmed = 0;
-                let countPreparing = 0;
-                let countDelivered = 0;
-                let countCancelled = 0;
+                // Check if data actually changed to avoid unnecessary DOM updates
+                if (JSON.stringify(allOrdersData) !== JSON.stringify(newOrdersData)) {
+                    allOrdersData = newOrdersData;
 
-                allOrdersData.forEach(o => {
-                    totalRevenue += o.amount;
-                    const status = o.status || 'Confirmed';
-                    
-                    if (status === 'Confirmed') countConfirmed++;
-                    else if (status === 'Preparing') countPreparing++;
-                    else if (status === 'Delivered') countDelivered++;
-                    else if (status === 'Cancelled') countCancelled++;
-                });
+                    // Calculate Stats
+                    let totalRevenue = 0;
+                    let countConfirmed = 0;
+                    let countPreparing = 0;
+                    let countDelivered = 0;
+                    let countCancelled = 0;
 
-                // Update Top Stats
-                document.getElementById("stat-total-orders").innerText = allOrdersData.length;
-                document.getElementById("stat-revenue").innerText = "₹" + totalRevenue.toFixed(2);
-                document.getElementById("stat-pending").innerText = countConfirmed;
-                document.getElementById("stat-preparing").innerText = countPreparing;
+                    allOrdersData.forEach(o => {
+                        totalRevenue += o.amount;
+                        const status = o.status || 'Confirmed';
+                        
+                        if (status === 'Confirmed') countConfirmed++;
+                        else if (status === 'Preparing') countPreparing++;
+                        else if (status === 'Delivered') countDelivered++;
+                        else if (status === 'Cancelled') countCancelled++;
+                    });
 
-                // Update Breakdown Cards
-                document.getElementById("count-confirmed").innerText = countConfirmed;
-                document.getElementById("count-preparing").innerText = countPreparing;
-                document.getElementById("count-delivered").innerText = countDelivered;
-                document.getElementById("count-cancelled").innerText = countCancelled;
+                    // Update Top Stats
+                    document.getElementById("stat-total-orders").innerText = allOrdersData.length;
+                    document.getElementById("stat-revenue").innerText = "₹" + totalRevenue.toFixed(2);
+                    document.getElementById("stat-pending").innerText = countConfirmed;
+                    document.getElementById("stat-preparing").innerText = countPreparing;
 
-                // Render List
-                renderOrderList();
+                    // Update Breakdown Cards
+                    document.getElementById("count-confirmed").innerText = countConfirmed;
+                    document.getElementById("count-preparing").innerText = countPreparing;
+                    document.getElementById("count-delivered").innerText = countDelivered;
+                    document.getElementById("count-cancelled").innerText = countCancelled;
+
+                    // Render List (Preserves your filter/search)
+                    renderOrderList();
+                }
 
             } catch (err) {
-                loader.style.display = "none";
-                document.getElementById("orders-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                if (!isBackground) {
+                    loader.style.display = "none";
+                    document.getElementById("orders-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                }
             }
         }
 
@@ -756,8 +591,7 @@
                 if (res.ok) {
                     const orderIndex = allOrdersData.findIndex(o => o._id === orderId);
                     if (orderIndex > -1) allOrdersData[orderIndex].status = newStatus;
-                    
-                    loadOrders(); 
+                    loadOrders(true); // Silent refresh
                 } else {
                     alert("Failed to update status");
                 }
@@ -836,11 +670,17 @@
             }
         }
 
-        // INIT
+        // INIT & REAL-TIME POLLING
         if (token && user && user.role === "admin") {
-            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-            loadOrders();
+            loadOrders(false); // Initial load with spinner
             loadReservations();
+
+            // 🔄 POLLING: Check for new orders every 10 seconds silently
+            setInterval(() => {
+                if (document.getElementById('tab-orders').classList.contains('active')) {
+                    loadOrders(true); 
+                }
+            }, 10000); // 10,000 ms = 10 seconds
         }
     </script>
 </body>
