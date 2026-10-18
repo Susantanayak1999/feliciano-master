@@ -30,13 +30,20 @@
 
         if (user) {
             const firstName = (user.name || "User").split(" ")[0];
+            
+            // 🚀 NEW: Check if the user is an admin
+            const isAdmin = user.role === "admin";
+            const dashboardLink = isAdmin 
+                ? `<li><a href="admin.html" style="font-weight:600; color:#c8a97e !important;">Admin Dashboard</a></li>` 
+                : `<li><a href="my-orders.html">My Orders</a></li>`;
+
             li.innerHTML = `
                 <a href="#" class="nav-link" id="authNavLink">
                     <span class="ion-ios-person"></span> ${firstName}
                     <span style="opacity:.75;font-size:10px;">▼</span>
                 </a>
                 <ul class="auth-dropdown" id="authDropdown">
-                    <li><a href="my-orders.html">My Orders</a></li>
+                    ${dashboardLink}
                     <li><a href="#" id="logoutBtn">Sign Out</a></li>
                 </ul>
             `;
