@@ -13,9 +13,20 @@ const app = express();
 app.use(cors());
 
 // ============================================================
-// 🚀 1. RAZORPAY WEBHOOK ROUTE (MUST BE BEFORE express.json)
+// 🚀 1. CAPTURE RAW BODY (MUST BE BEFORE ROUTES)
 // ============================================================
-app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (req, res) => {
+app.use(express.json({
+    verify: (req, res, buf) => {
+        if (req.originalUrl.startsWith('/razorpay-webhook')) {
+            req.rawBody = buf;
+        }
+    }
+}));
+
+// ============================================================
+// 🚀 2. RAZORPAY WEBHOOK ROUTE
+// ============================================================
+app.post("/razorpay-webhook", async (req, res) => {
     try {
         const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
         
@@ -25,7 +36,7 @@ app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (
         }
 
         const signature = req.headers["x-razorpay-signature"];
-        const body = req.body; 
+        const body = req.rawBody; 
 
         if (!body) {
             console.error("❌ Webhook Body is null.");
@@ -113,11 +124,6 @@ app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (
         res.status(200).json({ status: "ok" });
     }
 });
-
-// ============================================================
-// 🚀 2. NORMAL JSON PARSING (FOR ALL OTHER ROUTES)
-// ============================================================
-app.use(express.json());
 
 // ============================================================
 // MongoDB Connection
@@ -487,6 +493,26 @@ app.get("/menu", async (req, res) => {
     }
 });
 
+// 🚀 NEW: ADMIN MENU UPDATE ROUTE
+app.put("/admin/menu/:id", adminMiddleware, async (req, res) => {
+    try {
+        const { name, price, description, image, category, type } = req.body;
+        
+        const updatedItem = await MenuItem.findByIdAndUpdate(
+            req.params.id, 
+            { name, price, description, image, category, type },
+            { new: true }
+        );
+
+        if (!updatedItem) return res.status(404).json({ success: false, error: "Item not found" });
+        
+        console.log("✅ Menu item updated:", updatedItem.name);
+        res.json({ success: true, item: updatedItem });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 app.post("/menu/add", async (req, res) => {
     try {
         const { name, description, price, image, category, type, ingredients } = req.body;
@@ -496,15 +522,6 @@ app.post("/menu/add", async (req, res) => {
             image: image || "", category: category.trim(), type: type === "non-veg" ? "non-veg" : "veg",
             ingredients: Array.isArray(ingredients) ? ingredients : [],
         });
-        res.json({ success: true, item });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
-    }
-});
-
-app.put("/menu/:id", async (req, res) => {
-    try {
-        const item = await MenuItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json({ success: true, item });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
