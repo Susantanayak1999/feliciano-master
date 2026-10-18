@@ -595,17 +595,22 @@
             }
         }
 
-        async function loadReservations() {
+               async function loadReservations(isBackground = false) {
             const loader = document.getElementById("reservations-loading");
-            loader.style.display = "block";
-            document.getElementById("reservations-list").innerHTML = "";
+            
+            // Only show the loading spinner if it's NOT a background refresh
+            if (!isBackground) {
+                loader.style.display = "block";
+                document.getElementById("reservations-list").innerHTML = "";
+            }
 
             try {
                 const res = await fetch(`${BACKEND_URL}/admin/reservations`, {
                     headers: { "Authorization": "Bearer " + token }
                 });
                 const data = await res.json();
-                loader.style.display = "none";
+                
+                if (!isBackground) loader.style.display = "none";
 
                 if (!data.reservations.length) {
                     document.getElementById("reservations-list").innerHTML = `
@@ -659,19 +664,23 @@
                     `;
                 }).join("");
             } catch (err) {
-                loader.style.display = "none";
-                document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                if (!isBackground) {
+                    loader.style.display = "none";
+                    document.getElementById("reservations-list").innerHTML = `<div class="loading" style="color:var(--red);">Error: ${err.message}</div>`;
+                }
             }
         }
-
         if (token && user && user.role === "admin") {
+            // Initial load
             loadOrders(false); 
             loadReservations();
 
-            // Background polling every 10 seconds
+            // 🔄 REAL-TIME POLLING: Check for updates every 10 seconds
             setInterval(() => {
                 if (document.getElementById('tab-orders').classList.contains('active')) {
-                    loadOrders(true); 
+                    loadOrders(true); // Silently refresh Orders
+                } else if (document.getElementById('tab-reservations').classList.contains('active')) {
+                    loadReservations(true); // Silently refresh Reservations
                 }
             }, 10000); 
         }
