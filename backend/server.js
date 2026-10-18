@@ -49,33 +49,57 @@ app.post("/razorpay-webhook", express.raw({ type: "application/json" }), async (
 
         console.log(`🔔 Webhook Received: ${event}`);
 
-        // 3. Handle ONLY the correct events
-        if (event === "payment.captured" || event === "order.paid") {
-            const paymentEntity = payload.payload.payment.entity;
-            const orderId = paymentEntity.order_id;
-            const paymentId = paymentEntity.id;
-            const amount = (paymentEntity.amount / 100).toFixed(2);
-
-            console.log(`✅ Webhook: Payment captured for Order: ${orderId}, Amount: ₹${amount}`);
-
-            // Email Alert
-            try {
-                await brevoSend({
-                    to: "adminsusanta@gmail.com",
-                    subject: `💰 New Payment Received: ₹${amount}`,
-                    html: `<div style="padding:20px;"><h2 style="color:green;">Payment Successful!</h2><p><strong>Order ID:</strong> ${orderId}</p><p><strong>Amount:</strong> ₹${amount}</p></div>`
-                });
-                console.log("✅ Admin email sent.");
-            } catch (emailErr) {
-                console.error("❌ Email failed:", emailErr.message);
+        // 3. Handle ANY payment related event
+        if (event === "payment.captured" || event === "payment.authorized" || event === "order.paid") {
+            let paymentEntity = null;
+            
+            if (payload.payload.payment) {
+                paymentEntity = payload.payload.payment.entity;
+            } else if (payload.payload.order) {
+                paymentEntity = payload.payload.order.entity;
             }
 
-            // Check DB
-            const existingOrder = await Order.findOne({ orderId: orderId });
-            if (existingOrder) {
-                console.log(`✅ Webhook confirmed: Order ${orderId} is in DB.`);
-            } else {
-                console.warn(`⚠️ Webhook: Order ${orderId} not found in DB.`);
+            if (paymentEntity) {
+                const orderId = paymentEntity.order_id || paymentEntity.id;
+                const paymentId = paymentEntity.id || "N/A";
+                const amount = (paymentEntity.amount / 100).toFixed(2);
+
+                console.log(`✅ Webhook: Processing Payment for Order: ${orderId}, Amount: ₹${amount}`);
+
+                // Email Alert to Admin
+                try {
+                    await brevoSend({
+                        to: "adminsusanta@gmail.com",
+                        subject: `💰 New Payment Received: ₹${amount}`,
+                        html: `
+                        <div style="font-family: Arial, sans-serif; padding: 20px; background: #f4f6f9;">
+                            <div style="background: #fff; padding: 20px; border-radius: 10px; border-left: 5px solid #2e7d32;">
+                                <h2 style="color: #2e7d32; margin-top: 0;">Payment Successful!</h2>
+                                <p><strong>Event:</strong> ${event}</p>
+                                <p><strong>Order ID:</strong> ${orderId}</p>
+                                <p><strong>Payment ID:</strong> ${paymentId}</p>
+                                <p><strong>Amount:</strong> ₹${amount}</p>
+                                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                                <p style="font-size: 12px; color: #888;">This is an automated notification from your Razorpay Webhook.</p>
+                            </div>
+                        </div>`
+                    });
+                    console.log("✅ Admin email sent.");
+                } catch (emailErr) {
+                    console.error("❌ Email failed:", emailErr.message);
+                }
+
+                // Check DB
+                const existingOrder = await Order.findOne({ orderId: orderId });
+                if (existingOrder) {
+                    console.log(`✅ Webhook confirmed: Order ${orderId} is in DB.`);
+                    if (existingOrder.status !== "Confirmed") {
+                        existingOrder.status = "Confirmed";
+                        await existingOrder.save();
+                    }
+                } else {
+                    console.warn(`⚠️ Webhook: Order ${orderId} not found in DB yet.`);
+                }
             }
         } else {
             console.log(`ℹ️ Ignoring event: ${event}`);
