@@ -947,40 +947,92 @@
             }
         }
 
-                @media (max-width: 900px) {
-            body { flex-direction: column; }
-            .sidebar { 
-                width: 100%; height: auto; position: relative; padding: 20px; 
-                display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; 
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
             }
-            .sidebar h1 { margin-bottom: 0; font-size: 22px; flex: 1; }
-            
-            /* 🚀 SHOW THE BACK BUTTON ON MOBILE */
-            .sidebar-footer { 
-                display: block; 
-                margin-top: 0; 
-                order: 3; /* Puts it on the top right */
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: center;
             }
-            .back-btn { 
-                padding: 8px 16px; 
-                font-size: 13px; 
-                width: auto; /* Don't make it full width */
+
+            .sidebar h1 {
+                margin-bottom: 0;
+                font-size: 22px;
             }
-            .back-btn span { display: none; } /* Hide text, keep icon if you want, or leave as is */
-            
-            .sidebar-nav { display: flex; gap: 10px; width: 100%; margin-top: 15px; order: 4; }
-            .nav-item { margin-bottom: 0; padding: 10px 15px; font-size: 14px; }
-            
-            .main-content { margin-left: 0; width: 100%; padding: 20px; }
-            .top-bar h2 { font-size: 24px; }
-            .card-header { flex-direction: column; gap: 10px; }
-            .customer-info { flex-direction: column; gap: 10px; }
-            
-            .res-card { flex-direction: column; }
-            .res-right { border-left: none; border-top: 2px dashed rgba(200, 169, 126, 0.4); flex-direction: row; justify-content: flex-start; padding: 20px 32px; }
-            .res-right::before { left: -10px; top: -10px; }
-            .res-right::after { left: auto; right: -10px; top: -10px; bottom: auto; }
-            .res-contact { flex-direction: column; gap: 10px; }
+
+            .sidebar-nav {
+                display: flex;
+                gap: 10px;
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+            .sidebar-footer {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .top-bar h2 {
+                font-size: 24px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .customer-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .res-card {
+                flex-direction: column;
+            }
+
+            .res-right {
+                border-left: none;
+                border-top: 2px dashed rgba(200, 169, 126, 0.4);
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 20px 32px;
+            }
+
+            .res-right::before {
+                left: -10px;
+                top: -10px;
+            }
+
+            .res-right::after {
+                left: auto;
+                right: -10px;
+                top: -10px;
+                bottom: auto;
+            }
+
+            .res-contact {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
 
         @media (max-width: 600px) {
